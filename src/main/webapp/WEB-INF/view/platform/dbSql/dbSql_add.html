@@ -1,0 +1,28 @@
+@layout("/common/_curd/_container.html"){
+
+	<form data-url="${basePath}/${code}/save" method="post" class="form-horizontal" role="form">
+		<!-- 表单 -->
+		<br/>
+		<div class="form-group">
+		<label class="col-sm-2 control-label no-padding-right" >数据源列表</label>
+		<div class="col-sm-3">
+			<select id="editable-select" name="db_sql.db_source_id" style="width: 510px;height: 35px;">
+				@for(x in listDesc){
+					<option value="${x.id!}">${x.description!}</option>
+				@}
+			</select>
+		</div>
+		</div>
+		@ var _table="db_sql";
+		@ var _col=[
+		@			  {name:"名称", index:"type", type:"select_109",newline:true,length:8,required:"required"},
+		@			  {name:"sql语句", index:"outsql", type:"text",newline:true,length:8,required:"required"},
+		@			  {name:"更新周期", index:"interval", type:"text",newline:true,length:8,required:"required"}
+		@		   ];
+		@ include("/common/_curd/_add.html", {"col":_col, "table":_table}){}
+		
+		<!-- 按钮 -->
+		@ include("/common/_curd/_btn.html", {btn_save:"新增", btn_close:"关闭"}) {}
+	</form>
+
+@}

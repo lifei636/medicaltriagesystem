@@ -1,0 +1,338 @@
+body {
+	margin: 0px;
+	padding: 0px;
+	font-family: FZLTHK;
+}
+
+/*整体*/
+@font-face {
+	font-family: FZLTHK;
+	src: url("FZLTHK.TTF"); /*方正兰亭黑_GBK*/
+}
+
+@font-face {
+	font-family: FZLTZCHK;
+	src: url("FZLTZCHK.TTF"); /*方正兰亭中粗黑_GBK*/
+}
+
+@font-face {
+	font-family: FZLTXCHK;
+	src: url("FZLTXCHK.TTF"); /*方正兰亭细黑_GBK*/
+}
+
+.container {
+	width: 1920px;
+	height: 1080px;
+	margin: 0px auto;
+	float: left;
+	background: url(images/main_back_white.jpg) no-repeat;
+}
+
+/*上部*/
+.top {
+	width: 1873px;
+	height: 170px;
+	float: left;
+	border-bottom-left-radius: 10px;
+	border-bottom-right-radius: 10px;
+	background: #FFF;
+	margin: 0 20px;
+}
+
+.top .logo {
+	width: 380px;
+	height: 140px;
+	float: left;
+	margin: 15px 30px;
+}
+
+.top .name {
+	width: 730px;
+	height: 140px;
+	float: left;
+	color: #fd8a00;
+	font-size: 76px;
+	text-align: center;
+	line-height: 140px;
+	margin-top: 15px;
+	font-family: FZLTZCHK;
+	letter-spacing: 1px;
+}
+
+.top .date {
+	width: 370px;
+	height: 90px;
+	float: left;
+	color: #9f8b97;
+	font-size: 28px;
+	text-align: right;
+	line-height: 45px;
+	margin-top: 43px;
+	font-family: FZLTHK;
+	letter-spacing: 1px;
+}
+
+.top .time {
+	width: 290px;
+	height: 90px;
+	float: left;
+	font-size: 90px;
+	color: #4e3f49;
+	text-align: right;
+	line-height: 90px;
+	margin-top: 43px;
+	font-family: FZLTXCHK;
+	letter-spacing: 3px;
+}
+
+.yaofang {
+	width: 1873px;
+	height: 817px;
+	float: left;
+	background: left center url(images/back-3.png) no-repeat;
+	margin: 10px 0 0 20px;
+	font-family: FZLTZCHK;
+}
+
+.yaofang .win {
+	width: 934px;
+	height: 817px;
+}
+
+.yaofang .win .title {
+	width: 100%;
+	height: 185px;
+	font-size: 55px;
+	text-align: center;
+	line-height: 165px;
+	color: #fff;
+}
+
+.yaofang .win .center {
+	width: 100%;
+	height: 150px;
+	font-size: 55px;
+	text-align: center;
+	line-height: 150px;
+	color: #fe8a00;
+	font-family: FZLTZCHK;
+}
+
+.yaofang .win .btm {
+	width: 100%;
+	height: 482px;
+	overflow: hidden;
+}
+
+.yaofang .win .btm .cell-1 {
+	width: 48.5%;
+	height: 160px;
+	float: left;
+	padding-left: 1.5%;
+}
+/*等候三个字*/
+.yaofang .win .btm .cell-1 .cell-1-n-3 {
+	width: 250px;
+	height: 160px;
+	float: left;
+	font-size: 72px;
+	color: #4e3f49;
+	line-height: 110px;
+	font-family: FZLTZCHK;
+	text-align: justify;
+	text-align-last: justify;
+	padding-left: 25px;
+	padding-right: 25px;
+}
+
+.yaofang .win .btm .cell-1 .cell-1-num {
+	width: 140px;
+	height: 58px;
+	float: left;
+	font-size: 44px;
+	color: #fff;
+	line-height: 62px;
+	font-family: FZLTZCHK;
+	text-align: center;
+	border-radius: 12px;
+	background: #4e3f49;
+	margin-top: 24px;
+}
+
+/*等候两个字*/
+.yaofang .win .btm .cell-1 .cell-1-n-2 {
+	width: 210px;
+	height: 160px;
+	float: left;
+	font-size: 72px;
+	color: #424b50;
+	line-height: 105px;
+	text-align: justify;
+	text-align-last: justify;
+	margin-left: 7px;
+	margin-right: 86px;
+	font-family: FZLTZCHK;
+}
+
+/*等候四个字*/
+.yaofang .win .btm .cell-1 .cell-1-n-4 {
+	height: 160px;
+	float: left;
+	font-size: 72px;
+	color: #424b50;
+	line-height: 105px;
+	margin-left: -70px;
+	width: 289px;
+	margin-right: 80px;
+	font-family: FZLTZCHK;
+}
+
+/*叫号部分*/
+.main .table-2 {
+	width: 1210px;
+	height: 816px;
+	float: left;
+	background: url(images/back-2.png) no-repeat;
+	margin-left: 10px;
+}
+
+.table-2 .chuangk {
+	width: 1068px;
+	height: 152px;
+	float: left;
+	color: #FFFFFF;
+	line-height: 152px;
+	text-align: center;
+	font-size: 110px;
+	margin: 31px 0 67px 71px;
+	font-family: FZLTZCHK;
+}
+
+.table-2 .jiaohao {
+	width: 1210px;
+	height: 150px;
+	float: left;
+	margin-top: 180px;
+}
+
+.jiaohao .cell-2 {
+	width: 1010px;
+	height: 150px;
+	float: left;
+	margin: 0 100px;
+}
+
+.cell-2 .cell-2-n-3 {
+	width: 650px;
+	height: 150px;
+	float: left;
+	font-size: 140px;
+	color: #fe8a00;
+	line-height: 150px;
+	font-family: FZLTZCHK;
+	text-align: center;
+}
+
+.cell-2 .cell-2-num {
+	width: 260px;
+	height: 104px;
+	float: left;
+	font-size: 84px;
+	color: #fff;
+	line-height: 110px;
+	font-family: FZLTZCHK;
+	text-align: center;
+	border-radius: 20px;
+	background: #fe8a00;
+	margin-top: 20px;
+}
+
+/*底部*/
+.bottom {
+	width: 1920px;
+	height: 82px;
+	float: left;
+	font-size: 42px;
+	color: #fe8a00;
+	text-align: center;
+	line-height: 82px;
+}
+
+.main-tanc {
+	width: 1880px;
+	height: 816px;
+	float: left;
+	margin: 10px 0 0 20px;
+	background: center center url(images/tanc.png) no-repeat;
+	position: absolute;
+	top: 170px;
+}
+
+/*诊室部分*/
+.main-tanc .zhenshi {
+	width: 1070px;
+	height: 150px;
+	float: left;
+	margin: 30px 405px 35px 405px;
+	font-size: 110px;
+	color: #FFFFFF;
+	line-height: 160px;
+	font-family: FZLTZCHK;
+	text-align: center;
+	letter-spacing: 5px;
+}
+/*患者部分*/
+.huanzhe {
+	width: 1880px;
+	height: 591px;
+	float: left;
+}
+
+/*正在就诊*/
+.huanzhe .hz-zheng {
+	width: 1740px;
+	height: 250px;
+	float: left;
+	margin: 180px 0 0 70px;
+}
+
+.hz-zheng .zheng-n {
+	width: 618px;
+	height: 250px;
+	float: left;
+	font-size: 205px;
+	color: #fe8a00;
+	line-height: 250px;
+	font-family: FZLTZCHK;
+	text-align: justify;
+	text-align-last: justify;
+	margin-left: 323px;
+	margin-right: 20px;
+}
+
+.hz-zheng .zheng-n-4 {
+	width: 838px;
+	height: 250px;
+	float: left;
+	font-size: 205px;
+	color: #fe8a00;
+	line-height: 250px;
+	font-family: FZLTZCHK;
+	margin-left: 234px;
+	margin-right: 20px;
+}
+
+.hz-zheng .zheng-num {
+	width: 400px;
+	height: 160px;
+	float: left;
+	font-size: 125px;
+	color: #fff;
+	line-height: 160px;
+	font-family: FZLTZCHK;
+	text-align: center;
+	border-radius: 20px;
+	background: #fe8a00;
+	margin-top: 40px;
+	margin-left: 70px;
+}

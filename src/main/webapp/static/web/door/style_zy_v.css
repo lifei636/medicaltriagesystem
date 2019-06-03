@@ -1,0 +1,469 @@
+body {
+    margin: 0px;
+    padding: 0px;
+    font-family: YANSONG;
+}
+
+/*整体*/
+@font-face {
+    font-family: KESONG;
+    src: url("MFKeSongRegular.ttf"); /*造字工房刻宋（非商用）常规体*/ /*粗*/
+}
+
+@font-face {
+    font-family: YANSONG;
+    src: url("MFYanSongRegular.ttf"); /*造字工房言宋（非商用）常规体*/ /*细*/
+}
+
+@font-face {
+    font-family: FZLTZCHK;
+    src: url("FZLTZCHK.TTF"); /*方正兰亭中粗黑_GBK*/
+}
+
+.container {
+    width: 1080px;
+    height: 1920px;
+    margin: 0px auto;
+    float: left;
+    background: url(images/zy_main_back.jpg) no-repeat;
+}
+
+/*上部*/
+.top {
+    width: 1080px;
+    height: 160px;
+    float: left;
+}
+
+    .top .logo {
+        width: 480px;
+        height: 120px;
+        float: left;
+        margin: 25px 0 0 30px;
+    }
+
+    .top .date {
+        width: 260px;
+        height: 90px;
+        float: left;
+        color: #877f72;
+        font-size: 28px;
+        text-align: right;
+        line-height: 45px;
+        margin-top: 40px;
+        font-family: KESONG;
+        letter-spacing: 3px;
+    }
+
+    .top .time {
+        width: 280px;
+        height: 90px;
+        float: left;
+        font-size: 90px;
+        color: #6c665b;
+        text-align: right;
+        line-height: 90px;
+        margin-top: 40px;
+        font-family: FZLTZCHK;
+        letter-spacing: 3px;
+    }
+
+/*中间*/
+
+.main {
+    width: 1080px;
+    height: 1665px;
+    float: left;
+}
+
+    .main .table {
+        width: 1080px;
+        height: 830px;
+        float: left;
+    }
+
+/*诊室*/
+.table .zhenshi {
+    width: 996px;
+    height: 154px;
+    float: left;
+    letter-spacing: 5px;
+    font-size: 90px;
+    color: #424b50;
+    text-align: center;
+    line-height: 154px;
+    margin: 60px 42px;
+    background: url(images/zy_box-1.png) no-repeat;
+}
+
+/*患者部分*/
+.table .huanzhe {
+    width: 996px;
+    height: 540px;
+    float: left;
+    background: url(images/zy_box-2.png) no-repeat;
+    margin: 0 42px;
+}
+
+/*正在就诊*/
+.zhenshi .hz-zheng {
+    width: 760px;
+    height: 110px;
+    float: left;
+    margin: 35px 0 0 118px;
+}
+
+.hz-zheng .zheng-l {
+    width: 200px;
+    height: 110px;
+    float: left;
+    font-size: 46px;
+    color: #6c665b;
+    line-height: 90px;
+    letter-spacing: 2px;
+    font-family: KESONG;
+}
+
+.hz-zheng .zheng-n {
+    width: 230px;
+    height: 110px;
+    float: left;
+    font-size: 72px;
+    color: #ff3300;
+    line-height: 80px;
+    margin-left: 56px;
+    margin-right: 10px;
+    text-align: justify;
+    text-align-last: justify;
+}
+
+.hz-zheng .zheng-n-4 {
+    width: 307px;
+    height: 110px;
+    float: left;
+    font-size: 72px;
+    color: #ff3300;
+    line-height: 80px;
+    text-align: right;
+    margin-left: -17px;
+    margin-right: 7px;
+}
+
+.hz-zheng .zheng-num {
+    width: 166px;
+    height: 36px;
+    float: left;
+    margin: 20px 0 0 80px;
+}
+
+.zheng-num .zheng-txt {
+    width: 130px;
+    height: 36px;
+    float: left;
+    font-size: 44px;
+    color: #ff3300;
+    line-height: 40px;
+    text-align: center;
+    font-family: FZLTZCHK;
+}
+
+.zheng-num .kh-1-l {
+    width: 18px;
+    height: 36px;
+    float: left;
+    background: url(images/zy_kh-1-l.png) no-repeat;
+}
+
+.zheng-num .kh-1-r {
+    width: 18px;
+    height: 36px;
+    float: left;
+    background: url(images/zy_kh-1-r.png) no-repeat;
+}
+
+
+
+
+/*等候就诊*/
+.huanzhe .hz-deng {
+    width: 760px;
+    height: 220px;
+    float: left;
+    margin: 70px 0 0 118px;
+}
+
+.hz-deng .deng-l {
+    width: 200px;
+    height: 330px;
+    float: left;
+    font-size: 46px;
+    color: #6c665b;
+    line-height: 58px;
+    letter-spacing: 2px;
+    font-family: KESONG;
+}
+
+.hz-deng .deng-r {
+    width: 560px;
+    height: 110px;
+    float: left;
+}
+
+.hz-deng .deng-n {
+    width: 230px;
+    height: 110px;
+    float: left;
+    font-size: 72px;
+    color: #424b50;
+    line-height: 80px;
+    text-align: right;
+    margin-right: 14px;
+    margin-left: 55px;
+    display: inline-block;
+    text-align: justify;
+    text-align-last: justify;
+}
+
+
+
+.hz-deng .deng-n-4 {
+    width: 300px;
+    height: 110px;
+    float: left;
+    font-size: 72px;
+    color: #424b50;
+    line-height: 80px;
+    text-align: right;
+    margin-left: -12px;
+    margin-right: 11px;
+}
+    .hz-deng .deng-num {
+    width: 166px;
+    height: 36px;
+    float: left;
+    margin: 20px 0 0 80px;
+}
+
+.deng-num .deng-txt {
+    width: 130px;
+    height: 36px;
+    float: left;
+    font-size: 44px;
+    color: #424b50;
+    line-height: 40px;
+    text-align: center;
+    font-family: FZLTZCHK;
+}
+
+.deng-num .kh-2-l {
+    width: 18px;
+    height: 36px;
+    float: left;
+    background: url(images/zy_kh-2-l.png) no-repeat;
+}
+
+.deng-num .kh-2-r {
+    width: 18px;
+    height: 36px;
+    float: left;
+    background: url(images/zy_kh-2-r.png) no-repeat;
+}
+
+
+.main .table .zhenshi2 {
+    width: 954px;
+    height: 240px;
+    float: left;
+    padding-left:100px;
+    padding-top:20px;
+    font-family: "YANSONG";
+}
+    .main .table .zhenshi2 .left {
+        width:350px;
+        height:240px;
+        float:left;
+        overflow:hidden;
+    }
+        .main .table .zhenshi2 .left .t1 {
+            width: 350px;
+            height: 120px;
+            float: left;
+            font-size: 72px;
+            line-height: 120px;
+            color: #424b50;
+            overflow: hidden;
+        }
+        .main .table .zhenshi2 .left .t2 {
+            width: 350px;
+            height: 120px;
+            float: left;
+            font-size: 56px;
+            line-height: 120px;
+            color: #725f6a;
+            font-family: KESONG;
+            overflow: hidden;
+        }
+    .main .table .zhenshi2 .right {
+        width: 200px;
+        height: 200px;
+        float: right;
+        overflow: hidden;
+        margin-top:20px;
+        margin-right:30px;
+    }
+/*医生部分*/
+.main .doc {
+    width: 1080px;
+    height: 830px;
+    float: left;
+}
+
+.doc .box {
+    width: 358px;
+    height: 480px;
+    float: left;
+    margin: 40px 42px;
+    background: url(images/zy_box-3.png) no-repeat;
+}
+
+.doc .pic {
+    width: 330px;
+    height: 452px;
+    float: left;
+    margin: 14px;
+    border: #6c665b solid 1px;
+}
+
+.doc .d-right {
+    width: 590px;
+    height: 480px;
+    float: left;
+    margin: 40px 0 0 20px;
+}
+
+.d-right .d-n {
+    width: 390px;
+    height: 60px;
+    float: left;
+    font-size: 60px;
+    color: #424b50;
+    line-height: 56px;
+    text-align: left;
+    letter-spacing: 3px;
+}
+
+.d-right .d-z {
+    width: 390px;
+    height: 70px;
+    float: left;
+    font-size: 46px;
+    color: #6c665b;
+    line-height: 70px;
+    text-align: left;
+    letter-spacing: 3px;
+    font-family: KESONG;
+}
+
+.d-right .d-jianjie {
+    width: 550px;
+    height: 440px;
+    float: left;
+    font-size: 30px;
+    color: #6c665b;
+    line-height: 48px;
+    text-align: justify;
+    padding-top: 25px;
+    word-break: normal;
+    letter-spacing: 2px;
+    overflow: hidden;
+    font-family: KESONG;
+}
+
+
+
+.main1 {
+    width: 997px;
+    height: 1538px;
+    float: left;
+    margin: 220px 0 0 42px;
+    position: absolute;
+    background: url(images/zy_v_bg.jpg);
+}
+
+    /*诊室部分*/
+    .main1 .zhenshi {
+        width: 1054px;
+        height: 600px;
+        float: left;
+        font-size: 150px;
+        color: #fe8a00;
+        font-family: KESONG;
+        text-align: center;
+        padding-top:400px;
+        letter-spacing: 5px;
+        margin-top: 40px;
+    }
+
+    /*提示部分*/
+    .main1 .tishi {
+        width: 1054px;
+        height: 585px;
+        float: left;
+    }
+
+        .main1 .tishi .line-1 {
+            width: 1054px;
+            height: 200px;
+            float: left;
+            font-size: 56px;
+            color: #4e3f49;
+            line-height: 100px;
+            font-family: KESONG;
+            text-align: center;
+            margin-top: 80px;
+        }
+
+        .main1 .tishi .line-2 {
+            width: 1054px;
+            height: 180px;
+            float: left;
+            font-size: 48px;
+            color: #4e3f49;
+            line-height: 90px;
+            text-align: center;
+            margin-top: 50px;
+        }
+
+
+#tips {
+    width: 997px;
+    height: 800px;
+    float: left;
+    
+    background:url(images/zy_v_bg2.jpg);
+    position: absolute;
+    top: 1000px;
+    left: 42px;
+    z-index: 999;
+    font-size: 200px;
+    text-align: center;
+    vertical-align:middle;
+    color: #4e3f49;
+    overflow: hidden;
+    display: none;
+    font-family: KESONG;
+}
+
+
+/*底部*/
+.bottom {
+    width: 1080px;
+    height: 87px;
+    float: left;
+    font-size: 42px;
+    color: #a5bac5;
+    text-align: center;
+    line-height: 87px;
+    font-family: KESONG;
+    margin-top: 8px;
+}

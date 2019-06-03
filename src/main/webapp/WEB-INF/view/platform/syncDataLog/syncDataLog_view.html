@@ -1,0 +1,19 @@
+@layout("/common/_curd/_container.html"){
+
+<form class="form-horizontal" role="form">
+    <!-- 表单 -->
+    @ var _col=[
+    @             {name:"ID", index:"id", type:"text",newline:true,length:8},
+    @			  {name:"日志名称", index:"log_name", type:"text",newline:true,length:8},
+    @			  {name:"错误信息", index:"log_msg", type:"text",newline:true,length:8},
+    @			  {name:"详细描述", index:"log_exception", type:"text",newline:true,length:8},
+    @			  {name:"时间", index:"log_time", type:"text",newline:true,length:8},
+    @			  {name:"类型", index:"log_type", type:"text",newline:true,length:8}
+    @		   ];
+    @ include("/common/_curd/_view.html", {"col":_col}){}
+
+    <!-- 按钮 -->
+    @ include("/common/_curd/_btn.html", {btn_close:"关闭"}) {}
+</form>
+
+@}

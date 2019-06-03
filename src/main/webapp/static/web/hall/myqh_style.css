@@ -1,0 +1,102 @@
+﻿@charset "utf-8";
+/* CSS Document */
+body{ margin:0; padding:0; font-family:"微软雅黑";}
+.container{ width:1920px; height:1080px; float:left;}
+.top{
+	width: 1920px;
+	height: 194px;
+	float: left;
+	background: url(myqh_images/top_back.jpg) no-repeat;
+	}
+.top_logo{
+	width: 800px;
+	height: 132px;
+	float: left;
+	text-align: center;
+	line-height: 132px;
+	font-size: 100px;
+	color: #002d53;
+	font-weight: bold;
+	}
+.top_huanying{
+	width: 1920px;
+	height: 136px;
+	float: left;
+	text-align: center;
+	line-height: 136px;
+	font-size: 72px;
+	color: #000;
+	}
+.main{
+	width: 1920px;
+	height: 792px;
+	float: left;
+	background: url(myqh_images/main_back.jpg) no-repeat;
+	}
+.main_left{
+	width: 558px;
+	height: 570px;
+	float: left;
+	margin-left: 200px;
+	margin-top: 48px;
+	padding-top: 140px;
+	text-align: justify;
+	line-height: 110px;
+	font-size: 60px;
+	color: #060606;
+	text-indent: 2em;
+	}
+.main_right{
+	width: 896px;
+	height: 710px;
+	float: left;
+	margin-left: 60px;
+	margin-top: 48px;
+	}
+.main_right_up{
+	width: 896px;
+	height: 142px;
+	float: left;
+	}
+.main_right_up_shuru{
+	width: 642px;
+	height: 142px;
+    line-height:142px;
+    font-size:70px;
+	float: left;
+	margin-left: 8px;
+	}
+.main_right_up_btn{
+	width: 246px;
+	height: 142px;
+	float: left;
+	text-align: center;
+	line-height: 142px;
+	font-size: 60px;
+	color: #6c0604;
+	}
+.main_right_anjian{
+	width: 836px;
+	height: 458px;
+	float: left;
+	margin-top: 50px;
+	padding: 30px;
+	}
+.main_right_anjian_button{
+	width: 181px;
+	height: 129px;
+	float: left;
+	background: url(myqh_images/btn_back.png) no-repeat;
+	margin-left: 22px;
+	margin-top: 18px;
+	text-align: center;
+	line-height: 129px;
+	font-size: 60px;
+	color: #6c0604;
+	}
+.bottom{
+	width: 1920px;
+	height: 94px;
+	float: left;
+	background: url(myqh_images/bottom_back.jpg) no-repeat;
+	}

@@ -1,0 +1,24 @@
+@layout("/common/_curd/_container.html"){
+
+<form data-url="${basePath}/${code}/update" method="post" class="form-horizontal" role="form">
+    <!-- 表单 -->
+    @ var _table="queue_type";
+    @ var _key="queue_type_id";
+    @ var _col=[
+    @			  {name:"队列类型名称", index:"name", type:"text",newline:true,length:8,required:"required"},
+    @			  {name:"队列类型别名", index:"displayname", type:"text",newline:true,length:8,required:"required"},
+    @			  {name:"预留号", index:"reserve_numlist",type:"text",newline:true,length:8},
+    @			  {name:"报道", index:"is_checkin", type:"select_104",newline:true,length:8,required:"required"},
+    @			  {name:"预分诊", index:"is_pretriage", type:"select_105",newline:true,length:8,required:"required"},
+    @			  {name:"重新排号", index:"is_reorder", type:"select_106",newline:true,length:8,required:"required"},
+    @			  {name:"报到重新排号", index:"is_ckin_order", type:"select_111",newline:true,length:8,required:"required"},
+    @			  {name:"预约", index:"is_reserve", type:"select_107",newline:true,length:8,required:"required"},
+    @			  {name:"楼层信息", index:"floor", value:"",type:"text",newline:true,length:10}
+    @		   ];
+    @ include("/common/_curd/_edit.html", {"col":_col, "table":_table, "key":_key}){}
+
+    <!-- 按钮 -->
+    @ include("/common/_curd/_btn.html", {btn_save:"修改", btn_close:"关闭"}) {}
+</form>
+
+@}

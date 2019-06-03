@@ -1,0 +1,61 @@
+@layout("/common/_curd/_container.html"){
+
+<script type="text/javascript">
+	var ctx = "${basePath}";
+	var grid_selector = "#grid-table";
+	var pager_selector = "#grid-pager";
+	
+	$(function(){
+		initGrid();
+		initMenuBtn("btns", "${code}");
+	});
+	
+	function initGrid(){
+		var grid_url = ctx + "/${code}/list";
+		var _colnames = ["医生编号","医生工号","医生名称", "医生职称", "医生级别","所属科室", "医生简介"];
+		var _colmodel = [{ name: "doctor_id", index: "doctor_id", width: 100 }, { name: "login_id", index: "login_id", width: 100 },
+						{name:"name", index:"name", width:100},
+						{name:"title", index:"title", width:100},
+						{name:"call_rule", index:"title", width:100},
+						{name:"department", index:"department", width:100},
+						{name:"description", index:"description", width:100}];
+		
+		jQuery(grid_selector).jqGrid({
+			url : grid_url,
+		    shrinkToFit : true,
+			colNames : _colnames,
+			colModel : _colmodel, 
+			jsonReader : {id :"doctor_id"},
+			pager : pager_selector,
+			postData : {sort : "doctor_id", order : "desc"}
+		});
+	}
+</script>
+
+
+	<!-- 配置 grid -->
+	<div class="row">
+        <div class="col-xs-12 tb-grid">
+            <!-- 配置 查询 -->
+            @ var _col=[
+            @		{name:"医生编号", index:"doctor_id", type:"text"},
+            @		{name:"医生工号", index:"login_id", type:"text"},
+            @		{name:"医生名称", index:"name", type:"text"},
+			@		{name:"医生职称", index:"title", type:"text"},
+			@		{name:"医生级别", index:"call_rule", type:"text"},
+            @		{name:"医生简介", index:"description", type:"text"}
+            @];
+            @ include("/common/_function/_search.html",{"col":_col}){}
+            <!-- 按钮 -->
+            <div class="welljq well-sm" id="btns"></div>
+            <!-- grid -->
+            <table id="grid-table"></table>
+            <!-- 分页-->
+            <div id="grid-pager"></div>
+        </div>
+	</div>
+	
+	<!-- 引入所需的js -->
+	@include("/common/_listscript.html"){}
+	
+@}	

@@ -1,0 +1,311 @@
+@font-face {
+    font-family: FZLTHK;
+    src: url("FZLTHK.TTF"); /*方正兰亭黑_GBK*/
+}
+
+@font-face {
+    font-family: FZLTZCHK;
+    src: url("FZLTZCHK.TTF"); /*方正兰亭中粗黑_GBK*/
+}
+
+@font-face {
+    font-family: FZLTXCHK;
+    src: url("FZLTXCHK.TTF"); /*方正兰亭细黑_GBK*/
+}
+
+body {
+    margin: 0px;
+    padding: 0px;
+    font-family: "FZLTHK";
+}
+
+/*整体*/
+.container {
+    width: 1080px;
+    height: 1920px;
+    margin: 0px auto;
+    float: left;
+    background: url(images/main_back.jpg) no-repeat;
+    overflow: hidden;
+}
+
+/*上部*/
+.top {
+    width: 1080px;
+    height: 175px;
+    float: left;
+    margin: 0px;
+}
+
+    .top .logo {
+        width: 400px;
+        height: 140px;
+        float: left;
+        margin: 15px 0;
+    }
+
+    .top .date {
+        width: 370px;
+        height: 90px;
+        float: left;
+        color: #c8e9ee;
+        font-size: 28px;
+        text-align: right;
+        line-height: 45px;
+        margin-top: 43px;
+        font-family: "FZLTHK";
+        letter-spacing: 1px;
+    }
+
+    .top .time {
+        width: 290px;
+        height: 90px;
+        float: left;
+        font-size: 90px;
+        color: #c8e9ee;
+        text-align: right;
+        line-height: 90px;
+        margin-top: 43px;
+        font-family: "FZLTXCHK";
+        letter-spacing: 3px;
+    }
+
+/*中间*/
+.main {
+    width: 1020px;
+    height: 1630px;
+    float: left;
+    margin: 30px 0 0 30px;
+}
+
+    .main .hz {
+        width: 1020px;
+        height: 780px;
+        float: left;
+        margin-top: 30px;
+    }
+
+        .main .hz .zhenshi {
+            width: 860px;
+            height: 125px;
+            margin: 60px 75px;
+            font-size: 70px;
+            color: #0a7cbd;
+            text-align: center;
+            line-height: 125px;
+            border-radius: 62px;
+            font-family: "FZLTZCHK";
+            background-color: #d3eaf3;
+        }
+
+        .main .hz .hzlist {
+            width: 100%;
+            height: 400px;
+            overflow: hidden;
+            margin-top: 100px;
+        }
+
+            .main .hz .hzlist .jz {
+                width: 100%;
+                height: 150px;
+                overflow: hidden;
+            }
+
+            .main .hz .hzlist .dh {
+                width: 100%;
+                height: 250px;
+                overflow: hidden;
+            }
+
+            .main .hz .hzlist .span {
+                width: 50%;
+                float: left;
+                height: auto;
+            }
+
+            .main .hz .hzlist .title {
+                margin: 0 auto;
+                width: 235px;
+                height: 56px;
+                border-radius: 26px;
+                background-color: #d3eaf3;
+                font-size: 42px;
+                color: #787f82;
+                text-align: center;
+                line-height: 60px;
+            }
+
+            .main .hz .hzlist .jz-n {
+                width: 100%;
+                height: 150px;
+                font-size: 72px;
+                color: #fff;
+                font-family: "FZLTZCHK";
+                text-align: left;
+                color: #fff100;
+            }
+
+                .main .hz .hzlist .jz-n span {
+                    font-size: 30px;
+                }
+
+            .main .hz .hzlist .dh-n {
+                width: 100%;
+                height: 120px;
+                font-size: 72px;
+                color: #fff;
+                font-family: "FZLTZCHK";
+                text-align: left;
+            }
+
+                .main .hz .hzlist .dh-n span {
+                    font-size: 30px;
+                }
+
+    .main .doc {
+        width: 980px;
+        height: 680px;
+        margin-top: 70px;
+        margin-left: 20px;
+        overflow: hidden;
+        float: left;
+    }
+
+        .main .doc .pic {
+            width: 480px;
+            height: 640px;
+            text-align: center;
+            overflow: hidden;
+            float: left;
+            border-radius: 10px;
+        }
+
+        .main .doc .d-right {
+            width: 440px;
+            height: 600px;
+            padding:20px;
+            float: right;
+            overflow: hidden;
+            background-color: #d3eaf3;
+            border-radius:10px;
+        }
+
+            .main .doc .d-right .d-n {
+                width: 100%;
+                height: 90px;
+                float: left;
+                font-size: 55px;
+                color: #0a7cbd;
+                line-height: 90px;
+                font-family: "FZLTZCHK";
+                text-align: left;
+                letter-spacing: 3px;
+            }
+
+            .main .doc .d-right .d-z {
+                width: 100%;
+                height: 80px;
+                float: left;
+                font-size: 42px;
+                color: #535353;
+                line-height: 80px;
+                text-align: left;
+                letter-spacing: 3px;
+            }
+
+            .main .doc .d-right .d-jianjie {
+                width: 100%;
+                height: 440px;
+                float: left;
+                font-size: 27px;
+                color: #535353;
+                line-height: 45px;
+                text-align: justify;
+                word-break: normal;
+                letter-spacing: 2px;
+                overflow: hidden;
+                text-indent:2em;
+            }
+
+
+
+.main1 {
+    width: 1054px;
+    height: 1628px;
+    float: left;
+    margin: 12px 0 0 13px;
+    background: url(images/back-1-1.png) no-repeat;
+}
+
+    /*诊室部分*/
+    .main1 .zhenshi {
+        width: 1054px;
+        height: 600px;
+        float: left;
+        font-size: 150px;
+        color: #fe8a00;
+        font-family: "FZLTZCHK";
+        text-align: center;
+        padding-top:400px;
+        letter-spacing: 5px;
+        margin-top: 40px;
+    }
+
+    /*提示部分*/
+    .main1 .tishi {
+        width: 1054px;
+        height: 585px;
+        float: left;
+    }
+
+        .main1 .tishi .line-1 {
+            width: 1054px;
+            height: 200px;
+            float: left;
+            font-size: 56px;
+            color: #55cab1;
+            line-height: 100px;
+            font-family: "FZLTZCHK";
+            text-align: center;
+            margin-top: 80px;
+        }
+
+        .main1 .tishi .line-2 {
+            width: 1054px;
+            height: 180px;
+            float: left;
+            font-size: 48px;
+            color: #4e3f49;
+            line-height: 90px;
+            text-align: center;
+            margin-top: 50px;
+        }
+
+.bottom {
+    width: 1080px;
+    height: 105px;
+    float: left;
+    /*background: url(images/bottom_back.jpg) no-repeat;*/
+    font-size: 42px;
+    color: #fe8a00;
+    text-align: center;
+    line-height: 105px;
+}
+
+#tips {
+    width: 1054px;
+    height: 816px;
+    float: left;
+    border-radius: 10px;
+    background: #fff;
+    position: absolute;
+    top: 1000px;
+    left: 13px;
+    z-index: 999;
+    font-size: 200px;
+    text-align: center;
+    vertical-align:middle;
+    color: #fe8a00;
+    overflow: hidden;
+    display: none;
+}

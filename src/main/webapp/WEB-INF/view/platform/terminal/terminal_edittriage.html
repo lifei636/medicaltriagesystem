@@ -1,0 +1,21 @@
+@layout("/common/_curd/_container.html"){
+
+	<form data-url="${basePath}/${code}/edittriageupdate" method="post" class="form-horizontal" role="form">
+		<!-- 表单 -->
+		<br/>
+		<div class="form-group">
+		<label class="col-sm-2 control-label no-padding-right" >分诊台列表</label>
+		<div class="col-sm-3">
+			<select id="editable-select" name="triage_id" style="width: 250px;height: 35px;">
+				@for(x in list_triageName){
+	                <option value="${x.triage_id!}">${x.name!}</option>
+				@}
+			</select>
+			<input type="hidden"   name="ids" id="ids" value="${id!}" />
+		</div>
+		</div>
+		<!-- 按钮 -->
+		@ include("/common/_curd/_btn.html", {btn_save:"修改", btn_close:"关闭"}) {}
+	</form>
+
+@}

@@ -1,0 +1,780 @@
+﻿body {
+	margin: 0 auto;
+	width: 100%;
+	font-family: "微软雅黑", "宋体", Verdana, Arial, Helvetica, sans-serif;
+	font-size: 16px;
+	background-color: #fff;
+}
+
+ul {
+	margin: 0px;
+	padding: 0px;
+}
+
+a {
+	color: #000;
+	text-decoration: none;
+}
+
+li {
+	padding: 0px;
+	margin: 0px;
+	list-style: none;
+}
+
+.main {
+	width: 100%;
+	float: left;
+}
+
+.main .title {
+	width: 100%;
+	float: left;
+	height: 160px;
+	background-color: #509acc;
+	color: #fff;
+}
+
+.main .title .left {
+	width: 33%;
+	line-height: 160px;
+	padding-left: 0px;
+	text-align: left;
+	font-size: 3rem;
+	float: left;
+	overflow: hidden;
+	background: left center url(../image/logo.png) no-repeat;
+}
+
+.main .title .middle {
+	width: 38%;
+	height: 115px;
+	overflow: hidden;
+	float: left;
+	text-align: center;
+	padding-top: 45px;
+}
+
+.main .title .middle span {
+	font-size: 3.75rem;
+	border: 5px solid #fff;
+	padding: 0px 20px;
+}
+
+.main .title .right {
+	width: 27%;
+	font-size: 2.25rem;
+	text-align: right;
+	line-height: 60px;
+	float: right;
+	padding-right: 3%;
+	padding-top: 20px;
+}
+
+.main .tab_title {
+	width: 100%;
+	height: 150px;
+	line-height: 150px;
+	float: left;
+	color: #4d4434;
+	margin-top: 20px;
+	overflow: hidden;
+}
+
+.main .tab_title .left {
+	width: 20%;
+	float: left;
+	background-color: #ffe4ad;
+	/*border-right: 2px solid #ffe4ad;*/
+	font-size: 4.5rem;
+	text-align: center;
+}
+
+.main .tab_title .middle {
+	width: 40%;
+	float: left;
+	background-color: #bee2b4;
+	/*border-right: 2px solid #bee2b4;*/
+	font-size: 4.5rem;
+	text-align: center;
+}
+
+.main .tab_title .right {
+	width: 40%;
+	float: left;
+	background-color: #8ad4d0;
+	font-size: 4.5rem;
+	text-align: center;
+}
+
+#list {
+	width: 99%;
+	margin-top: 10px;
+	margin-left: 1%;
+	float: left;
+}
+
+#list li {
+	width: 49%;
+	height: 800px;
+	float: left;
+	overflow: hidden;
+	color: #4c90bf;
+}
+
+#list li .title {
+	width: 100%;
+	height: 150px;
+	font-size: 4.5rem;
+	text-align: center;
+	color: #4d4434;
+	background-color: #ffe4ad;
+	line-height: 150px;
+	float: left;
+}
+
+#list li .title .bg {
+	background-color: #bee2b4 !important;
+}
+
+#list li .jz {
+	width: 99%;
+	border: 2px solid #4c90bf;
+	height: 200px;
+	font-size: 4.5rem;
+	text-align: center;
+	float: left;
+	margin-top: 10px;
+	line-height: 200px;
+}
+
+#list li .jz .jzleft {
+	width: 40%;
+	background: right top url(li_bg.jpg) repeat-y;
+	text-align: center;
+	float: left;
+}
+
+#list li .jz .jzright {
+	width: 60%;
+	color: #f3980a;
+	text-align: center;
+	float: left;
+}
+
+#list li .dh {
+	width: 99%;
+	border: 2px solid #4c90bf;
+	height: 400px;
+	font-size: 4.5rem;
+	text-align: center;
+	margin-top: 10px;
+	float: left;
+}
+
+#list li .dh .dhleft {
+	width: 40%;
+	background: right top url(li_bg.jpg) repeat-y;
+	height: 400px;
+	line-height: 400px;
+	text-align: center;
+	float: left;
+}
+
+#list li .dh .dhright {
+	width: 60%;
+	text-align: center;
+	height: 400px;
+	overflow: hidden;
+	float: left;
+}
+
+#list li .dh .dhright span {
+	width: 100%;
+	height: 100px;
+	display: block;
+	text-align: center;
+	float: left;
+	line-height: 100px;
+	overflow: hidden;
+	border-bottom: 2px solid #4c90bf;
+}
+
+@
+keyframes mymove { 0% {
+	margin-left: 100%;
+}
+
+100%
+{
+margin-left
+
+
+:
+
+ 
+
+-200%;
+}
+}
+.main .bottom {
+	width: 100%;
+	height: 80px;
+	color: #fff;
+	text-align: center;
+	font-size: 2.25rem;
+	position: absolute;
+	left: 0px;
+	bottom: 0px;
+	background-color: #509acc;
+	line-height: 80px;
+}
+
+.main .bg {
+	width: 100%;
+	height: 1080px;
+	background-color: #000;
+	overflow: hidden;
+}
+
+.main .single {
+	float: left;
+	width: 100%;
+	height: 840px;
+}
+
+.main .single .title {
+	width: 100%;
+	height: 80px;
+	line-height: 80px;
+	font-size: 48px;
+	overflow: hidden;
+	background-color: #f0ad41;
+	text-align: center;
+	color: #fff;
+}
+
+.main .single .title2 {
+	width: 100%;
+	height: 160px;
+	line-height: 160px;
+	font-size: 72px;
+	overflow: hidden;
+	text-align: center;
+}
+
+.main .single .title3 {
+	width: 100%;
+	height: 80px;
+	line-height: 80px;
+	font-size: 48px;
+	overflow: hidden;
+	background-color: #509acc;
+	text-align: center;
+	color: #fff;
+}
+
+.main .single .title4 {
+	width: 100%;
+	height: 500px;
+	font-size: 48px;
+	overflow: hidden;
+	list-style: none;
+}
+
+.main .single .title4 li {
+	width: 50%;
+	float: left;
+	line-height: 100px;
+	overflow: hidden;
+	text-align: center;
+	border: none;
+	padding: 0px;
+	margin: 0px;
+}
+
+.main .quhao {
+	width: 100%;
+	float: left;
+	height: 840px;
+	overflow: hidden;
+}
+
+.main .quhao .left {
+	width: 815px;
+	height: 580px;
+	float: left;
+	margin: 80px 0px 0px 150px;
+	padding: 50px;
+	background-color: #bee2b4;
+	border-radius: 20px;
+}
+
+.main .quhao .left .input {
+	width: 100%;
+	height: 125px;
+}
+
+.main .quhao .left .input .input_txt {
+	border: 5px solid #ebebeb;
+	border-bottom-left-radius: 20px;
+	border-top-left-radius: 20px;
+	background-color: #fff;
+	width: 600px;
+	height: 125px;
+	float: left;
+	color: #414d3d;
+	text-align: left;
+	line-height: 125px;
+	font-size: 72px;
+	overflow: hidden;
+}
+
+.main .quhao .left .input .input_btn {
+	border-bottom-right-radius: 20px;
+	border-top-right-radius: 20px;
+	background-color: #ebebeb;
+	width: 200px;
+	height: 135px;
+	float: left;
+	font-size: 72px;
+	color: #414d3d;
+	text-align: center;
+	line-height: 135px;
+	font-weight: bold;
+}
+
+.main .quhao .left .input .input_btn:active {
+	background-color: #509acc;
+}
+
+.main .quhao .left li {
+	width: 199px;
+	height: 135px;
+	border-bottom: 1px solid #636363;
+	border-right: 1px solid #949494;
+	border-top: 0px;
+	border-left: 0px;
+	list-style: none;
+	float: left;
+	margin-right: 3px;
+	margin-top: 5px;
+	line-height: 140px;
+	font-size: 64px;
+	background-color: #ebebeb;
+	border-radius: 5px;
+	color: #414d3d;
+	text-align: center;
+	font-weight: bold;
+}
+
+.main .quhao .right {
+	width: 580px;
+	height: 580px;
+	float: left;
+	margin: 80px 0px 0px 100px;
+	padding: 50px;
+	background-color: #e1e1e1;
+	border-radius: 20px;
+	line-height: 130px;
+	font-size: 36px;
+	color: #333;
+}
+
+.main .quhao .right span {
+	text-align: center;
+	width: 100%;
+	height: 100px;
+	color: #509acc;
+	line-height: 100px;
+	font-size: 72px;
+	display: block;
+}
+
+.main .yaofang {
+	margin-top: 50px;
+	width: 100%;
+	float: left;
+	height: 840px;
+	overflow: hidden;
+}
+
+.main .yaofang .win {
+	width: 840px;
+	height: 750px;
+	float: left;
+	margin-left: 80px;
+}
+
+.main .yaofang .win .top {
+	width: 100%;
+	height: 188px;
+	background-color: #8ad4d0;
+	font-size: 96px;
+	text-align: center;
+	line-height: 188px;
+	overflow: hidden;
+	border-top-left-radius: 10px;
+	border-top-right-radius: 10px;
+	color: #314c4a;
+}
+
+.main .yaofang .win .center {
+	width: 100%;
+	height: 96px;
+	background-color: #ffe4ad;
+	font-size: 48px;
+	text-align: center;
+	line-height: 96px;
+	overflow: hidden;
+	color: #4d4534;
+}
+
+.main .yaofang .win .btm {
+	width: 100%;
+	height: 467px;
+	background-color: #dcdcdc;
+	font-size: 72px;
+	text-align: center;
+	line-height: 155px;
+	overflow: hidden;
+	border-bottom-left-radius: 10px;
+	border-bottom-right-radius: 10px;
+	color: #595959;
+}
+
+.main .yaofang .win .btm span {
+	width: 50%;
+	float: left;
+	text-align: center;
+}
+
+#bg {
+	display: none;
+	position: absolute;
+	top: 160px;
+	left: 0px;
+	width: 100%;
+	height: 840px;
+	background-color: #7f7f7f;
+	z-index: 1001;
+	-moz-opacity: 0.7;
+	opacity: .70;
+	filter: alpha(opacity = 70);
+}
+
+#showmsg {
+	width: 700px;
+	height: auto;
+	color: #414d3d;
+	z-index: 1005;
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	display: none;
+	transform: translate(-50%, -50%);
+	border-radius: 20px;
+	padding-bottom: 20px;
+	background-color: #ebebeb;
+}
+
+#showmsg .title {
+	text-align: center;
+	width: 100%;
+	height: 100px;
+	padding-top: 20px;
+	font-size: 50px;
+	background-color: #509acc;
+	border-top-left-radius: 20px;
+	border-top-right-radius: 20px;
+	color: #fff;
+}
+
+#showmsg .btnlist {
+	text-align: center;
+	width: 100%;
+	min-height: 200px;
+	font-size: 60px;
+	height: auto;
+	line-height: 200px;
+	overflow: hidden;
+}
+
+#showmsg .btnlist2 {
+	text-align: center;
+	width: 100%;
+	min-height: 200px;
+	font-size: 20px;
+	height: auto;
+	line-height: 100px;
+	overflow: hidden;
+}
+
+#showmsg .btnlist2 .rows {
+	width: 100%;
+	height: 100px;
+	font-size: 50px;
+}
+
+#showmsg .btnlist2 .rows .w10 {
+	width: 10%;
+	height: 100px;
+	text-align: center;
+	float: left;
+	overflow: hidden;
+}
+
+#showmsg .btnlist2 .rows .w15 {
+	width: 15%;
+	height: 100px;
+	text-align: center;
+	float: left;
+	overflow: hidden;
+}
+
+#showmsg .btnlist2 .rows .w20 {
+	width: 20%;
+	height: 100px;
+	text-align: center;
+	float: left;
+	overflow: hidden;
+}
+
+#showmsg .btnlist2 .rows .w30 {
+	width: 30%;
+	height: 100px;
+	text-align: center;
+	float: left;
+	overflow: hidden;
+}
+
+#showmsg .bottom {
+	width: 100%;
+	text-align: center;
+}
+
+#showmsg .back_btn {
+	text-align: center;
+	width: 200px;
+	height: 80px;
+	border-radius: 30px;
+	border: 0px;
+	font-size: 30px;
+	background-color: #509acc;
+	color: #fff;
+	margin-left: 20px;
+	display: inline-block;
+	line-height: 80px;
+}
+
+#showmsg .back_btn2 {
+	text-align: center;
+	width: 150px;
+	height: 60px;
+	border-radius: 10px;
+	border: 0px;
+	font-size: 30px;
+	background-color: #509acc;
+	color: #fff;
+	margin-top: 20px;
+	display: inline-block;
+	line-height: 60px;
+}
+
+#divAlter {
+	width: 1240px;
+	background-color: #ebebeb;
+	display: none;
+	color: #fff;
+	z-index: 1002;
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	border-radius: 20px;
+	padding-bottom: 20px;
+}
+
+#divAlter .title {
+	text-align: center;
+	width: 100%;
+	height: 100px;
+	padding-top: 20px;
+	font-size: 50px;
+	background-color: #509acc;
+	border-top-left-radius: 20px;
+	border-top-right-radius: 20px;
+}
+
+#divAlter .btnlist {
+	text-align: center;
+	width: 100%;
+	font-size: 40px;
+	height: 220px;
+	padding-top: 80px;
+	overflow: hidden;
+}
+
+#divAlter .btn_server {
+	width: 500px;
+	height: 200px;
+	margin-left: 40px;
+	background-color: #509acc;
+	text-align: center;
+	color: #fff;
+	line-height: 100px;
+	border-radius: 5px;
+	border: 0px;
+	font-size: 36px;
+	overflow: hidden;
+	display: inline-block;
+}
+
+#divAlter .back_btn {
+	text-align: center;
+	width: 380px;
+	height: 90px;
+	border-radius: 45px;
+	border: 0px;
+	font-size: 45px;
+	margin-left: 430px;
+	background-color: #fff;
+	color: #414d3d;
+}
+
+.timeback {
+	position: absolute;
+	left: 30%;
+	top: 70px;
+	display: none;
+	font-family: "微软雅黑";
+	font-size: 32px;
+	text-align: center;
+	color: White;
+}
+
+#paiban {
+	width: 100%;
+	height: 840px;
+	float: left;
+	overflow: hidden;
+}
+
+#paiban li {
+	border: 0px;
+	width: 388px;
+	height: 302px;
+	padding: 10px 14px 10px 15px;
+	margin-top: 73px;
+	margin-left: 50px;
+	background-color: #d2d2d2;
+	float: left;
+}
+
+#paiban li .ks_name {
+	width: 388px;
+	height: 70px;
+	color: #fff;
+	background-color: #f0ad41;
+	font-size: 48px;
+	text-align: center;
+	overflow: hidden;
+	margin-bottom: 12px;
+	float: left;
+	line-height: 70px;
+	font-weight: bold;
+}
+
+#paiban li .img {
+	width: 163px;
+	height: 211px;
+	float: left;
+	background-color: #fff;
+	overflow: hidden;
+}
+
+#paiban li .img img {
+	width: 100%;
+}
+
+#paiban li .zs_name {
+	width: 210px;
+	height: 74px;
+	float: right;
+	color: #fff;
+	background-color: #509acc;
+	font-size: 36px;
+	text-align: center;
+	overflow: hidden;
+	margin-bottom: 7px;
+	line-height: 74px;
+	font-weight: bold;
+}
+
+#paiban li .d_name {
+	width: 210px;
+	height: 130px;
+	float: right;
+	color: #509acc;
+	background-color: #e5e5e5;
+	font-size: 36px;
+	text-align: center;
+	overflow: hidden;
+	line-height: 40px;
+	font-weight: bold;
+}
+
+#paiban li .d_name span {
+	color: #595959;
+	font-size: 24px;
+}
+
+.tips_back {
+	width: 100%;
+	background-color: #fff;
+	background-color: rgba(255, 255, 255, 0.5);
+	height: 100%;
+	display: none;
+	z-index: 99;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+}
+
+.tips {
+	width: 1500px;
+	height: 840px;
+	position: absolute;
+	top: 160px;
+	left: 210px;
+	opacity: 1;
+	color: #509acc;
+	background-color: #fff;
+}
+
+.tips .title {
+	width: 1500px;
+	height: 300px;
+	background-color: #509acc;
+	font-size: 10.125rem;
+	text-align: center;
+	line-height: 300px;
+	margin-bottom: 20px;
+	overflow: hidden;
+	color: #fff;
+}
+
+.tips .content {
+	width: 1480px;
+	height: 500px;
+	border: 10px solid #509acc;
+	display: table-cell;
+	vertical-align: middle;
+	line-height: 10.125rem;
+	font-size: 10.125rem;
+	text-align: center;
+}
+
+.tips .content span {
+	font-size: 6.75rem;
+}

@@ -1,0 +1,18 @@
+@layout("/common/_curd/_container.html"){
+
+	<form class="form-horizontal" role="form">
+		<!-- 表单 -->
+		@ var _col=[
+			
+@			  {name:"", index:"pager_id", type:"text",newline:true,length:8},
+		@			  {name:"", index:"queue_type_id", type:"text",newline:true,length:8},
+		@			  {name:"", index:"onduty", type:"text",newline:true,length:8},
+		@			  {name:"", index:"is_custom", type:"text",newline:true,length:8}		
+		@		   ];
+		@ include("/common/_curd/_view.html", {"col":_col}){}
+		
+		<!-- 按钮 -->
+		@ include("/common/_curd/_btn.html", {btn_close:"关闭"}) {}
+	</form>
+
+@}

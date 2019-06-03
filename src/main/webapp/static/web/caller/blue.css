@@ -1,0 +1,268 @@
+﻿body {
+	margin: 0 auto;
+	width: 100%;
+	font-family: "微软雅黑", "宋体", Verdana, Arial, Helvetica, sans-serif;
+	font-size: 16px;
+	background-color: #fff;
+}
+
+ul {
+	margin: 0px;
+	padding: 0px;
+}
+
+a {
+	color: #000;
+	text-decoration: none;
+}
+
+li {
+	padding: 0px;
+	margin: 0px;
+	list-style: none;
+}
+
+.main {
+	width: 100%;
+	float: left;
+}
+
+.main {
+	width: 90%;
+	height: 200px;
+	top: 50%;
+	left: 50%;
+	background-color: #ccc;
+	position: absolute;
+	-webkit-transform: translate(-50%, -50%);
+}
+
+.main .err_info {
+	font-size: 24px;
+	color: #f00;
+}
+
+.main .login {
+	width: 100%;
+	height: 200px;
+	border: 1px solid #438eb9;
+}
+
+.main .login .left {
+	text-align: right;
+	width: 30%;
+	font-size: 24px;
+	line-height: 100px;
+	float: left;
+}
+
+.main .login .right {
+	width: 70%;
+	text-align: left;
+	float: right;
+	height: 100px;
+	overflow: hidden;
+}
+
+.main .btn {
+	margin-top: 20px;
+	width: 150px;
+	height: 60px;
+	color: #fff;
+	background-color: #438eb9;
+	border-radius: 10px;
+	border: 0px;
+	font-size: 24px;
+	cursor: pointer;
+	margin-right: 20px;
+}
+
+.main .btn:active {
+	border: 1px solid #fff;
+}
+
+.main .txt {
+	margin-top: 20px;
+	width: 40%;
+	height: 60px;
+	font-size: 24px;
+	border: 1px solid #438eb9;
+}
+
+.main .txt2 {
+	margin-top: 20px;
+	width: 40%;
+	height: 60px;
+	font-size: 36px;
+	border: 1px solid #f00;
+}
+
+.tips_back {
+	width: 100%;
+	background-color: #000;
+	background-color: rgba(0, 0, 0, 0.7);
+	height: 100%;
+	display: none;
+	z-index: 99;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+}
+
+.tips {
+	top: 50%;
+	left: 50%;
+	background-color: #ccc;
+	position: absolute;
+	-webkit-transform: translate(-50%, -50%);
+}
+
+.index {
+	width: 100%;
+	height: auto;
+}
+
+.index .info {
+	width: 100%;
+	height: 100px;
+	line-height: 100px;
+	text-align: center;
+	font-weight: bold;
+	overflow: hidden;
+	color: #f00;
+	font-size: 48px;
+}
+
+.index .show_list {
+	width: 100%;
+	height: auto;
+	overflow: hidden;
+	background-color: #fff;
+	margin: 0 0.5%;
+}
+
+.index .show_list .tab1 {
+	width: 33%;
+	height: 80px;
+	float: left;
+	text-align: center;
+	background-color: #7ecef4;
+	font-size: 36px;
+	color: #fff;
+	line-height: 80px;
+	cursor: pointer;
+}
+
+.index .show_list .tab2 {
+	width: 33%;
+	height: 80px;
+	float: left;
+	text-align: center;
+	background-color: #71bceb;
+	font-size: 36px;
+	line-height: 80px;
+	color: #fff;
+	cursor: pointer;
+}
+
+.index .show_list .title {
+	width: 100%;
+	height: 20px;
+	overflow: hidden;
+	border-bottom: 1px dashed #000;
+}
+
+.index .show_list .span1 {
+	width: 49%;
+	height: 60px;
+	text-align: center;
+	float: left;
+	overflow: hidden;
+	border: 1px solid #ccc;
+	margin-top: 2px;
+	font-size: 30px;
+	line-height: 60px;
+}
+
+.index .show_list .span2 {
+	width: 25%;
+	height: 60px;
+	text-align: center;
+	float: left;
+	border-right: 1px solid #ccc;
+	border-top: 1px solid #ccc;
+	border-bottom: 1px solid #ccc;
+	margin-top: 2px;
+	font-size: 30px;
+	line-height: 60px;
+}
+
+.index .show_list .list {
+	width: 100%;
+	height: auto;
+	overflow: hidden;
+	display: none;
+	background-color: #fff;
+}
+
+.index .show_list .list a {
+	color: #000;
+}
+
+.index .show_list .list .wait_list {
+	width: 100%;
+	height: auto;
+	overflow-y: scroll;
+	overflow-x: hidden;
+	line-height: 80px;
+}
+
+.index .show_list .list .wait_list::-webkit-scrollbar {
+	width: 2px;
+	height: 2px;
+	background-color: #fff;
+}
+
+.index .show_list .list .wait_list::-webkit-scrollbar-track {
+	-webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, .3);
+	border-radius: 1px;
+	background-color: #fff;
+}
+
+.index .show_list .list .wait_list::-webkit-scrollbar-thumb {
+	/*width: 10px;*/
+	height: auto;
+	border-radius: 1px;
+	-webkit-box-shadow: inset 0 0 6px #438eb9;
+	background-color: #fff;
+}
+
+.index .show_list li {
+	width: 100%;
+	float: left;
+}
+
+.index .btnlist {
+	width: 100%;
+	height: 220px;
+	position: absolute;
+	bottom: 0;
+	overflow: hidden;
+}
+
+.index .btnlist .div {
+	width: 40%;
+	margin: 5px 5%;
+	height: 100px;
+	float: left;
+}
+
+.index .btnlist .div .btn {
+	width: 100%;
+	height: 100px;
+	font-size: 48px;
+	background-color: #438eb9;
+	border-radius: 10px;
+	border: 0px;
+	color: #fff;
+}

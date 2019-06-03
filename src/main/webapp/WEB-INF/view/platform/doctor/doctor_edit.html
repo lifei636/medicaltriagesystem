@@ -1,0 +1,21 @@
+@layout("/common/_curd/_container.html"){
+
+	<form data-url="${basePath}/${code}/update" method="post" class="form-horizontal" role="form">
+		<!-- 表单 -->
+		@ var _table="doctor";
+		@ var _key="doctor_id";
+		@ var _col=[
+		@			  {name:"医生编号", index:"login_id", type:"text",newline:true,length:8,required:"required"},
+		@			  {name:"医生姓名", index:"name", type:"text",newline:true,length:8,required:"required"},
+		@			  {name:"所属科室", index:"department", type:"text",newline:true,length:8},
+		@			  {name:"医生职称", index:"title", type:"text",newline:true,length:8},
+		@			  {name:"医生级别", index:"call_rule", type:"text",newline:true,length:8},
+		@			  {name:"医生简介", index:"description", type:"text",newline:true,length:8}	
+		@		   ];
+		@ include("/common/_curd/_edit.html", {"col":_col, "table":_table, "key":_key}){}
+		
+		<!-- 按钮 -->
+		@ include("/common/_curd/_btn.html", {btn_save:"修改", btn_close:"关闭"}) {}
+	</form>
+
+@}

@@ -1,0 +1,480 @@
+body{ margin:0px; padding:0px;		font-family: YANSONG;
+}
+
+@font-face {
+    font-family: KESONG;
+    src: url("MFKeSongRegular.ttf"); /*造字工房刻宋（非商用）常规体*/ /*粗*/
+}
+
+@font-face {
+    font-family: YANSONG;
+    src: url("MFYanSongRegular.ttf"); /*造字工房言宋（非商用）常规体*/ /*细*/
+}
+
+@font-face {
+    font-family: FZLTXCHK;
+    src: url("FZLTXCHK.TTF"); /*方正兰亭细黑_GBK*/
+}
+
+@font-face {
+    font-family: FZLTZCHK;
+    src: url("FZLTZCHK.TTF"); /*方正兰亭中粗黑_GBK*/
+}
+
+/*整体*/
+
+.container{
+	width: 1920px;
+	height: 1080px;
+	margin: 0px auto;
+	float: left;
+	background: url(images/zy_main_back.jpg) no-repeat;
+}
+
+/*上部*/
+.top{
+	width: 1920px;
+	height: 160px;
+	float: left;
+
+}
+.top .logo{
+	width: 480px;
+	height: 120px;
+	float: left;
+	margin: 25px 0 0 80px;
+}
+.top .name{
+	width: 700px;
+	height: 120px;
+	float: left;
+	color: #424b50;
+	font-size: 90px;
+	text-align: center;
+	line-height: 120px;
+	margin-top: 25px;
+	letter-spacing: 1px;
+}
+.top .date{
+	width: 280px;
+	height: 90px;
+	float: left;
+	color: #877f72;
+	font-size: 28px;
+	text-align: right;
+	line-height: 45px;
+	margin-top: 43px;
+	font-family: KESONG;
+	letter-spacing: 3px;
+}
+
+.top .time{
+	width: 290px;
+	height: 90px;
+	float: left;
+	font-size: 90px;
+	color: #6c665b;
+	text-align: right;
+	line-height: 90px;
+	margin-top: 43px;
+	font-family: FZLTXCHK;
+	letter-spacing: 1px;
+}
+	
+/*中间*/
+
+.main{
+	width: 1920px;
+	height: 825px;
+	float: left;
+}
+
+
+
+
+/*列表部分*/
+.main .table{
+	width: 1750px;
+	height: 780px;
+	float: left;
+	margin: 15px 85px;
+}
+/*title部分*/
+.table .title{
+	width: 1720px;
+	height: 100px;
+	float: left;
+	color: #6c665b;
+	line-height: 100px;
+	text-align: center;
+	font-size: 46px;
+	font-family: KESONG;
+	margin: 0 15px;
+}
+.title .title-1 {
+	width: 317px;
+	height: 90px;
+	float: left;
+}
+
+.title .title-2 {
+	width: 350px;
+	height: 90px;
+	float: left;
+}
+
+.title .title-3 {
+	width: 650px;
+	height: 90px;
+	float: left;
+}
+
+.title .title-4 {
+    width: 370px;
+    height: 90px;
+    float: left;
+}
+
+/*下部分内容*/
+.table .down{
+	width: 1720px;
+	height: 650px;
+	float: left;
+	background: url(images/zy_box.png) no-repeat;
+	padding: 15px;
+}
+.down .line{
+	width: 1720px;
+	height: 130px;
+	float: left;
+}
+/*诊室*/
+.line .line-zhenshi{
+	width: 240px;
+	height: 130px;
+	float: left;
+	color: #6c665b;
+	line-height: 130px;
+	text-align: center;
+	font-size: 46px;
+	font-family: KESONG;
+}
+/*正在就诊*/
+.line .hz-zheng{
+	width: 370px;
+	height: 130px;
+	float: left;
+}
+.hz-zheng .zheng-n {
+    width: 145px;
+    height: 130px;
+    float: left;
+    font-size: 48px;
+    color: #ff3300;
+    line-height: 130px;
+    text-align: justify;
+    text-align-last: justify;
+    margin-left: 31px;
+    margin-right: 3px;
+}
+.hz-zheng .zheng-n-4 {
+    width: 197px;
+    height: 130px;
+    float: left;
+    font-size: 48px;
+    color: #ff3300;
+    line-height: 130px;
+    text-align: right;
+    margin-left: -19px;
+}
+
+
+
+.hz-zheng .zheng-num{
+	width: 150px;
+	height: 36px;
+	float: left;
+	margin: 46px 0 0 20px;
+}
+.zheng-num .zheng-txt{
+	width: 110px;
+	height: 36px;
+	float: left;
+	font-size: 44px;
+	color: #ff3300;
+	line-height: 40px;
+	text-align: center;
+	font-family: FZLTZCHK;
+}
+.zheng-num .kh-1-l{
+	width: 18px;
+	height: 36px;
+	float: left;
+	background: url(images/zy_kh-1-l.png) no-repeat;
+}
+.zheng-num .kh-1-r{
+	width: 18px;
+	height: 36px;
+	float: left;
+	background: url(images/zy_kh-1-r.png) no-repeat;
+}
+/*等候就诊*/
+.line .line-r{
+	width: 1110px;
+	height: 130px;
+	float: left;
+	padding: 0px;
+}
+.line-r .hz-deng{
+	width: 370px;
+	height: 130px;
+	float: left;
+}
+.hz-deng .deng-n {
+    width: 144px;
+    height: 130px;
+    float: left;
+    font-size: 48px;
+    color: #424b50;
+    line-height: 129px;
+    text-align: justify;
+    text-align-last: justify;
+    margin-left: 40px;
+    margin-right: 1px;
+}
+.hz-deng .deng-n-4 {
+    width: 325px;
+    height: 130px;
+    float: left;
+    font-size: 48px;
+    color: #424b50;
+    line-height: 130px;
+    text-align: right;
+    margin-left: -145px;
+    margin-right: 1px;
+}
+.hz-deng .deng-num{
+	width: 150px;
+	height: 36px;
+	float: left;
+	margin: 46px 0 0 20px;
+}
+.deng-num .deng-txt{
+	width: 110px;
+	height: 36px;
+	float: left;
+	font-size: 44px;
+	color: #424b50;
+	line-height: 40px;
+	text-align: center;
+	font-family: FZLTZCHK;
+}
+.deng-num .kh-2-l{
+	width: 18px;
+	height: 36px;
+	float: left;
+	background: url(images/zy_kh-2-l.png) no-repeat;
+}
+.deng-num .kh-2-r{
+	width: 18px;
+	height: 36px;
+	float: left;
+	background: url(images/zy_kh-2-r.png) no-repeat;
+}
+
+.line .line-1 {
+	width: 317px;
+	height: 145px;
+	float: left;
+	color: #4e3f49;
+	line-height: 145px;
+	text-align: center;
+	font-size: 49px;
+	font-family: "YANSONG";
+	overflow: hidden;
+}
+
+.line .line-1 span {
+	font-size: 30px;
+}
+
+.line .line-2 {
+    width: 350px;
+    height: 145px;
+    float: left;
+    color: #4e3f49;
+    line-height: 145px;
+    text-align: center;
+    font-size: 49px;
+    font-family: "YANSONG";
+    overflow: hidden;
+}
+.line .line-3 {
+    width: 600px;
+    height: 145px;
+    float: left;
+    color: #4e3f49;
+    line-height: 145px;
+    font-size: 49px;
+    font-family: "YANSONG";
+    overflow: hidden;
+    padding-left:50px;
+}
+    .line .line-3 .l1 {
+        width:200px;
+        height:145px;
+        text-align:center;
+        float:left;
+        overflow:hidden;
+    }
+    .line .line-3 .l2 {
+        width: 3250px;
+        height: 145px;
+        float: left;
+        text-align:center;
+        overflow: hidden;
+    }
+
+.line .line-4 {
+    width: 370px;
+    height: 145px;
+    float: left;
+    color: #4e3f49;
+    line-height: 145px;
+    text-align: center;
+    font-size: 49px;
+    font-family: "FZLTZCHK";
+    overflow: hidden;
+}
+/*底部*/
+.bottom{
+	width: 1920px;
+	height: 87px;
+	float: left;
+	font-size: 42px;
+	color: #a5bac5;
+	text-align: center;
+	line-height: 87px;
+	margin-top: 8px;
+	font-family: KESONG;
+}
+
+
+
+
+.main_call {
+    width: 1920px;
+    height: 825px;
+    float: left;
+    position:absolute;
+    left:0px;
+    top:0px;
+}
+
+    .main_call .table_call {
+        width: 1750px;
+        height: 780px;
+        float: left;
+        /*margin: 15px 85px;*/
+        background-color: #e8dabf;
+        position: fixed;
+        top: 150px;
+        left: 85px;
+        /*transform:translate(-50%,-50%);*/
+    }
+
+/*诊室*/
+.table_call .zhenshi_call {
+    width: 1750px;
+    height: 154px;
+    float: left;
+    letter-spacing: 5px;
+    font-size: 90px;
+    color: #424b50;
+    text-align: center;
+    line-height: 154px;
+    margin: 30px 0 40px 0;
+    background: url(images/zy_box-1_call.png) no-repeat;
+}
+
+
+/*患者部分*/
+.table_call .huanzhe_call {
+    width: 1750px;
+    height: 550px;
+    float: left;
+    background: url(images/zy_box-2_call.png) no-repeat;
+   
+}
+
+/*正在就诊*/
+.huanzhe_call .hz-zheng_call {
+    width: 1590px;
+    height: 200px;
+    float: left;
+    margin: 170px 0 0 80px;
+    font-size:90px;
+    line-height:200px;
+}
+
+
+
+/*二个字*/
+.hz-zheng_call .zheng-n_call {
+    width: 561px;
+    height: 200px;
+    float: left;
+    font-size: 185px;
+    color: #ff3300;
+    line-height: 200px;
+    text-align: left;
+    margin-left: 320px;
+    text-align: justify;
+    text-align-last: justify;
+    margin-right: 109px;
+}
+
+
+
+/*四个字*/
+.hz-zheng_call .zheng-n_call-4 {
+    width: 750px;
+    height: 200px;
+    float: left;
+    font-size: 185px;
+    color: #ff3300;
+    line-height: 200px;
+    text-align: left;
+    margin-left: 135px;
+    margin-right: 107px;
+}
+
+.hz-zheng_call .zheng-num_call {
+    width: 410px;
+    height: 92px;
+    float: left;
+    margin: 50px 0 0 0;
+}
+.zheng-num_call .zheng-txt_call {
+    width: 318px;
+    height: 92px;
+    float: left;
+    font-size: 110px;
+    color: #ff3300;
+    line-height: 105px;
+    text-align: center;
+    font-family: FZLTZCHK;
+}
+.zheng-num_call .kh-1-l_call {
+    width: 46px;
+    height: 92px;
+    float: left;
+    background: url(images/zy_kh-1-l_call.png) no-repeat;
+}
+.zheng-num_call .kh-1-r_call {
+    width: 46px;
+    height: 92px;
+    float: left;
+    background: url(images/zy_kh-1-r_call.png) no-repeat;
+}
+

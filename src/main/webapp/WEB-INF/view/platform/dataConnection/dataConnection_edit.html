@@ -1,0 +1,23 @@
+@layout("/common/_curd/_container.html"){
+
+	<form data-url="${basePath}/${code}/update" method="post" class="form-horizontal" role="form">
+		<!-- 表单 -->
+		@ var _table="data_connection";
+		@ var _key="id";
+		@ var _col=[
+		@			  {name:"数据库类型", index:"dbType", type:"text",newline:true,length:8,required:"required"},
+		@			  {name:"数据库名称", index:"dbName", type:"text",newline:true,length:8,required:"required"},
+		@			  {name:"连接地址", index:"url", type:"text",newline:true,length:8,required:"required"},
+		@			  {name:"用户名", index:"username", type:"text",newline:true,length:8,required:"required"},
+		@			  {name:"密码", index:"password", type:"text",newline:true,length:8},
+		@			  {name:"出错处理", index:"err_type",type:"select_116",newline:true,length:8,required:"required"},
+		@			  {name:"同步医生信息", index:"doc_info",type:"select_117",newline:true,length:8,required:"required"},
+		@			  {name:"描述", index:"description", type:"text",newline:true,length:8}		
+		@		   ];
+		@ include("/common/_curd/_edit.html", {"col":_col, "table":_table, "key":_key}){}
+		
+		<!-- 按钮 -->
+		@ include("/common/_curd/_btn.html", {btn_save:"修改", btn_close:"关闭"}) {}
+	</form>
+
+@}

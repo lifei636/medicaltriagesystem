@@ -1,0 +1,937 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0;" name="viewport" />
+    <title>诊室门口</title>
+    <link href="/static/web/hall/style_green_bd.css" rel="stylesheet" />
+    <script src="/static/web/hall/jquery.min.js"></script>
+    <script src="/static/web/hall/jquery.mobile-1.3.2.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!--上部-->
+        <div class="top">
+            <div class="logo">
+                <img src="/static/web/image/logo.png">
+            </div>
+            <div class="name"></div>
+            <!--<div class="date" id="divDate">
+                星期四<br /> 2017年10月26日
+            </div>
+            <div class="time" id="divTime">22:58</div>-->
+        </div>
+
+        <!--中部-->
+        <div class="main">
+
+            <!--列表部分-->
+            <div class="table-1">
+                <div class="title">报到机注意事项</div>
+                <div class="down">
+                    1、已挂号的门诊患者，需扫描就诊卡（或身份证）报到后方能候诊。<br />
+                    2、看检查、检验报告的回诊病员，也需再次扫描就诊卡。<br />
+                    3、支持手动输入就诊卡（身份证）卡号报到。
+                </div>
+            </div>
+
+
+            <!--叫号部分-->
+            <div class="table-2">
+                <div class="jiaohao">
+                    <!--<input type="text" readonly="readonly" maxlength="20" placeholder="请输入您的就诊卡号" class="input_txt" id="serialNum" />-->
+                    <div class="input_txt" id="serialNum"></div>
+                    <div id="keyboard" class="keyborde">
+                        <div class="enterkey" id="serialOK"><br />确<br />认</div>
+                        <ul>
+                            <li data-value="7" class="nmbkey">7</li>
+                            <li data-value="8" class="nmbkey">8</li>
+                            <li data-value="9" class="nmbkey">9</li>
+                            <li data-value="X" class="nmbkey">X</li>
+                            <li data-value="4" class="nmbkey">4</li>
+                            <li data-value="5" class="nmbkey">5</li>
+                            <li data-value="6" class="nmbkey">6</li>
+                            <li data-value="0" class="nmbkey">0</li>
+                            <li data-value="1" class="nmbkey">1</li>
+                            <li data-value="2" class="nmbkey">2</li>
+                            <li data-value="3" class="nmbkey">3</li>
+                            <li data-value="del" class="nmbkey">回删</li>
+                            <li data-value="delAll" class="resetkey">重置</li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="bottom">温馨提示：使用身份证报道时，请将身份证放置在身份证读卡区！！！</div>
+        <div id="bg"></div>
+        <div id="divAlter">
+            <div class="title">请选择对应业务号码取号</div>
+            <div class="btnlist" id="content"></div>
+            <input type="button" value="返回" class="back_btn" id="btn_bak2" />
+        </div>
+        <div id="showmsg">
+            <div class="title" id="showmsg_title">信息提示</div>
+            <div class="btnlist" id="info_msg">
+
+            </div>
+            <div class="bottom">
+                <span class="back_btn" id="btn_bak1">返回</span><span id="showmsg_btn" class='back_btn'>打印</span>
+            </div>
+            <div class="btm_tips">
+                请耐心等候，注意系统叫号
+            </div>
+        </div>
+        <div id="divTimer" class="timeback" style="display: none;">
+            <span id="spanSec" style="color: Red; margin: 0px 5px 0px 5px;">15</span>秒后返回
+        </div>
+    </div>
+</body>
+</html>
+<script type="text/javascript">
+    var is_yinsi = false; //是否开启隐私保护
+    var Getdata = "";
+    var indata = "";
+    function ShowTime() {
+        try {
+            var obj, n, y, r, s, f, x;
+            var weekday = new Array(7)
+            weekday[0] = "日"
+            weekday[1] = "一"
+            weekday[2] = "二"
+            weekday[3] = "三"
+            weekday[4] = "四"
+            weekday[5] = "五"
+            weekday[6] = "六"
+            obj = new Date();
+            n = obj.getYear() + 1900;
+            if (obj.getMonth() < 9) {
+                y = "0" + (obj.getMonth() + 1);
+            }
+            else {
+                y = obj.getMonth() + 1;
+            }
+            if (obj.getDate() < 10) {
+                r = "0" + obj.getDate();
+            }
+            else {
+                r = obj.getDate();
+            }
+            x = "星期" + weekday[obj.getDay()];
+            if (obj.getHours() < 10) {
+                s = "0" + obj.getHours();
+            }
+            else {
+                s = obj.getHours();
+            }
+            if (obj.getMinutes() < 10) {
+                f = "0" + obj.getMinutes();
+            }
+            else {
+                f = obj.getMinutes();
+            }
+            Getdata = n + "年" + y + "月" + r + "日";
+            indata = s + ":" + f;
+            $("#divDate").html(x + '<br />' + Getdata);
+            $("#divTime").html(indata);
+        }
+        catch (ex) { }
+    }
+    $(document).ready(
+        function () {
+            ShowTime();
+            setInterval(ShowTime, 5000);
+        });
+    function getUrlParam(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return unescape(r[2]); return null;
+    }
+    var ip = getUrlParam("ip");
+    var is_print = getUrlParam("print");
+    
+    document.getElementById("serialNum").focus();
+    window.document.onload = function () {
+        document.documentElement.style.webkitTouchCallout = "none"; //禁止弹出菜单
+        document.documentElement.style.webkitUserSelect = "none";//禁止选中
+    }
+    $("#serialOK").bind("vmousedown", function () {
+        GetQueueList();
+    });
+    $("#btn_bak2").bind("vmousedown", function () {
+        closediv();
+    });
+    $("#btn_bak1").bind("vmousedown", function () {
+        closediv();
+    });
+    //var ids = getUrlParam("queueTypes");
+
+    function GetQueueList() {
+
+        var source_code = $("#serialNum").html();
+        if (source_code.length > 5) {
+            $.ajax({
+                type: "POST",
+                async: true,
+                url: "/clientPatientQueue/Scan",
+                dataType: "json",
+                data: { "code": source_code, "ip": ip },
+                success: function (data) {
+                    if (data.return_code == "success") {
+                        if (data.count > 0) {
+                            var html = "<div class='rows'><div class='w20'>姓名</div><div class='w20'>队列</div><div class='w20'>状态</div><div class='w20'>排队号</div><div class='w30'>就诊时间段</div><div class='w20'>操作</div></div>";
+                            $.each(data.list, function (i, item) {
+                                var s = "", c = "";
+                                switch (item.state_patient) {
+                                    case 0:
+                                    case 2:
+                                    case 3:
+                                    case 4:
+                                    case 5:
+                                    case 6:
+                                    case 7:
+                                    case 8:
+                                    case 50:
+                                        s = "已报到";
+                                        break;
+                                    case 51:
+                                        s = "正在就诊";
+                                        break;
+                                    case 52:
+                                    case 53:
+                                        s = '已就诊';
+                                        break;
+                                    case 54:
+                                        s='过号';
+                                        break;
+                                    default:
+                                        s = '已过号';
+                                }
+                                var r_id=item.register_id;
+                                if(item.state_patient2!=0&&item.state_patient2!=undefined)
+                                {
+                                    //r_id=data.dqjz.register_id2;
+                                    if(item.state_patient2=="2")
+                                        {
+                                            r_id="复诊-"+item.register_id2;
+                                        }
+                                }
+                                var showbtn=false;
+                                var btnhtml="<div class='back_btn' ontouchstart='baodao(\"" + source_code + "\",\"" + item.queue_type_id + "\",\"" + item.id + "\",\"" + item.reorder_type + "\",\"" + item.is_pretriage + "\",\"" + item.reserve_numlist + "\",\"" + item.print_type + "\")'>报到</div>";
+                                if(item.is_display == 1)
+                                    {
+                                        s="未报到";
+                                        showbtn=true;
+                                    }
+                                else{
+                                    if(item.state_patient == 1)
+                                        showbtn=true;
+                                    else if(item.state_patient==53)
+                                    {
+                                        showbtn=true;
+                                        btnhtml="<div class='back_btn' ontouchstart='baodao(\"" + source_code + "\",\"" + item.queue_type_id + "\",\"" + item.id + "\",\"" + item.reorder_type + "\",\"" + item.is_pretriage + "\",\"" + item.reserve_numlist + "\",\"" + item.print_type + "\")'>复诊报到</div>";
+                                    }
+                                    else
+                                        showbtn=false;
+                                }
+                                html += "<div class='rows'><div class='w20'>" + item.patient_name + "</div><div class='w20'>" + item.queue_type_name + "</div><div class='w20'>" + s + "</div><div class='w20'>" + r_id + "</div><div class='w30'>"+str2date(item.begin_time,item.last_time,item.fre_date)+"</div><div class='w20'>" + ( !showbtn? "请等候" : btnhtml) + "</div></div>";
+                            });
+                            
+                            if (divClose == null)
+                                divClose = setInterval(showTimer, 1000);
+                            $("#showmsg").show();
+                            $("#showmsg").width(1300);
+                           
+                            $("#info_msg").removeClass("btnlist")
+                            $("#info_msg").addClass("btnlist2");
+                            $("#info_msg").html(html);
+                            $("#bg").css("z-index", 1003);
+                            $("#bg").show();
+                            $("#showmsg_btn").hide();
+                        }
+                        else {
+                            if (divClose == null)
+                                divClose = setInterval(showTimer, 1000);
+                            $("#showmsg").show();
+                            $("#showmsg").width(700);
+                            //$("#showmsg").css('margin-top', -(parseFloat($('#showmsg').height()) / 2) + 'px');
+                            //$("#showmsg").css('margin-left', -350 + 'px');
+                            $("#info_msg").removeClass("btnlist2")
+                            $("#info_msg").addClass("btnlist");
+                            $("#info_msg").html("未查询到信息！");
+                            $("#bg").css("z-index", 1003);
+                            $("#bg").show();
+                            $("#showmsg_btn").hide();
+                        }
+
+                    }
+                    else {
+                        if (divClose == null)
+                            divClose = setInterval(showTimer, 1000);
+                        $("#showmsg").show();
+                        $("#showmsg").width(700);
+                        //$("#showmsg").css('margin-top', -(parseFloat($('#showmsg').height()) / 2) + 'px');
+                        //$("#showmsg").css('margin-left', -350 + 'px');
+                        $("#info_msg").removeClass("btnlist2")
+                        $("#info_msg").addClass("btnlist");
+                        $("#info_msg").html("未查询到信息！");
+                        $("#bg").css("z-index", 1003);
+                        $("#bg").show();
+                        $("#showmsg_btn").hide();
+                    }
+                },
+                error: function () {
+                    if (divClose == null)
+						divClose = setInterval(showTimer, 1000);
+                    $("#showmsg").show();
+                    $("#showmsg").width(700);
+                    $("#info_msg").removeClass("btnlist2")
+                    $("#info_msg").addClass("btnlist");
+                    $("#info_msg").html("操作失败，请联系管理员");
+                    $("#bg").css("z-index", 1003);
+                    $("#bg").show();
+                    $("#showmsg_btn").hide();
+                }
+            });
+        }
+        else {
+            if (divClose == null)
+                divClose = setInterval(showTimer, 1000);
+            $("#showmsg").show();
+            $("#showmsg").width(700);
+            //$("#showmsg").css('margin-top', -(parseFloat($('#showmsg').height()) / 2) + 'px');
+            //$("#showmsg").css('margin-left', -350 + 'px');
+            $("#info_msg").removeClass("btnlist2")
+            $("#info_msg").addClass("btnlist");
+            $("#info_msg").html("请刷卡或输入正确的卡号");
+            $("#bg").css("z-index", 1003);
+            $("#bg").show();
+            $("#showmsg_btn").hide();
+        }
+
+    }
+    function str2date(begin,last,fre) {
+        var bdate = Date.parse(begin); 
+        var ldate= Date.parse(last); 
+        var bstr="",lstr="";
+        if (isNaN(bdate)) {  
+            bdate= Date.parse(fre);
+            ldate=bdate+30*60*1000;
+            if(isNaN(bdate))
+            {
+                bdate=new Date();
+                ldate=bdate+30*60*1000;
+            }
+        } 
+        else
+        {
+            if (isNaN(ldate)) {  
+                ldate=bdate+30*60*1000;
+            }  
+        }
+        bdate=new Date(bdate);
+        ldate=new Date(ldate);
+        if (bdate.getHours() < 10) {
+            bstr = "0" + bdate.getHours();
+        }
+        else {
+            bstr = bdate.getHours();
+        }
+        if (bdate.getMinutes() < 10) {
+            bstr += ":0" + bdate.getMinutes();
+        }
+        else
+        {
+            bstr += ":"+bdate.getMinutes();
+        }
+        if (ldate.getHours() < 10) {
+            lstr = "0" + ldate.getHours();
+        }
+        else {
+            lstr = ldate.getHours();
+        }
+        if (ldate.getMinutes() < 10) {
+            lstr += ":0" + ldate.getMinutes();
+        }
+        else
+        {
+            lstr += ":"+ldate.getMinutes();
+        }
+        return bstr+'-'+lstr;
+    }
+    function GetData(sql) {
+        var datalist = null;
+        $.ajax({
+            type: "GET",
+            async: false,
+            url: "/client/commSelect",
+            contentType: "application/text;charset=utf-8",
+            dataType: "json",
+            data: { "sql": sql },
+            cache: false,
+            success: function (pdata) {
+                datalist = pdata;
+            }
+        });
+        return datalist;
+    }
+    function baodao(code, queue, id, ttype, is_tri, numlist, print_type) {
+        $.ajax({
+            type: "POST",
+            async: true,
+            url: "/clientPatientQueue/ScanBaodao",
+            dataType: "json",
+            data: { "code": code, 'queue_type_id': queue, 'yl': numlist, "ip": ip },
+            success: function (data) {
+                if (data.return_code == "success") {
+                    // var wait = GetData("SELECT count(id) as wait FROM patient_queue where is_deleted=0 and state_patient NOT IN (1, 51, 52, 53, 54) and is_display=2 and queue_type_id=" + queue + " and id<>" + data.id);
+                    // var wait_count = 0;
+                    // if (wait.count == 1)
+                    //     wait_count = wait.list[0].wait;
+                    if (divClose == null)
+                        divClose = setInterval(showTimer, 1000);
+                    $("#showmsg").show();
+                    $("#showmsg").width(900);
+                    //$("#showmsg").css('margin-top', -(parseFloat($('#showmsg').height()) / 2) + 'px');
+                    //$("#showmsg").css('margin-left', -350 + 'px');
+                    $("#info_msg").removeClass("btnlist2")
+                    $("#info_msg").addClass("btnlist");
+                    var r_id=data.register_id;
+                    if(data.state_patient2!=0&&data.state_patient2!=undefined)
+                    {
+                        //r_id=data.dqjz.register_id2;
+                        if(data.state_patient2=="2")
+                            {
+                                r_id="复诊-"+data.register_id2;
+                            }
+                    }
+                    var msg=data.patient_name+" 报到成功<br />";
+                    var datadocinof=GetData("SELECT a.`name`, a.display_name, b.NAME as triage_name FROM pager a INNER JOIN triage b ON a.triage_id = b.triage_id WHERE a.doctor_id = "+data.doctor_id);
+                    msg+="<div class='info_msg2'>";
+                    if(datadocinof.count==1)
+                    {
+                        msg+="看诊科室："+datadocinof.list[0].triage_name+"&nbsp;&nbsp;&nbsp;&nbsp;看诊诊室："+datadocinof.list[0].display_name+"<br />";
+                    }
+                    msg+="看诊医生："+data.queue_type_name+"&nbsp;&nbsp;&nbsp;&nbsp;挂号号序："+r_id+"<br />看诊时间："+str2date(data.begin_time,data.last_time,data.fre_date);
+                    $("#info_msg").html(msg);
+                    $("#bg").css("z-index", 1003);
+                    $("#bg").show();
+                    $("#showmsg_btn").hide();
+                    if (is_print)
+                    {
+                        var myDate = new Date();
+                        PrintXml(data.patient_name, data.queue_type_name, 0, myDate.toLocaleString(), r_id);
+                    }
+                }
+                else {
+					if (divClose == null)
+						divClose = setInterval(showTimer, 1000);
+                    $("#showmsg").show();
+                    $("#showmsg").width(700);
+                    $("#info_msg").removeClass("btnlist2")
+                    $("#info_msg").addClass("btnlist");
+                    $("#info_msg").html("操作失败，请联系管理员");
+                    $("#bg").css("z-index", 1003);
+                    $("#bg").show();
+                    $("#showmsg_btn").hide();
+                }
+            }
+        });
+    }
+    
+
+    $("#serialOK").keypress(function () {
+        if (event.keyCode == "13") {
+            GetPatientInfo();
+        }
+    });
+    var iNum = 16;
+    var divClose = null;
+    function showTimer() {
+        if ($("#divTimer").css("display") == "none") {
+            $("#divTimer").show();
+        }
+        if (iNum == 0) {
+            clearInterval(divClose);
+            divClose = null;
+            iNum = 16;
+            $("#divTimer").hide();
+            isSwipeCard = 0;
+            //if (validate != "false") {
+            //    $("#divAlter").hide();
+            //    $("#quhao_content").show();
+            //}
+			
+            $("#showmsg").hide();
+            $("#bg").hide();
+            $("#serialNum").html("");
+            keystring="";
+        }
+        else {
+            iNum--;
+            $("#spanSec").html(iNum.toString());
+        }
+    }
+    function closediv() {
+        iNum = 0;
+        showTimer();
+        try{
+            FreshCard();
+        }
+		catch(err){}
+    }
+
+
+    function quhao(name, id, wait, project, chkwin, r_id) {
+        if (CheckPrint() == "0") {
+            $.ajax({
+                type: "POST",
+                async: false,
+                url: "/clientPatientQueue/Manual_quhao?t=" + new Date().getTime(),
+                dataType: "text",
+                cache: false,
+                data: { "id": id },
+                success: function (text) {
+                    var data = JSON.parse(text);
+                    if (data.return_code == "success") {
+                        var str = "\n\r姓名：" + name + "\n\r\n\r检查项目：" + project + "\n\r\n\r排队号码：" + r_id + "\n\r\n\r等候窗口：" + chkwin + "\n\r\n\r等候人数：" + wait + "\n\r\n\r温馨提示：请保管好您的随身物品,耐心等候！！！";
+                        OnPrinted(obj.Print(str));
+                    }
+                },
+                error: function () {
+                    $("#info_msg").html("<span style='color:red'>出现错误，请稍后重试</span>");
+                }
+            });
+        }
+        else {
+            if (divClose == null)
+                divClose = setInterval(showTimer, 1000);
+            $("#showmsg").show();
+            $("#showmsg").width(700);
+            $("#info_msg").removeClass("btnlist2")
+            $("#info_msg").addClass("btnlist");
+            $("#info_msg").html("打印机故障，暂时无法取号");
+            $("#bg").css("z-index", 1003);
+            $("#bg").show();
+            $("#showmsg_btn").hide();
+        }
+    }
+
+    function OnPrinted(code) {
+        if (code == "0000000000") {
+			if (divClose == null)
+				divClose = setInterval(showTimer, 1000);
+            $("#showmsg").show();
+            $("#showmsg").width(700);
+            $("#info_msg").removeClass("btnlist2")
+            $("#info_msg").addClass("btnlist");
+            $("#info_msg").html("打印成功");
+            $("#bg").css("z-index", 1003);
+            $("#bg").show();
+            $("#showmsg_btn").hide();
+            obj.CutPaper();
+        }
+        else {
+			if (divClose == null)
+				divClose = setInterval(showTimer, 1000);
+            $("#showmsg").show();
+            $("#showmsg").width(700);
+            $("#info_msg").removeClass("btnlist2")
+            $("#info_msg").addClass("btnlist");
+            $("#info_msg").html("打印出错");
+            $("#bg").css("z-index", 1003);
+            $("#bg").show();
+            $("#showmsg_btn").hide();
+        }
+    }
+
+    function PrintXml(patient_name, queue_type_name, waiting_count, time, register_id) {
+		var printXml = '! 0 200 200 100 1\n';
+		printXml += 'CENTER\n';
+		printXml += 'TEXT 24 11 0 40 检验科\n';
+		printXml += 'PRINT\n';
+
+		printXml += '! 0 200 200 32 1\n';
+		printXml += 'TEXT 24 0 0 0 您是第\n';
+		printXml += 'PRINT\n';
+
+		printXml += '! 0 200 200 64 1\n';
+		printXml += 'CENTER\n';
+		printXml += 'TEXT 24 11 0 0 ' + register_id + '号\n';
+		printXml += 'PRINT\n';
+
+		printXml += '! 0 200 200 200 1\n';
+		printXml += 'TEXT 24 0 0 0 所属业务：' + queue_type_name + '\n';
+		//printXml += 'TEXT 24 0 0 32 等候人数：' + waiting_count + ' \n';
+		printXml += 'TEXT 24 0 0 32 姓名：'+patient_name+'\n';
+		//printXml += 'TEXT 24 0 0 96 谢谢您的合作!\n';
+		printXml += 'TEXT 24 0 0 64 ' + time + '\n\n';
+		//printXml += 'TEXT 24 0 0 160 \n';
+		printXml += 'PRINT\n'
+		window.Callobject.PrintXml(printXml);
+}
+    //获取url参数
+    function getUrlParam(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return unescape(r[2]); return null;
+    }
+
+    $.ajaxSetup({
+        global: false,
+        async: true,
+        type: "POST",
+        dataType: "json",
+        timeout: 2000
+    });
+
+    document.oncontextmenu = "return false";
+
+    //--------刷卡开始
+    var keystring = ""; //记录按键的字符串
+    var isPrint = 0;
+    var isSwipeCard = 0;
+    function keypress(e) {
+        if (isSwipeCard == 1) return;
+
+        var currKey = 0, CapsLock = 0, e = e || event;
+        currKey = e.keyCode || e.which || e.charCode;
+        CapsLock = currKey >= 65 && currKey <= 90;
+
+        if (currKey == 13) {
+            //获取对应的条形码后执行数据查询
+            //获取对应的条形码后执行数据查询
+            var str ="";
+            str= keystring;
+            //switch (keystring.length) {
+            //    case 9:
+            //        str = keystring;
+            //        break;
+            //    case 11:
+            //        str = keystring.slice(1, 10);
+            //        break;
+            //    case 24:
+            //        str = keystring.slice(12, 21);
+            //        break;
+            //    case 26:
+            //        str = keystring.slice(13, 22);
+            //        break;
+            //    case 10:
+            //        str = keystring.slice(0, 11);
+            //        break;
+            //    case 20:
+            //        str = keystring.slice(1, 12);
+            //        break;
+            //    case 38:
+            //        str = keystring.slice(13, 20);
+            //        break;
+            //    case 39:
+            //        str = keystring.slice(1, 20);
+            //        break;
+            //    case 36:
+            //        str = keystring.slice(12, 19);
+            //        break;
+            //}
+            if (str != "") {
+                //if ($("#serialNum"))
+                $("#serialNum").html("");
+                $("#serialNum").html(str);
+                isSwipeCard = 1;
+                GetQueueList();
+
+            }
+            else {
+				if (divClose == null)
+					divClose = setInterval(showTimer, 1000);
+                $("#showmsg").show();
+                $("#showmsg").width(700);
+                $("#info_msg").removeClass("btnlist2")
+                $("#info_msg").addClass("btnlist");
+                $("#info_msg").html("操作错误，请重新刷卡！");
+                $("#bg").css("z-index", 1003);
+                $("#bg").show();
+                $("#showmsg_btn").hide();
+            }
+        }
+        else {
+            switch (currKey) {
+                //屏蔽了退格、制表、回车、空格、方向键、删除键                  
+                case 8: case 9: case 16: case 17: case 18: case 32: case 37: case 38: case 39: case 40: case 46: keyName = ""; break;
+                default: keyName = String.fromCharCode(currKey); break;
+            }
+
+            keystring += keyName;
+        }
+    }
+
+    window.onkeydown = keypress;
+    //--------刷卡结束
+
+	var sfzid = "";
+	var sfzcode = 0x23A40219;
+	var sfztype = "GetChinaIdentityCardXml";
+	var Variable1 = "000160ffffffffffff";
+	var timefreshcard=null;
+	function FreshCard()
+	{
+		clearInterval(timefreshcard);
+		timefreshcard=null;
+		window.Callobject.GetChinaIdentityCardInfo(sfzcode, sfztype, "20", Variable1, "");
+		if(timefreshcard==null)
+			timefreshcard=setInterval(FreshCard,10000);
+	}
+	FreshCard();
+	function unescapeStr(str) {
+		var tmp = "";
+		for (var i = 0; i < str.length / 4; i++) {
+			tmp += "%u" + str.substring(i * 4 + 2, i * 4 + 4) + str.substring(i * 4, i * 4 + 2);
+		}
+		return unescape(tmp);
+	}
+	function unescapeStr1(str) {
+		var tmp = "";
+		for (var i = 0; i < str.length / 2; i++) {
+			tmp += "%u00" + str.substring(i * 2, i * 2 + 2);
+		}
+		return unescape(tmp);
+	}
+
+	function getReadCardInfo(keystring) {
+		var str=keystring.replace(/，/g,",").split(',');
+		var isok="";
+		var cardno="";
+		for(var i=0;i<str.length;i++)
+		{
+			var item=str[i];
+			var reg = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/; 
+			if(reg.test(item))
+			{
+				isok="GetChinaIdentityCardXml";
+				cardno=item;
+			}
+			else if(item=="DetectedCard")
+				isok="DetectedCard";
+		}
+		if (isok == "DetectedCard") {
+			FreshCard();
+		}
+		else if (isok == "GetChinaIdentityCardXml") {
+			if (cardno > 0) {
+				
+                sfzisSwipeCard = 1;
+                $("#serialNum").html("");
+				//sfzid = unescapeStr1(cardno);
+				//if (keystring.length > 8) {
+				//    sfzid = sfzid.substring(0, 8);
+				//}
+				//else {
+				//    sfzid = keystring.substring(4, 14);
+				//}
+				 $("#serialNum").html(cardno);
+				GetQueueList();
+			}
+			else {
+				if (divClose == null)
+					divClose = setInterval(showTimer, 1000);
+				$("#showmsg").show();
+				$("#showmsg").width(700);
+				$("#info_msg").removeClass("btnlist2")
+				$("#info_msg").addClass("btnlist");
+				$("#info_msg").html("读卡异常，请重试");
+				$("#bg").css("z-index", 1003);
+				$("#bg").show();
+				$("#showmsg_btn").hide();
+				//window.Callobject.GetChinaIdentityCardInfo(code, type, "20", Variable1, "");
+			}
+		}
+		else
+			{
+				if (divClose == null)
+					divClose = setInterval(showTimer, 1000);
+				$("#showmsg").show();
+				$("#showmsg").width(700);
+				$("#info_msg").removeClass("btnlist2")
+				$("#info_msg").addClass("btnlist");
+				$("#info_msg").html("读卡异常，请重试");
+				$("#bg").css("z-index", 1003);
+				$("#bg").show();
+				$("#showmsg_btn").hide();
+				//window.Callobject.GetChinaIdentityCardInfo(code, type, "20", Variable1, "");
+			}
+	}
+	
+    var showPaperState = null;
+    function LowPaperCheck() {
+        $("#bg").css("display", "block");
+        $("#divConfirm").css("display", "block");
+        $("#divAlter").css("display", "block");
+        $("#divPrintTest").css("display", "block");
+        $("#content").html("取号机缺纸，暂时无法提供取号打印服务，请联系工作人员！");
+        showPaperState = setInterval(paperCheck, 1000);
+    }
+
+    function paperCheck() {
+        var checkPaper = checkpaper();
+        if (checkPaper == 1) {
+            if (document.getElementById("bg") != null && document.getElementById("bg").style.display == "block") {
+                $("#bg").css("display", "none");
+                $("#divConfirm").css("display", "none");
+                $("#divAlter").css("display", "none");
+                $("#divPrintTest").css("display", "none");
+                $("#content").html("");
+            }
+            isSwipeCard = 0;
+            keystring = "";
+            if (showPaperState != null) {
+                clearInterval(showPaperState);
+            }
+        }
+        else if (checkPaper == -1) {
+            showdiv("取号机忙，请稍候再试！");
+        }
+    }
+
+    function printxml(xml) {
+        window.Callobject.PrintXml(xml);
+    }
+
+    function PrinterAlert() {
+        showdiv("打印机忙，请稍后再试");
+    }
+
+    var isCheck = 0;
+    function checkpaper() {
+        return window.Callobject.CheckPaper();
+    }
+    function HasCheckPaper() {
+        showdiv("有纸");
+    }
+    function LessCheckPaper() {
+        showdiv("缺纸");
+    }
+
+    function printTest(obj) {
+        obj.className = "table-tiao3-btn-down";
+
+        setTimeout(function () {
+            obj.className = "table-tiao3-btn";
+            if (checkpaper() == 1) {
+                var printXml = '<?xml version="1.0" encoding="GB18030"?><print_task charset="GB18030/BIG5" line_blank="32" copy="1">';
+
+                var isPaper = printxml(printXml);
+                if (isPaper == 0) {
+                    isSwipeCard = 0;
+                    keystring = "";
+                    paperCheck();
+                }
+            }
+        }, 10);
+    }
+
+    function playVoice(content) {
+        var callText = "<?xml version=\"1.0\" encoding=\"GB18030\"?>"
+            + "<Contents><Content>"
+            + "<Voice Num=\"1\" Speed=\"1000\" digitMode=\"2\">"
+            + content + " </Voice>"
+            + "</Content></Contents>";
+        window.Callobject.playVoice(callText);
+    }
+    /// <reference path="jquery.min.js" />
+
+    $(function () {
+        var serialNum = $("#serialNum");
+        //$("#serialOK").bind("vmousedown", function (e) {
+        //    var obj = this;
+        //    obj.style.background = "#faa";
+        //    setTimeout(function () {
+        //        serialOK();
+        //        obj.style.background = "white";
+        //        return false;
+        //    }, 200);
+        //})
+
+        //  $("#keyboard li").mousedown(function () {
+        $("#keyboard li").bind("vmousedown", function () {
+            if (event.stopPropagation) {
+                // 针对 Mozilla 和 Opera   
+                event.stopPropagation();
+            }
+            else if (window.event) {
+                // 针对 IE   
+                window.event.cancelBubble = true;
+            }
+
+            var obj = this;
+            obj.style.background = "#4ce640";// "#208e9b";
+            var value = this.getAttribute("data-value");
+            if (value == "del") {
+                if (serialNum.html().length > 0) {
+                    serialNum.html(serialNum.html().substr(0, serialNum.html().length - 1))
+                }
+            } else if (value == "delAll") {
+                if (serialNum.html().length > 0) {
+                    serialNum.html("");
+                }
+            }
+            else {
+                serialNum.html(serialNum.html() + value)
+            }
+            setTimeout(function () {
+                obj.style.background = "#eee";
+            }, 200);
+        });
+    })
+    //解决缩放问题
+
+    var spots = {}, touches, timer;
+
+document.addEventListener('touchstart', function (e) {
+   e.preventDefault();
+   [].forEach.call(e.targetTouches, function (touch) {
+       //对每一根触摸在屏幕上的手指都生成一个元素，并且用touch.identifier作为该元素的唯一标识，触摸结束后清除引用的元素
+       if (spots[touch.identifier]) {
+           return;
+       }
+       var spot = spots[touch.identifier] = document.createElement('div');
+       spot.classList.add('spot');
+       spot.style.top = touch.pageY - 35;
+       spot.style.left = touch.pageX - 35;
+       document.body.appendChild(spot);
+   })
+   timer = setInterval(function () {
+       renderTouches(touches);
+   }, 16);
+}, false);
+
+document.addEventListener('touchmove', function (e) {
+   e.preventDefault();
+   touches = e.touches;
+});
+
+function renderTouches(touches) {
+   if (!touches) {
+       return;
+   };
+   [].forEach.call(touches, function (touch) {
+       var spot = spots[touch.identifier];
+       if (spot) {
+           spot.style.top = touch.pageY - 35;
+           spot.style.left = touch.pageX - 35;
+       }
+   })
+}
+
+document.addEventListener('touchend', function (e) {
+   e.preventDefault();
+   [].forEach.call(e.changedTouches, function (touch) {
+       var spot = spots[touch.identifier];
+       if (spot) {
+           document.body.removeChild(spot);
+           delete spots[touch.indentifier];
+       }
+   })
+   if (e.changedTouches.length === 0) {
+       clearInterval(timer);
+   }
+});
+</script>

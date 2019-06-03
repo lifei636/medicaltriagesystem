@@ -1,0 +1,194 @@
+@font-face {
+	font-family: FZLTHK;
+	src: url("FZLTHK.TTF"); /*方正兰亭黑_GBK*/
+}
+
+@font-face {
+	font-family: FZLTZCHK;
+	src: url("FZLTZCHK.TTF"); /*方正兰亭中粗黑_GBK*/
+}
+
+@font-face {
+	font-family: FZLTXCHK;
+	src: url("FZLTXCHK.TTF"); /*方正兰亭细黑_GBK*/
+}
+
+body {
+	margin: 0px;
+	padding: 0px;
+	font-family: "FZLTHK";
+}
+
+ul {
+	margin: 0px;
+	padding: 0px;
+	list-style: none;
+}
+
+/*整体*/
+.container {
+    width: 1080px;
+    height: 1920px;
+    float: left;
+    background: left top url(images/pb_green_v_bg2.jpg) no-repeat;
+    overflow: hidden;
+}
+
+/*上部*/
+.top {
+    width: 1042px;
+    height: 143px;
+    margin-left: 19px;
+    overflow: hidden;
+    background-color: #fff;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+    .top .logo {
+        width: 540px;
+        height: 143px;
+        float: left;
+    }
+
+    .top .name {
+        width: 460px;
+        height: 143px;
+        float: left;
+        font-size: 60px;
+        line-height: 143px;
+        text-align: center;
+        color: #ff8a00;
+        font-family:FZLTZCHK;
+    }
+
+
+
+/*中间*/
+.main_title{
+    width: 100%;
+    height: 110px;
+    line-height: 110px;
+    font-size: 60px;
+    font-family: FZLTZCHK;
+    color: #fff;
+    text-align: center;
+}
+.main {
+	width: 1042px;
+	height: 1540px;
+	float: left;
+    overflow:hidden;
+	margin-left: 19px;
+}
+.main #list{
+    width:100%;
+    overflow-y: hidden;
+}
+.title {
+    width: 100%;
+    height: 110px;
+    line-height: 110px;
+    font-size: 30px;
+    font-family: FZLTZCHK;
+    color: #fff;
+    text-align: center;
+
+}
+    .title .span {
+        width: 15%;
+        float: left;
+        overflow: hidden;
+    }
+    .title .span2 {
+        width: 40%;
+        height: 110px;
+        float: left;
+        overflow: hidden;
+
+    }
+    .title .mline {
+        height: 50%;
+        border-bottom: 2px solid #fff;
+    }
+.main #list ul {
+    width:1042px;
+    height: auto;
+    float:left;
+}
+    .main #list li {
+        width:255px;
+        height:100px;
+        float:left;
+        margin-top:10px;
+        background-color:#fff;
+        border-radius:5px;
+        margin-right:5px;
+    }
+        .main #list li .img {
+            margin-top: 7px;
+            margin-left: 6px;
+            width: 64px;
+            height: 86px;
+            border: 1px solid #bfa9b6;
+            float:left;
+        }
+        .main #list li .doc {
+            margin-top: 7px;
+            margin-left: 6px;
+            width:170px;
+            height:90px;
+            float:left;
+        }
+            .main #list li .doc .docname {
+                width: 100px;
+                height: 30px;
+                line-height: 30px;
+                font-size: 24px;
+                font-family: FZLTZCHK;
+                color: #52464d;
+            }
+            .main #list li .doc .doctitle {
+                width: 100px;
+                height: 22px;
+                line-height:22px;
+                font-size: 18px;
+                font-family: FZLTZCHK;
+                color: #52464d;
+            }
+            .main #list li .doc .doctime {
+                padding-top:8px;
+                width: 100px;
+                height: 30px;
+                line-height:30px;
+                font-size: 24px;
+                font-family: FZLTZCHK;
+                color: #ff8a00;
+            }
+            .main #list li .doc .doczj {
+                float:right;
+                width: 66px;
+                height: 22px;
+                border-radius: 5px;
+                line-height:22px;
+                color: #fff;
+                background-color: #55cac3;
+            }
+
+.bottom {
+	width: 1080px;
+	height: 235px;
+	float: left;
+	/*background: url(images/bottom_back.jpg) no-repeat;*/
+	font-size: 24px;
+	color: #fff;
+	text-align: center;
+	line-height: 45px;
+}
+    .bottom .tipcontent {
+        width:80%;
+        height:auto;
+        padding-left:10%;
+        text-align:left;
+    }
+

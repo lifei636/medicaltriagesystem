@@ -1,0 +1,402 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>大厅等候</title>
+<link href="/static/web/hall/css_cxc.css" rel="stylesheet" />
+<script src="/static/web/door/jquery.min.js"></script>
+<script src="http://192.168.0.235:81/web/js/CallManager.js"></script>
+</head>
+<body style="zoom: 1">
+	<div class="main">
+		<div class="title">
+			<div class="left" id="hsptl_name">&nbsp;</div>
+			<div class="middle"></div>
+			<div class="right">
+				<span id="now_time"></span><br /> <span id="now_date"></span>
+			</div>
+		</div>
+
+
+		<ul id="list">
+			<li id="cxc">
+				<div class="title">采血处</div>
+				<div class="jz">
+					<div class="jzleft">正在检查</div>
+					<div class="jzright" id="cxc_jz"></div>
+				</div>
+				<div class="dh">
+					<div class="dhleft">等候检查</div>
+					<div class="dhright" id="dh_list"></div>
+				</div>
+			</li>
+			<li id="ek">
+				<div class="title" style="background-color: #bee2b4">儿科</div>
+				<div class="jz">
+					<div class="jzleft">正在检查</div>
+					<div class="jzright" id="divPatient"></div>
+				</div>
+				<div class="dh">
+					<div class="dhleft">等候检查</div>
+					<div class="dhright" id="divWait"></div>
+				</div>
+			</li>
+		</ul>
+		<div class="bottom">温馨提示：请保管好您的随身物品,耐心等候！！！</div>
+	</div>
+	<div class="tips_back" id="tips">
+		<div class="tips">
+			<div class="title" id="tips_zsmc"></div>
+			<div class="content">
+				<b id="hz_name"></b>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
+<script type="text/javascript">
+        var is_yinsi = false;
+        var Getdata = "";
+        var indata = "";
+
+        var mylist = new Array();
+        var mycall = new Array();
+        var doctorCall = new Array();
+
+        function ShowTime() {
+            try {
+                var datetime = window.Callobject.getDateTime();
+                var year = datetime.split(' ')[0].split('-')[0].toString() + '年' + datetime.split(' ')[0].split('-')[1].toString() + '月' + datetime.split(' ')
+
+                [0].split('-')[2].toString() + '日';
+                var week = "　星期" + "日一二三四五六".charAt(datetime.split(' ')[2].toString().trim().replace('7', '0'));
+                var time = datetime.split(' ')[1].toString();
+                $("#now_date").html(year + week);
+                $("#now_time").html(time.split(':')[0] + ':' + time.split(':')[1]);
+            }
+            catch (ex) { }
+        }
+        function yinsibaohu(name) {
+            var pat = '';
+            if (is_yinsi)
+                pat = (name.length == 2 ? name.substring(0, 1) + "*" : (name.length == 3 ? name.substring(0, 1) + "*" + name.substring(2, 3) : name.substring(0, 1) + "**" + name.substring(3, name.length)));
+            else
+                pat = name;
+            return pat;
+        }
+        function hideword(str) {
+            if (is_yinsi) {
+                if (str.length > 3)
+                    return str.replace(/^(\S{1})\S{2}(.*)$/, '$1**$2');
+                else
+                    return str.replace(/^(\S{1})\S{1}(.*)$/, '$1*$2');
+            }
+            else
+                return str;
+        }
+        function animation(id, str, state) {
+            str = hideword(str);
+            var name = "";
+            var name_display = "";
+            switch (state) {
+                case 2:
+                    name = str + "复";
+                    name_display = str + "<span style='color:red'>(复)</span>";
+                    break;
+                case 5:
+                    name = str + "优";
+                    name_display = str + "<span style='color:red'>(优)</span>";
+                    break;
+                case 54:
+                    name = str + "过";
+                    name_display = str + "<span style='color:red'>(过)</span>";
+                    break;
+                default:
+                    name = id + str;
+                    name_display = str + "(" + id + ")";
+                    break;
+            }
+            //if (name.length > 5)
+            //    return " <marquee direction='left' width='100%' height='100'>" + name_display + "</marquee>";
+            //else
+            return name_display;
+        }
+        function GetList() {
+            try {
+                $.ajax({
+                    type: "GET",
+                    url: "/call_patient/list_patient_pager?status=wait&type=page&t=" + new Date().getTime(),
+                    //url: "/clientPatientQueue/list_roomdoor?t=" + new Date().getTime(),
+                    contentType: "application/text;charset=utf-8",
+                    dataType: "json",
+                    cache: false,
+                    success: function (data) {
+                        if (data.count > 0) {
+                            var h_l = "";
+                            $.each(data.list, function (i, item) {
+
+                                $("#dh_list").html("");
+                                if (i >= 6)
+                                    return false;
+                                else {
+
+                                    h_l += "<span>" + animation(item.register_id, item.patient_name, item.state_patient) + "</span>";
+                                }
+
+                            });
+                            $("#dh_list").html(h_l);
+                        }
+                        else {
+                            $("#dh_list").html("");
+                        }
+                    },
+                    error: function () {
+
+                    }
+                });
+            }
+            catch (err) { }
+        }
+        function PagerCall() {
+            try {
+                $.ajax({
+                    type: "GET",
+                    url: "/clientPatientQueue/list_roomdoor_jz?t=" + new Date().getTime(),
+                    dataType: "json",
+                    cache: false,
+                    success: function (data) {
+                        if (data.return_code == "success") {
+
+                            ////if (data.dqjz.patient_name.length < 4) {
+                            ////    $("#divPatientName").removeClass("zheng-r");
+                            ////    $("#divPatientName").addClass("zheng-r-3");
+                            ////}
+                            ////else {
+                            ////    $("#divPatientName").removeClass("zheng-r-3");
+                            ////    $("#divPatientName").addClass("zheng-r");
+                            ////}
+                            $("#cxc_jz").html(animation(data.dqjz.register_id, data.dqjz.patient_name, data.dqjz.state_patient));
+                            ////$("#divPatientId").html('<div class="zheng-num">' + data.dqjz.register_id + '</div>');
+
+                            ////$("#jz_name").html("(" + data.dqjz.register_id + ")" + hideword(data.dqjz.patient_name));
+                            if (data.dqjz.caller != "0") {
+                                var bb = "采血处," + data.dqjz.patient_name + "," + data.dqjz.register_id + "," + "采血处,采血";
+                                mycall.push(bb);
+                                //$("#tips").show();
+                                ////$("#triage_name").html(yinsibaohu(data.dqjz.patient_name));
+                                //$("#tips_zsmc").html("采血处");
+
+                                //$("#hz_name").html("(" + data.dqjz.register_id + ")" + animation(data.dqjz.patient_name));
+                                ////$("#divPatientID").html(txtList[2]);
+
+                                
+                                //setTimeout(function () {
+                                //    window.Callobject.playVoice(callText);
+                                //}, 100);
+                                //var callText = "<?xml version=\"1.0\" encoding=\"GB18030\"?>"
+                                //    + "<Contents><Content>"
+                                //    + "<Voice Num=\"1\" Speed=\"1000\" digitMode=\"1\">"
+                                //    + "请 " + data.dqjz.register_id + "号" + data.dqjz.patient_name + " 到" + zsmc + "就诊。"
+                                //    + "</Voice>"
+                                //    + "</Content></Contents>";
+                                //window.Callobject.playVoice(callText)
+                            }
+                            
+                        }
+                        else {
+                            $("#divPatientName").html("");
+                            $("#divPatientId").html("");
+                        }
+                    },
+                    error: function () {
+
+                    }
+                });
+            }
+            catch (err) { }
+        }
+        PagerCall();
+        GetList();
+        window.setInterval(GetList, 2000);
+        window.setInterval(PagerCall, 2000);
+
+       
+
+        
+        function Call(txt) {
+            doctorCall.push(txt);
+        }
+
+        var timerCall = null;
+        function CallContent() {
+            clearInterval(timerCall);
+            if (doctorCall.length == 0) {
+                timerCall = setInterval(CallContent, 1000);
+            }
+            else {
+                timerCall = setInterval(CallContent, 10000);
+
+                GetCallContent(doctorCall[0].toString());
+                //删除叫号列队
+                doctorCall.shift();
+            }
+
+        }
+
+        function GetCallContent(txt) {
+            $.ajax("http://192.168.0.235:81/Web/显示叫号/儿科采血处/Call.ashx",
+                {
+                    data: {
+                        id: txt
+                    },
+                    dataType: 'jsonp',
+                    timeout: 6000,
+                    async: false,
+                    jsonp: "jsoncallback",
+                    success: function (result) {
+                        var aa = JSON.parse(result);
+                        //var aa = result.call_room + "," + result.pat_name + "," + result.call_no + "," + result.call_area + ","
+                        //    + result.pat_wait;
+
+                        //for (var j = 0; j < mylist.length; j++) {
+                        //    if (mylist[j].split(',')[0] == result.call_room) {
+                        //        mylist.splice(j, 1);
+                        //    }
+                        //}
+                        mylist.push(aa);
+
+                        //呼叫
+                        if (aa.pat_name != "") {
+                            var bb = aa.call_room + "," + aa.pat_name + "," + aa.call_no + "," + aa.call_area + ",检查";
+                            mycall.push(bb);
+                        }
+                        //if (result.pat_name_wait1 != "") {
+                        //    bb = result.call_room + "," + result.pat_name_wait1 + "," + result.call_no_wait1 + ",门口等候"
+                        //    mycall.push(bb)
+                        //}
+                        //if (result.pat_name_wait2 != "") {
+                        //    bb = result.call_room + "," + result.pat_name_wait2 + "," + result.call_no_wait2 + ",门口等候"
+                        //    mycall.push(bb)
+                        //}
+
+                    }
+                });
+        };
+
+        var timeback = null;
+        var timelist = null;
+
+        function calldoctor() {
+            clearInterval(timeback);
+            if (mycall.length == 0) {
+                timeback = setInterval(calldoctor, 1000);
+            }
+            else {
+                clearInterval(timelist);
+                timelist = null;
+                timeback = setInterval(calldoctor, 10000);
+                callFun(mycall[0].toString());
+                //$("#divlist").html(mycall[0].toString());
+                //删除叫号列队
+                mycall.shift();
+                if (mycall.length <= 0)
+                    setTimeout(Show, 7000);
+            }
+
+        }
+        function callFun(txt) {
+
+            try {
+                var txtList = txt.split(',');
+                if (txtList[1].length > 0) {
+                    $("#tips").show();
+                    $("#triage_name").html(txtList[3]);
+                    $("#tips_zsmc").html(txtList[0]);
+
+                    $("#hz_name").html("(" + txtList[2] + ")" + yinsibaohu(txtList[1]));
+                    //$("#divPatientID").html(txtList[2]);
+
+                    var callText = "<?xml version=\"1.0\" encoding=\"GB18030\"?>"
+                        + "<Contents><Content>"
+                        + "<Voice Num=\"1\" Speed=\"1000\" digitMode=\"2\">"
+                        + "请 " + txtList[2] + "号" + txtList[1] + " 到" + txtList[0] + txtList[4]+"。"
+                        + "</Voice>"
+                        + "</Content></Contents>";
+
+                    setTimeout(function () {
+                        window.Callobject.playVoice(callText);
+                    }, 100);
+                }
+            }
+            catch (err) { }
+        }
+
+        var page = 0;
+        function Show() {
+            $("#tips").hide();
+            var aname = "";
+            var dhaname = "";
+            if (timelist == null)
+                timelist = setInterval(Show, 7000);
+
+            for (var i = page * 2; i < (page + 1) * 2; i++) {
+                if (mylist[i]) {
+                    var item = mylist[i];
+
+                    if (item != undefined) {
+                        //aname += "<li>";
+                        //aname += "<div class=\"left\">" +(item[0].length > 5 ? ('<marquee>' + item[0] + '</marquee>') : item[0]) +  "</div>";
+                        if (i % 2 == 0) {
+                            //$("#divPatient").html(item.call_room);
+                            //<div class=\"right\"></div></li>";
+                            //aname += '<div class="line">';
+                            //aname += '<div class="line-zhenshi">' + (item[0].length > 5 ? ('<marquee>' + item[0] + '</marquee>') : item[0]) + '</div>';
+                            //正在
+                            if (item.pat_name != "" && item.pat_name != undefined) {
+                                //aname += "<div class=\"left color\"></div>";
+                                $("#divPatient").html("(" + item.call_no + ")" + yinsibaohu(item.pat_name));
+                                //aname += '<div class="hz-zheng">';
+                                //aname += '<div class="zheng-n">'  '</div>';
+                                //aname += '<div class="zheng-num"><div class="kh-1-l"></div><div class="zheng-txt">' + item[2] + '</div><div class="kh-1-r"></div></div>';
+                                //aname += '</div>';
+                            }
+                            else {
+                                $("#divPatient").html("");
+                            }
+
+                            var qy = item.pat_wait.split(",");
+                            if (qy != undefined && qy != "") {
+                                $("#divWait").html("");
+                                var qy_html = "";
+                                $.each(qy, function (i, patient) {
+                                    qy_html += "<span>" + patient + "</span>";
+                                });
+                                $("#divWait").html(qy_html);
+                            }
+                            else {
+                                $("#divWait").html("");
+                            }
+
+                        }
+                    }
+                }
+                if ((page + 1) * 3 < mylist.length) {
+                    page++;
+                }
+                else {
+                    page = 0;
+                }
+            }
+        }
+        $(document).ready(
+            function () {
+                ShowTime();
+                setInterval(ShowTime, 30000);
+                CallManager.start();
+                //doctorCall.push("PHBhdGllbnRfaW5mbz48Y2FsbF9hcmVhPtXvx/jD+7PGPC9jYWxsX2FyZWE+PGNhbGxfcm9vbT7V78rSw/uzxjwvY2FsbF9yb29tPjxkb2N0b3JfdGl0bGU+0r3J+taws8Y8L2RvY3Rvcl90aXRsZT48ZG9jdG9yX2lkPjEyMzwvZG9jdG9yX2lkPjxkb2N0b3JfY2FsbF9uYW1lPtK9yfrQ1cP7PC9kb2N0b3JfY2FsbF9uYW1lPjxjYWxsX2tpbmQ+xtXNqDwvY2FsbF9raW5kPjxjYWxsX25vPjI8L2NhbGxfbm8+ICA8cGF0aWVudF9uYW1lPru81d+jqDKjqSzL+cr0v8ajqDOjqSzK0sP7s8ajqDSjqTwvcGF0aWVudF9uYW1lPjxwYXRfbmFtZT7Q1cP7PC9wYXRfbmFtZT48ZGVwdF9uYW1lPru81d/L+cr0v8bK0sP7s8Y8L2RlcHRfbmFtZT48L3BhdGllbnRfaW5mbz4=");
+                calldoctor();
+                CallContent();
+                //Show();
+            });
+        
+</script>

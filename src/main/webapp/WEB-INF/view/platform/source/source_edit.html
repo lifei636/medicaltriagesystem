@@ -1,0 +1,21 @@
+@layout("/common/_curd/_container.html"){
+
+	<form data-url="${basePath}/${code}/update" method="post" class="form-horizontal" role="form">
+		<!-- 表单 -->
+		@ var _table="souce";
+		@ var _key="id";
+		@ var _col=[
+		@			  {name:"数据库类型", index:"dbType", type:"select_110",newline:true,length:8,required:"required"},
+		@			  {name:"数据库驱动", index:"driver", type:"text",newline:true,length:8,required:"required"},
+		@			  {name:"数据库连接", index:"url", type:"text",newline:true,length:8,required:"required"},
+		@			  {name:"用户名", index:"username", type:"text",newline:true,length:8,required:"required"},
+		@			  {name:"密码", index:"password", type:"text",newline:true,length:8,required:"required"},
+		@			  {name:"描述", index:"description", type:"text",newline:true,length:8,required:"required"}		
+		@		   ];
+		@ include("/common/_curd/_edit.html", {"col":_col, "table":_table, "key":_key}){}
+		
+		<!-- 按钮 -->
+		@ include("/common/_curd/_btn.html", {btn_save:"修改", btn_close:"关闭"}) {}
+	</form>
+
+@}

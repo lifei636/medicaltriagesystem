@@ -1,0 +1,390 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>诊室门口</title>
+<link href="/static/web/hall/style-pb-white-w2.css" rel="stylesheet" />
+<script src="/static/web/hall/jquery.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!--上部-->
+        <div class="top">
+            <div class="logo">
+                <img src="/static/web/image/logo.png">
+            </div>
+            <div class="name">药房</div>
+            <div class="date" id="divDate">
+                星期四<br /> 2017年10月26日
+            </div>
+            <div class="time" id="divTime">22:58</div>
+        </div>
+
+        <!--中部-->
+        <div class="main">
+            <div class="w1" id="w1">
+                <div class="title" id="w1_title">内科</div>
+                <div class="list">
+                    <ul id="w1_list">
+                        <li>
+                            <div class="pic"><img src="" width="100%" height="100%" id="doc_img" /></div>
+                            <div class="doc">
+                                <div class="t1">医生</div>
+                                <div class="t2">医生</div>
+                                <div class="t1">医生</div>
+                                <div class="t2">医生</div>
+                            </div>
+                            <div class="ti">全天</div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="w1" id="w2">
+                <div class="title" id="w2_title">内科</div>
+                <div class="list">
+                    <ul id="w2_list"></ul>
+                </div>
+            </div>
+        <div class="bottom">请保管好你的随身物品，核对药品信息，药品一经发出，概不退换，未叫号显示的患者请稍等</div>
+
+        
+    </div>
+</body>
+</html>
+<script type="text/javascript">
+    var is_yinsi = false; //是否开启隐私保护
+    var Getdata = "";
+    var indata = "";
+    //var data = ["东院CT室","产科", "乳腺外科", "东院儿科"];
+    var data = [];
+    var old_data = null;
+    var page = 1;
+    var w1_p = 0;
+    var w2_p = 0;
+    var w1_c = 0;
+    var w2_c = 0;
+    var px = 718;
+    var time = 10000;
+    var w1_t = null;
+    var w2_t = null;
+    function ShowTime() {
+        try {
+            var obj, n, y, r, s, f, x;
+            var weekday = new Array(7)
+            weekday[0] = "日"
+            weekday[1] = "一"
+            weekday[2] = "二"
+            weekday[3] = "三"
+            weekday[4] = "四"
+            weekday[5] = "五"
+            weekday[6] = "六"
+            obj = new Date();
+            n = obj.getYear() + 1900;
+            if (obj.getMonth() < 9) {
+                y = "0" + (obj.getMonth() + 1);
+            }
+            else {
+                y = obj.getMonth() + 1;
+            }
+            if (obj.getDate() < 10) {
+                r = "0" + obj.getDate();
+            }
+            else {
+                r = obj.getDate();
+            }
+            x = "星期" + weekday[obj.getDay()];
+            if (obj.getHours() < 10) {
+                s = "0" + obj.getHours();
+            }
+            else {
+                s = obj.getHours();
+            }
+            if (obj.getMinutes() < 10) {
+                f = "0" + obj.getMinutes();
+            }
+            else {
+                f = obj.getMinutes();
+            }
+            Getdata = n + "年" + y + "月" + r + "日";
+            indata = s + ":" + f;
+            $("#divDate").html(x + '<br />' + Getdata);
+            $("#divTime").html(indata);
+        }
+        catch (ex) { }
+    }
+    ShowTime();
+    window.setInterval(ShowTime, 5000);
+
+    function GetList() {
+
+        $.ajax({
+            type: "GET",
+            async: false,
+            url: "/paiban/DoctorPaibanWeekByDatabase",
+            contentType: "application/text;charset=utf-8",
+            dataType: "json",
+            cache: false,
+            success: function (pdata) {
+                old_data = pdata;
+                if (old_data.count > 0) {
+                    $.each(old_data.list, function (i, item) {
+                        if ($.inArray(item.department, data) == -1) {
+                            data.push(item.department);
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    var rows = 2;
+    function PagerShow() {
+        $("#w1_title").html("");
+        $("#w1_list").html("");
+        $("#w2_title").html("");
+        $("#w2_list").html("");
+        var c = parseInt(data.length);
+        if (c > 0) {
+            var i = 0, j = rows;
+            var html = "";
+            if (c <= rows) {
+                j = c;
+                setTimeout(GetList, 1000);
+            }
+            else {
+                if (c > rows * page) {
+                    i = (rows * (page - 1));
+                    j = rows * page;
+                    page = page + 1;
+                }
+                else {
+                    i = (rows * (page - 1));
+                    j = c;
+                    page = 1;
+                    GetList();
+                }
+            }
+            for (var n = i; n < j; n++) {
+                var html = "";
+                var doc_data = new Array();
+                $.each(old_data.list, function (i, item) {
+                    if (item.department == data[n]) {
+                        doc_data.push(item);
+                    }
+                });
+                doc_data = setsort(doc_data);
+                $.each(doc_data, function (i, item) {
+                    var time = "全天";
+                    switch (item.onduty2) {
+                        case "1":
+                            time = "全天";
+                            break;
+                        case "2":
+                            time = "上午";
+                            break;
+                        case "3":
+                            time = "下午";
+                            break;
+                        default:
+                    }
+                    var name = item.name;
+                    if (name.length == 2)
+                        name = name.substr(0, 1) + "&nbsp;&nbsp;&nbsp;&nbsp;" + name.substr(1, 1);
+                    html += "<li><div class='pic'><img src='/static/web/image/" + item.login_id + ".jpg' width='100%' height='100%'/></div><div class='doc'><div class='t1'>医生</div><div class='t2'>" + name + "</div><div class='t1'>职称</div><div class='t2'>" + item.title + "</div></div><div class='ti'>" + time + "</div></li>";
+                });
+                if (n % 2 == 0) {
+                    $("#w1_title").html(data[n]);
+                    $("#w1_list").html(html);
+                   
+                }
+                else {
+                   
+                    $("#w2_title").html(data[n]);
+                    $("#w2_list").html(html);
+                }
+                
+                
+
+            }
+            show();
+        }
+        else {
+            setTimeout(GetList, 20000);
+        }
+    }
+    function show()
+    {
+        var w1 = $("#w1_list");
+        var w2 = $("#w2_list");
+        var w1_h = w1.height();
+        var w2_h = w2.height();
+        w1.animate({ marginTop: 0 }, 0);
+        w2.animate({ marginTop: 0 }, 0);
+        w1_c = Math.ceil(w1.height() / px);
+        w2_c = Math.ceil(w2.height() / px);
+        w1_p = 0;
+        w2_p = 0;
+        if (w1_c >= w2_c)
+            window.setTimeout(PagerShow, w1_c * time);
+        else
+            window.setTimeout(PagerShow, w2_c * time);
+        w1_t = null;
+        w2_t = null;
+        if(w1_c>1)
+            show_w1();
+        if(w2_c>1)
+            show_w2();
+    }
+    function show_w1()
+    {
+        clearTimeout(w1_t);
+        var w1 = $("#w1_list");
+        if (w1_p == w1_c)
+            w1_p = 0;
+        if (w1_c > 0)
+            w1.css("marginTop", -(w1_p * px)); //w1.animate({ marginTop: -(w1_p * px) }, 0);
+        else
+            w1.css("marginTop", 0);
+        w1_p += 1;
+        w1_t=window.setTimeout(show_w1, time);
+    }
+    function show_w2() {
+        clearTimeout(w2_t);
+        var w2 = $("#w2_list");
+        if (w2_p == w2_c)
+            w2_p = 0;
+        if (w2_c > 0)
+            w2.css("marginTop", -(w2_p * px)); 
+        else
+            w2.css("marginTop", 0);
+        w2_p += 1;
+        w2_t = window.setTimeout(show_w2, time);
+    }
+    function sortObjectArray(objArr, keyArr, type) {
+        for (var x = 0; x < objArr.length; x++) {
+            objArr[x].oldIndex = x;
+        }
+        if (type != undefined && type != 'asc' && type != 'desc') {
+            return 'error';
+        }
+        var order = 1;
+        if (type != undefined && type == 'desc') {
+            order = -1;
+        }
+        var key = keyArr[0];
+        objArr.sort(function (objA, objB) {
+            if (objA[key] > objB[key]) {
+                return order;
+            } else if (objA[key] < objB[key]) {
+                return 0 - order;
+            } else {
+                if (objA.oldIndex > objB.oldIndex) {
+                    return order;
+                } else if (objA.oldIndex < objB.oldIndex) {
+                    return 0 - order;
+                } else {
+
+                    return 0;
+                }
+            }
+        })
+
+        for (var i = 1; i < keyArr.length; i++) {
+            var key = keyArr[i];
+            for (var y = 0; y < objArr.length; y++) {
+                objArr[y].oldIndex = y;
+            }
+            objArr.sort(function (objA, objB) {
+                for (var j = 0; j < i; j++) {
+                    if (objA[keyArr[j]] != objB[keyArr[j]]) {
+                        if (objA.oldIndex > objB.oldIndex) {
+                            return order;
+                        } else if (objA.oldIndex < objB.oldIndex) {
+                            return 0 - order;
+                        } else {
+                            return 0;
+                        }
+                    }
+                }
+                if (objA[key] > objB[key]) {
+                    return order;
+                } else if (objA[key] < objB[key]) {
+                    return 0 - order;
+                } else {
+                    if (objA.oldIndex > objB.oldIndex) {
+                        return order;
+                    } else if (objA.oldIndex < objB.oldIndex) {
+                        return 0 - order;
+                    } else {
+                        return 0;
+                    }
+                }
+            })
+        }
+        return objArr;
+    }
+    function setsort(pdata) {
+        if (pdata.length > 0) {
+            //按部门排序使用“,”分隔，同一序列内使用“|”分隔，不能超过100个部门
+            //var deptArray = ["普外", "五官", "心血管", "呼吸", "神经", "消化", "肾病|内分泌科", "肝病", "感染", "胃肠|小儿", "肝胆甲乳", "泌尿烧伤", "神经", "骨一科", "骨二科", "妇科", "产科", "儿科", "儿保", "康复", "口腔", "皮肤", "中医", "疼痛", "护理"];
+            var titleArray = ["主任医师", "副主任医师", "主治医师", "医师", "技师","护师", "护士"];
+
+            for (var i = 0; i < pdata.length; i++) {
+                var item = pdata[i];
+                //item.departmentsort = 100;
+                item.titlesort = 10;
+                //for (var j = 0; j < deptArray.length; j++) {
+                //    var deptlist = deptArray[j].split("|");
+                //    if (deptlist.length > 1) {
+                //        for (j1 = 0; j1 < deptlist.length; j1++) {
+                //            if (item.department.indexOf(deptlist[j1]) >= 0) {
+                //                item.departmentsort = j;
+                //                break;
+                //            }
+                //        }
+                //    }
+                //    else {
+                //        if (item.department.indexOf(deptArray[j]) >= 0) {
+                //            item.departmentsort = j;
+                //            break;
+                //        }
+                //    }
+                //}
+                for (var k = 0; k < titleArray.length; k++) {
+                    if (item.title == titleArray[k]) {
+                        item.titlesort = k;
+                        break;
+                    }
+                }
+            }
+        }
+        pdata = sortObjectArray(pdata, [ 'titlesort', 'login_id']);
+        //var newpdata = pdata.list;
+        //for (var i = 0; i < newpdata.length; i++) {
+        //    if (newpdata[i].departmentsort >= 100)
+        //        pdata.list.splice(i);
+        //}
+
+        return pdata;
+    }
+
+
+    function selectDepartment()
+    {
+        var list = old_data.list;
+        if (old_data.count > 0)
+        {
+            $.each(function (i, item) {
+                if ($.inArray(item.department, data) == -1)
+                {
+                    data.push(item.department);
+                }
+            });
+        }
+    }
+
+    GetList();
+    PagerShow();
+    
+
+</script>

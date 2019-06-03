@@ -1,0 +1,324 @@
+body {
+	margin: 0px;
+	padding: 0px;
+	font-family: FZLTHK;
+}
+
+/*整体*/
+@font-face {
+	font-family: FZLTHK;
+	src: url("FZLTHK.TTF"); /*方正兰亭黑_GBK*/
+}
+
+@font-face {
+	font-family: FZLTZCHK;
+	src: url("FZLTZCHK.TTF"); /*方正兰亭中粗黑_GBK*/
+}
+
+@font-face {
+	font-family: FZLTXCHK;
+	src: url("FZLTXCHK.TTF"); /*方正兰亭细黑_GBK*/
+}
+
+.container {
+	width: 1920px;
+	height: 1080px;
+	margin: 0px auto;
+	float: left;
+	background: url(images/main_back_white.jpg) no-repeat;
+}
+
+/*上部*/
+.top {
+	width: 1880px;
+	height: 170px;
+	float: left;
+	border-bottom-left-radius: 10px;
+	border-bottom-right-radius: 10px;
+	background: #FFF;
+	margin: 0 20px;
+}
+
+.top .logo {
+	width: 380px;
+	height: 140px;
+	float: left;
+	margin: 15px 30px;
+}
+
+.top .name {
+	width: 730px;
+	height: 140px;
+	float: left;
+	color: #fd8a00;
+	font-size: 76px;
+	text-align: center;
+	line-height: 140px;
+	margin-top: 15px;
+	font-family: FZLTZCHK;
+	letter-spacing: 1px;
+}
+
+.top .date {
+	width: 370px;
+	height: 90px;
+	float: left;
+	color: #9f8b97;
+	font-size: 28px;
+	text-align: right;
+	line-height: 45px;
+	margin-top: 43px;
+	font-family: FZLTHK;
+	letter-spacing: 1px;
+}
+
+.top .time {
+	width: 290px;
+	height: 90px;
+	float: left;
+	font-size: 90px;
+	color: #4e3f49;
+	text-align: right;
+	line-height: 90px;
+	margin-top: 43px;
+	font-family: FZLTXCHK;
+	letter-spacing: 3px;
+}
+
+/*中间*/
+.main {
+	width: 1880px;
+	height: 816px;
+	float: left;
+	margin: 10px 0 0 20px;
+}
+
+/*列表部分*/
+.main .table-1 {
+	width: 660px;
+	height: 816px;
+	float: left;
+	background: url(images/back-1.png) no-repeat;
+}
+
+.table-1 .title {
+	width: 528px;
+	height: 106px;
+	float: left;
+	color: #FFFFFF;
+	line-height: 106px;
+	text-align: center;
+	font-size: 55px;
+	margin: 31px 0 43px 66px;
+	font-family: FZLTZCHK;
+}
+
+.table-1 .down {
+	width: 660px;
+	height: 560px;
+	float: left;
+	margin-top: 40px;
+	overflow: hidden;
+}
+
+.table-1 .down .deng-list {
+	width: 660px;
+	height: auto;
+	float: left;
+	overflow-y: hidden;
+	overflow: hidden;
+}
+
+.table-1 .down .deng-list .dhlist {
+	width: 100%;
+	height: auto;
+	overflow-y: hidden;
+	overflow: hidden;
+}
+
+.down .cell-1 {
+	width: 460px;
+	height: 110px;
+	float: left;
+	margin: 0 100px;
+}
+
+.cell-1 .cell-1-n-3 {
+	width: 300px;
+	height: 110px;
+	float: left;
+	font-size: 72px;
+	color: #4e3f49;
+	line-height: 110px;
+	font-family: FZLTZCHK;
+	text-align: left;
+}
+
+.cell-1 .cell-1-num {
+	width: 140px;
+	height: 58px;
+	float: left;
+	font-size: 44px;
+	color: #fff;
+	line-height: 62px;
+	font-family: FZLTZCHK;
+	text-align: center;
+	border-radius: 12px;
+	background: #4e3f49;
+	margin-top: 24px;
+}
+
+/*叫号部分*/
+.main .table-2 {
+	width: 1210px;
+	height: 816px;
+	float: left;
+	background-color:#fff;
+    border-radius:10px;
+	margin-left: 10px;
+}
+
+.table-2 .chuangk {
+	width: 1210px;
+	height: 184px;
+	float: left;
+	color: #FFFFFF;
+	line-height: 164px;
+	text-align: center;
+	font-size: 90px;
+	font-family: FZLTZCHK;
+    background:left top url(images/back-4.png) no-repeat;
+}
+
+.table-2 .jiaohao {
+	width: 1210px;
+	height: 150px;
+	float: left;
+	margin-top: 74px;
+}
+
+.jiaohao .cell-2 {
+	width: 1010px;
+	height: 150px;
+	float: left;
+	margin: 0 100px;
+}
+
+.cell-2 .cell-2-n-3 {
+	width: 650px;
+	height: 150px;
+	float: left;
+	font-size: 100px;
+	color: #fe8a00;
+	line-height: 150px;
+	font-family: FZLTZCHK;
+	text-align: center;
+	overflow: hidden;
+}
+
+.cell-2 .cell-2-num {
+	width: 260px;
+	height: 104px;
+	float: left;
+	font-size: 84px;
+	color: #fff;
+	line-height: 110px;
+	font-family: FZLTZCHK;
+	text-align: center;
+	border-radius: 20px;
+	background: #fe8a00;
+	margin-top: 20px;
+}
+
+/*底部*/
+.bottom {
+	width: 1920px;
+	height: 82px;
+	float: left;
+	background: url(images/bottom_back.jpg) no-repeat;
+	font-size: 42px;
+	color: #fe8a00;
+	text-align: center;
+	line-height: 82px;
+}
+/*等候两个字*/
+.cell-1 .cell-1-n-2 {
+	width: 210px;
+	height: 105px;
+	float: left;
+	font-size: 72px;
+	color: #4e3f49;
+	line-height: 105px;
+	text-align: justify;
+	text-align-last: justify;
+	margin-left: 7px;
+	margin-right: 86px;
+	font-family: FZLTZCHK;
+}
+
+.cell-2 .cell-2-n-2 {
+	width: 420px;
+	height: 160px;
+	float: left;
+	font-size: 140px;
+	color: #fe8a00;
+	line-height: 150px;
+	text-align: justify;
+	text-align-last: justify;
+	margin-left: 121.6px;
+	margin-right: 108px;
+}
+/*等候四个字*/
+.cell-1 .cell-1-n-4 {
+	height: 98px;
+	float: left;
+	font-size: 72px;
+	color: #4e3f49;
+	line-height: 105px;
+	margin-left: -70px;
+	width: 289px;
+	margin-right: 80px;
+	font-family: FZLTZCHK;
+}
+
+.cell-2 .cell-2-n-4 {
+	width: 660px;
+	height: 160px;
+	float: left;
+	font-size: 140px;
+	color: #fe8a00;
+	line-height: 150px;
+	margin-left: -27px;
+	margin-right: 19px;
+	overflow: hidden;
+}
+
+.tips {
+	width: 1880px;
+	height: 825px;
+	position: absolute;
+	top: 180px;
+	left: 20px;
+	background-color: #fff;
+	border-radius: 20px;
+}
+
+.tips .title {
+	margin-top: 20px;
+	width: 100%;
+	height: 300px;
+	font-size: 150px;
+	text-align: center;
+	line-height: 300px;
+	overflow: hidden;
+	color: #fd8a00;
+}
+
+.tips .content {
+	width: 100%;
+	height: 500px;
+	line-height: 500px;
+	font-size: 300px;
+	text-align: center;
+	color: red;
+}

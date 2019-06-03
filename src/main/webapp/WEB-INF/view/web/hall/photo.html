@@ -1,0 +1,89 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>照片批处理</title>
+    <link href="/static/web/hall/css.css" rel="stylesheet" />
+    <script src="/static/web/hall/jquery.min.js"></script>
+</head>
+<body>
+    1、原始照片放在 D:\\photo目录下，以医生姓名命名
+    2、新照片放在D:\\photo\\new目录下，没有此目录时手动添加
+    3、此文件需要在IE浏览器中打开
+    4、配置Internet选项--安全选项--ActiveX控件和插件中的选项为“启用”
+    <input type="button" value="处理照片" onclick="photo()" />
+	<input type="button" value="无照片检查" onclick="checknophoto()" />
+    处理结果：<label id="result"></label>
+</body>
+</html>
+<script type="text/javascript">
+    function photo() {
+        var fso = new ActiveXObject("Scripting.FileSystemObject");
+        var path = "D:\\photo";
+        var fldr = fso.GetFolder(path);
+        var ff = new Enumerator(fldr.Files);
+        var filelist = new Array();
+        var count = 0;
+        for (; !ff.atEnd() ; ff.moveNext()) {
+            var sql = "select login_id from doctor where name='" + ff.item().Name.replace(".jpg", '') + "'";
+            var data = GetData(sql);
+            if (data.count > 0) {
+                var newfilename = data.list[0].login_id;
+                ff.item().Copy("D:\\photo\\new\\" + newfilename + ".jpg");
+                count++;
+            }
+        }
+        $("#result").html(count);
+    }
+	function checknophoto()
+	{
+		$.ajax({
+            type: "GET",
+            async: false,
+            url: "/client/orclCommSelect",
+            contentType: "application/text;charset=utf-8",
+            dataType: "json",
+            data: { "sql": "SELECT A .empl_code AS login_id, A .empl_name AS NAME,  c. NAME AS title, b.simple_name AS department FROM core_his50.com_employee A INNER JOIN core_his50.com_department b ON A .dept_code = b.dept_code INNER JOIN core_his50.com_dictionary c ON c.CODE = A .levl_code AND c. TYPE = 'LEVEL' WHERE b.BRANCH_CODE = 'D'AND (c. NAME LIKE '%医%' OR c. NAME LIKE '%专家%'OR c. NAME LIKE '%技师%')" },
+            cache: false,
+            success: function (pdata) {
+				var fso = new ActiveXObject("Scripting.FileSystemObject");
+                var path = "D:\\photo\\new";
+				var fldr = fso.GetFolder(path);
+				var ff = new Enumerator(fldr.Files);
+				var filelist = new Array();
+				
+				var doctorlist=pdata;
+				var html="";
+				$.each(pdata.list,function(i,item){
+					var isphoto=false;
+					for (; !ff.atEnd() ; ff.moveNext()) {
+					if(ff.item().Name.replace(".jpg", '')==item.LOGIN_ID)
+						isphoto=true;
+						break;
+					}
+					if(!isphoto)
+						html+="部门："+item.DEPARTMENT+"；姓名:"+item.NAME+"；工号："+item.LOGIN_ID+"<br />";
+				
+				});
+				$("#result").html(html);
+            }
+        });
+		
+	}
+    function GetData2(sql) {
+        var datalist = null;
+        $.ajax({
+            type: "GET",
+            async: false,
+            url: "/client/sqlCommSelect",
+            contentType: "application/text;charset=utf-8",
+            dataType: "json",
+            data: { "sql": sql },
+            cache: false,
+            success: function (pdata) {
+                datalist = pdata;
+            }
+        });
+        return datalist;
+    }
+</script>

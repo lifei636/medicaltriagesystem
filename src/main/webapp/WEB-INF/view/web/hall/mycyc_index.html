@@ -1,0 +1,366 @@
+﻿<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>CT</title>
+    <link href="/static/web/hall/mycyc_style.css" rel="stylesheet" />
+    <script src="/static/web/hall/jquery.min.js"></script>
+    
+</head>
+<body>
+    <div class="container">
+        <div class="top">
+            <div class="top-logo"></div>
+            <div class="top-name"></div>
+            <div class="top-date" id="divDate"></div>
+            <div class="top-time" id="divTime"></div>
+        </div>
+        <div class="main">
+            <div class="table">
+                <div class="up">
+                    <div class="up-1" id="divTerminalName"></div>           
+                    <div class="up-2" id="divPatientName"></div>
+                </div>
+                <div class="down">
+                    <div class="down-1">等候列表</div>
+                    <div class="down-2" id="divList">
+                        <div class="cell"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="bottom">建档立卡贫困户、脱贫攻坚一线干部、急诊优先</div>
+    </div>
+</body>
+</html>
+<script type="text/javascript">
+    var is_yinsi = true; //是否开启隐私保护
+    var page = 1;
+    var data;
+    function ShowTime() {
+        try {
+            var datetime = window.Callobject.getDateTime();
+            var year = datetime.split(' ')[0].split('-')[0].toString() + '年' + datetime.split(' ')[0].split('-')[1].toString() + '月' + datetime.split(' ')[0].split('-')[2].toString() + '日';
+            var week = "　星期" + "日一二三四五六".charAt(datetime.split(' ')[2].toString().trim().replace('7', '0'));
+            var time = datetime.split(' ')[1].toString();
+            document.getElementById("divDate").innerHTML = year + week;
+            document.getElementById("divTime").innerHTML = time.split(':')[0] + ':' + time.split(':')[1];
+        }
+        catch (ex) { }
+    }
+    function yinsibaohu(name) {
+        var pat = '';
+        if (is_yinsi)
+            if(name!="")
+                pat = (name.length == 2 ? name.substring(0, 1) + " * " : (name.length == 3 ? name.substring(0, 1) + " * " + name.substring(2, 3) : name.substring(0, 1) + "  *      *  " + name.substring(3, name.length)));
+
+        else
+            pat = name;
+        return pat;
+    }
+    function getQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return unescape(r[2]); return null;
+    }
+    function getUrlParam(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return unescape(r[2]); return null;
+    }
+    var ip = getUrlParam("ip");
+    //var wait = getUrlParam("wait");
+    //$("#tips").height(window.screen.availHeight);
+    //alert(window.screen.availHeight);
+    var rows =5;// parseInt((window.screen.availHeight - 380) / 110);
+    function PagerShow() {
+        try {
+            //$("#divList").html("");
+            var c = parseInt(data.count);
+            if (c > 0) {
+                var i = 0, j = rows;
+                var html = "";
+                if (c <= rows) {
+                    j = c;
+                    setTimeout(GetList, 10000);
+                }
+                else {
+                    if (c > rows * page) {
+                        i = (rows * (page - 1));
+                        j = rows * page;
+                        page = page + 1;
+                    }
+                    else {
+                        i = (rows * (page - 1));
+                        j = c;
+                        page = 1;
+                        GetList();
+                    }
+                }
+                for (var n = i; n < j; n++) {
+                    var jz = "";
+                    var dh = "";
+                    if( data.list[n].patient_name!=""&&data.list[n].patient_name!=null)
+                        html += "<li><div class=\"w1\">" + data.list[n].pager_displayname + "</div><div class=\"w2\"><div class=\"line-2-n\">" + hideword(data.list[n].patient_name) + "</div><div class=\"line-2-num\">" + data.list[n].register_id + "</div></div></li>";
+                    else
+                        html += "<li><div class=\"w1\">" + data.list[n].pager_displayname + "</div><div class=\"w2\"></div></li>";
+                }
+            }
+            else {
+                setTimeout(GetList, 10000);
+            }
+            $("#divTerminalName").html(data.terminalname);
+            //$("#divList").html(html);
+
+        }
+        catch (err) { }
+    }
+
+    function hideword(str) {
+        if (is_yinsi) {
+            if (str.length > 3)
+                return str.replace(/^(\S{1})\S{2}(.*)$/, '$1**$2');
+            else
+                return str.replace(/^(\S{1})\S{1}(.*)$/, '$1*$2');
+        }
+        else
+            return str;
+    }
+    function checknmb(id, state) {
+        var name = "";
+        if (id != "" && id != undefined) {
+            switch (state) {
+                case 2:
+                    name = "<b style='color:#fff100'>复</b>";
+                    break;
+                case 5:
+                    name = "<b style='color:#fff100'>优</b>";
+                    break;
+                case 54:
+                    name = "<b style='color:#fff100'>过</b>";
+                    break;
+                case 8:
+                    name = "<b style='color:#fff100'>迟</b>";
+                    break;
+                default:
+                    name = id;
+                    break;
+            }
+        }
+        return name;
+    }
+    function animation(id, str, state) {
+        str = hideword(str);
+        var name = "";
+        var name_display = "";
+        if (str != ""&&str!=undefined) {
+            switch (state) {
+                case 2:
+                    name = str + "复";
+                    name_display = str + "<b style='color:#fff100'>&nbsp;&nbsp;|&nbsp;&nbsp;复</b>";
+                    break;
+                case 5:
+                    name = str + "优";
+                    name_display = str + "<b style='color:#fff100'>&nbsp;&nbsp;|&nbsp;&nbsp;优</b>";
+                    break;
+                case 54:
+                    name = str + "过";
+                    name_display = str + "<b style='color:#fff100'>&nbsp;&nbsp;|&nbsp;&nbsp;过</b>";
+                    break;
+                default:
+                    name = id + str;
+                    name_display = str + "<b>&nbsp;&nbsp;|&nbsp;&nbsp;" + id + "</b>";
+                    break;
+            }
+        }
+        //if (name.length > 5)
+        //    return " <marquee direction='left' width='100%' height='100'>" + name_display + "</marquee>";
+        //else
+        return name_display;
+    }
+    function GetList() {
+
+            $.ajax({
+                type: "GET",
+                async: false,
+                url: "/call_patient/list_patient_wait2?t=" + new Date().getTime(),
+                contentType: "application/text;charset=utf-8",
+                dataType: "json",
+                cache: false,
+                success: function (pdata) {
+                    data = pdata;
+                },
+                error: function () {
+                    data = { "count": 0, "fztname": "未知" };
+                }
+            });
+
+    }
+    var dh = new Array();
+
+    function GetList_dh() {
+        dh = new Array();
+        try {
+            $.ajax({
+                type: "GET",
+                url: "/call_patient/list_patient_termainal",
+                contentType: "application/text;charset=utf-8",
+                dataType: "json",
+                cache: false,
+                async: false,
+                success: function (data) {
+                    if (data.count > 0) {
+
+                        $.each(data.list, function (i, item) {
+                            if (item.state_patient != 2) {
+                                dh.push(item);
+                            }
+                        });
+                    }
+                },
+                error: function () {
+
+                }
+            });
+
+            dh.sort(function (a, b) {
+                const first = a.time_interval - b.time_interval;
+                if (first !== 0) {
+                    return first;
+                }
+                return a.register_id - b.register_id;
+            });
+        }
+        catch (err) { }
+    }
+    function PagerCall() {
+        try {
+            $.ajax({
+                type: "GET",
+                url: "/clientPatientQueue/list_patient_call?t=" + new Date().getTime(),
+                contentType: "application/text;charset=utf-8",
+                dataType: "json",
+                cache: false,
+                success: function (data) {
+                    var k = 0;
+                    for (var i = 0; i < data.list.length; i++) {
+                        //$.each(data.list, function (j, item) {
+                        //    //if (item.hjzt == 1) {
+                        var item = data.list[i];
+
+                        var t = ("请 " + item.register_id + "号" + item.patient_name + " 到" + item.jhqmc + "就诊。").length * 400;
+                        setTimeout("showtips(" + t + ", '" + item.patient_name + "','" + item.jhqmc + "','" + item.register_id + "')", k);
+
+                        k = k + t;
+
+                    }
+                    if (k == 0)
+                        k = 2000;
+                    setTimeout(PagerCall, k);
+                }
+
+            });
+        }
+        catch (err) { }
+    }
+    function showtips(t, name, jhqmc, id) {
+        try {
+            $("#divPatientID").html(id);
+            $("#divClinicName").html(jhqmc);
+            $("#divPatientName").html(hideword(name));
+            //$("#mainCall").show(0).delay(t).hide(0)
+            var callText = "<?xml version=\"1.0\" encoding=\"GB18030\"?>"
+                + "<Contents><Content>"
+                + "<Voice Num=\"1\" Speed=\"1000\" digitMode=\"1\">"
+                + "请 " + id + "号" + name + " 到" + jhqmc + "就诊。"
+                + "</Voice>"
+                + "</Content></Contents>";
+            //var callText ="请 " + id + "号" + name + " 到" + jhqmc + "就诊。"
+            //SSMSObject.PlayVoice(callText, 3, 5, 5);
+            window.Callobject.playVoice(callText);
+        }
+        catch (err) { }
+    }
+    function callback(str) { }
+    function AuotBD() {
+        $.ajax({
+            type: "GET",
+            url: "/call_patient/AutoSetPatientDisplay?t=" + new Date().getTime(),
+            contentType: "application/text;charset=utf-8",
+            dataType: "json",
+            cache: false,
+            success: function (data) {
+            }
+        });
+    }
+    GetList();
+    PagerShow();
+    PagerCall();
+    //ShowTime();
+
+
+    window.setInterval(PagerShow, 10000);
+    //window.setInterval(PagerCall, 2000);
+    //window.setInterval(ShowTime, 5000);
+    if (getUrlParam("bd") == "auto") {
+        AuotBD();
+        window.setInterval(AuotBD, 30000);
+    }
+
+    var page_dh = 1;
+    function dh_show() {
+        var rows = 5
+        try {
+            //$("#dh").html("");
+            var dh_span = "";
+            var dh_html = "";
+            var c = parseInt(dh.length);
+            if (c > 0) {
+                var i = 0, j = rows;
+                var html = "";
+                if (c <= rows) {
+                    j = c;
+                    setTimeout(GetList_dh, 10000);
+                }
+                else {
+                    if (c > rows * page_dh) {
+                        i = (rows * (page_dh - 1));
+                        j = rows * page_dh;
+                        page_dh = page_dh + 1;
+                    }
+                    else {
+                        i = (rows * (page_dh - 1));
+                        j = c;
+                        page_dh = 1;
+                        GetList_dh();
+                    }
+                }
+
+                for (var n = i; n < j; n++) {
+                    var item = dh[n];
+                    //dh_html += "<span>" + animation(item.register_id, item.patient_name, item.state_patient) + "</span>";
+                    //dh_html += "<div class=\"cell2\"><div class=\"cell-n2\">" + hideword(item.patient_name) + "</div><div class=\"cell-num2\">" + checknmb(item.register_id, item.state_patient) + "</div></div>";
+                    dh_html += "<div class=\"cell\">" + hideword(item.patient_name) + "</div>";
+                    //dh_span += check_patient(item.register_id, item.patient_name, item.state_patient, item.is_display);
+                    //if (n > i + 1 && n % 4 == 0) {
+                    //    dh_html += "<li>" + dh_span + "</li>";
+                    //    dh_span = "";
+                    //}
+                    //if (n % 4 != 0 && n == j - 1)
+                    //    dh_html += "<li>" + dh_span + "</li>";
+                    //else if (n == c - 1)
+                    //    dh_html += "<li>" + dh_span + "</li>";
+                }
+            }
+            else {
+
+                setTimeout(GetList_dh, 10000);
+            }
+            $("#divList").html(dh_html);
+            setTimeout(dh_show, 10000);
+        }
+        catch (err) { setTimeout(dh_show, 10000); }
+    }
+    GetList_dh();
+    dh_show();
+</script>

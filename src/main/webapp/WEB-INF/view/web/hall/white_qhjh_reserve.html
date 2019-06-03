@@ -1,0 +1,899 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1,user-scalable=no"
+          id="viewport" />
+    <title>取号机</title>
+
+    <link href="/static/web/hall/style_white_quhao.css" rel="stylesheet" />
+    <script src="/static/web/hall/jquery.min.js"></script>
+    <script src="/static/web/hall/touchscan.js"></script>
+    <script src="/static/web/hall/keyboard.js"></script>
+    <script src="/static/web/hall/TakingManager.js"></script>
+    <script src="/static/web/hall/jquery.mobile-1.3.2.min.js"></script>
+    <style>
+        body {
+            -moz-user-select: none; /*火狐*/
+            -webkit-user-select: none; /*webkit浏览器*/
+            -ms-user-select: none; /*IE10*/
+            -khtml-user-select: none; /*早期浏览器*/
+            user-select: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!--上部-->
+        <div class="top">
+            <div class="logo">
+                <img src="/static/web/image/logo.png">
+            </div>
+            <div class="name">自助机</div>
+            <div class="date" id="now_date">
+                星期四<br /> 2017年10月26日
+            </div>
+            <div class="time" id="now_time">22:58</div>
+        </div>
+        <div class="main">
+
+            <div class="table-1">
+                <!-- <div class="title">温馨提示</div>
+                <div class="down">
+                    1、请刷卡或手工输入就诊卡号进行报到取号。<br /><br />
+                    2、请过号患者到门口显示屏报到。<br /><br />
+                    3、祝您及您的家人健康。
+                </div> -->
+
+            </div>
+
+
+            <!--叫号部分-->
+            <div class="table-2" >
+                <div class="chuangk" id="divPagerName">欢迎使用自助取号机</div>
+                <div class="jiaohao" id="quhao_content">
+                    <!--<input type="text" readonly="readonly" maxlength="20" placeholder="请输入您的就诊卡号" class="input_txt" id="serialNum" />-->
+                    <div class="input_txt" id="serialNum"></div>
+                    <div id="keyboard" class="keyborde">
+                        <div class="enterkey" id="serialOK"><br />确<br />认</div>
+                        <ul>
+                            <li data-value="7" class="nmbkey">7</li>
+                            <li data-value="8" class="nmbkey">8</li>
+                            <li data-value="9" class="nmbkey">9</li>
+                            <li data-value="4" class="nmbkey">4</li>
+                            <li data-value="5" class="nmbkey">5</li>
+                            <li data-value="6" class="nmbkey">6</li>
+                            <li data-value="1" class="nmbkey">1</li>
+                            <li data-value="2" class="nmbkey">2</li>
+                            <li data-value="3" class="nmbkey">3</li>
+                            <li data-value="del" class="nmbkey">回删</li>
+                            <li data-value="0" class="nmbkey">0</li>
+                            <li data-value="delAll" class="resetkey">重置</li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+            <!-- <bottom class="bd" onclick="bd_show()" id="bd_btn">报到</bottom> -->
+            <bottom class="yy" onclick="reserve_show()" id="yy_btn">预约</bottom>
+            <div class="bottom">温馨提示：请保管好您的随身物品,耐心等候！！！</div>
+        </div>
+        <div id="bg2"></div>
+        <div id="bg"></div>
+        <div id="divAlter">
+            <div class="title" id="title">请选择对应业务号码取号</div>
+            <div class="btnlist" id="content"></div>
+            <div class="btnlist" id="content2" style="display:none"></div>
+            <input type="button" value="返回" class="back_btn" id="btn_bak2" />
+        </div>
+        
+        <div id="showmsg">
+            <div class="title" id="tips_title">信息提示</div>
+            <div class="btnlist" id="info_msg"></div>
+            <div class="bottom">
+                <span class="back_btn" id="btn_bak1">返回</span><span id="showmsg_btn" class='back_btn'>取号</span>
+            </div>
+        </div>
+        <div id="divTimer" class="timeback" style="display: none;">
+            <span id="spanSec" style="color: Red; margin: 0px 5px 0px 5px;">15</span>秒后返回
+        </div>
+
+
+        <!--<div style="display: none">
+            <iframe id="print"></iframe>
+        </div>-->
+    </div>
+</body>
+</html>
+<script type="text/javascript">
+    //url参数：queueTypes :队列queue_type_id，以逗号分隔
+    //         validate :是否开起卡号验证：false/true
+    var obj = document.getElementById("PrinterActiveX");
+    function CheckPrint() {
+       return obj.CheckPrinter(window);
+       // if (printstatu == "准备就绪（Ready）") 
+    }
+
+    function ShowTime() {
+        try {
+            var datetime = window.Callobject.getDateTime();
+            var year = datetime.split(' ')[0].split('-')[0].toString() + '年' + datetime.split(' ')[0].split('-')[1].toString() + '月' + datetime.split(' ')
+
+            [0].split('-')[2].toString() + '日';
+            var week = "　星期" + "日一二三四五六".charAt(datetime.split(' ')[2].toString().trim().replace('7', '0'));
+            var time = datetime.split(' ')[1].toString();
+            $("#now_date").html(week+"<br />"+year);
+            $("#now_time").html(time.split(':')[0] + ':' + time.split(':')[1]);
+        }
+        catch (ex) { }
+    }
+    function getQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return unescape(r[2]); return null;
+    }
+    function getUrlParam(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return unescape(r[2]); return null;
+    }
+
+    ShowTime();
+
+    $("#triage_name").html("自助取号机");
+    window.setInterval(ShowTime, 5000);
+
+    document.getElementById("serialNum").focus();
+    window.document.onload = function () {
+        document.documentElement.style.webkitTouchCallout = "none"; //禁止弹出菜单
+        document.documentElement.style.webkitUserSelect = "none";//禁止选中
+    }
+    //vmousedown
+    $("#serialOK").bind("vmousedown", function () {
+        GetQueueList();
+    });
+    $("#btn_bak2").bind("vmousedown", function () {
+        closediv();
+    });
+    $("#btn_bak1").bind("vmousedown", function () {
+        closediv();
+    });
+    
+    var ids = getUrlParam("queueTypes");
+    var validate = getUrlParam("validate");
+    var patientname = "";
+    var old_source_code = "";
+    var ip=getUrlParam("ip");
+    var html = "";
+    var yy=false;
+    var bd=false;
+    $.ajax({
+        type: "GET",
+        url: "/clientqueuetype/GetQueueTypeOne",
+        contentType: "application/text;charset=utf-8",
+        dataType: "json",
+        cache: false,
+        data: { "id": ids },
+        async: false,
+        success: function (data) {
+            $("#content").empty();
+            if (data.count > 0) {
+                html = "";
+                var cls = "class='btn_server'";
+                if (data.count ==3)
+                    cls = "class='btn_server3'";
+                else if(data.count==4)
+                    cls = "class='btn_server4'";
+                else if (data.count > 4)
+                    cls = "class='btn_server5'";
+                $.each(data.list, function (i, item) {
+                    $("#content").append("<div " + cls + " id='" + item.queue_type_id + "'>" + item.name + "</div>");
+                    $("#content2").append("<div " + cls + " style='background-color: #fe8a00;' id='yy" + item.queue_type_id + "'>" + item.name + "</div>");
+                    $("#" + item.queue_type_id).bind("vmousedown", function () {
+                        quhaoTips(item.displayname, item.name, item.queue_type_id);
+                    });
+                    $("#yy" + item.queue_type_id).bind("vmousedown", function () {
+                        quhaoTipsyy_choose(item.displayname, item.name, item.queue_type_id);
+                    });
+                });
+            }
+            else{
+                $("#content").append("<span style='color:red'>当前添加的队列参数无效，请重新添加</span>");
+                $("#content2").append("<span style='color:red'>当前添加的队列参数无效，请重新添加</span>");
+            }
+                
+
+        },
+        error: function (err) {
+            html = "<span style='color:red'>系统错误，请联系管理员</span>";
+            $("#content").html(html);
+            $("#content2").html(html);
+        }
+    });
+    if (validate == "false") {
+        $("#bg2").show();
+        $("#quhao_content").hide();
+        $("#divAlter").show();
+        $("#btn_bak2").hide();
+    }
+    function reserve_show()
+    {
+        if(yy)
+        {
+            $("#content2").hide();
+            $("#content").show();
+            yy=false;
+            $("#yy_btn").html("预约");
+            $("#yy_btn").css("background","#55cabd");
+            $("#title").html("请选择对应业务号码取号");
+            $("#title").css("background","#fe8a00");
+            $("#tips_title").html("信息提示");
+            $("#tips_title").css("background","#55cabd");
+            closediv();
+            $("#bd_btn").show();
+        }
+        else
+        {
+            $("#content2").show();
+            $("#content").hide();
+            yy=true;
+            $("#yy_btn").html("取消");
+            $("#yy_btn").css("background","#fe8a00");
+            $("#title").html("预约取号");
+            $("#title").css("background","#55cabd");
+            $("#tips_title").html("预约时间选择");
+            $("#tips_title").css("background","#fe8a00");
+            $("#bd_btn").hide();
+        }
+    }
+    function bd_show()
+    {
+        if(bd)
+        {
+            $("#bg2").show();
+            $("#quhao_content").hide();
+            $("#divAlter").show();
+            $("#btn_bak2").hide();
+            $("#quhao_content").hide();
+            $("#content2").hide();
+            $("#content").show();
+            bd=false;
+            $("#bd_btn").html("报到");
+            $("#bd_btn").css("background","#55cabd");
+            $("#title").html("请选择对应业务号码取号");
+            $("#title").css("background","#fe8a00");
+            $("#tips_title").html("信息提示");
+            $("#tips_title").css("background","#55cabd");
+            $("#yy_btn").show();
+            closediv();
+        }
+        else
+        {
+            $("#bg2").hide();
+            $("#quhao_content").show();
+            bd=true;
+            $("#divAlter").hide();
+            $("#btn_bak2").show();
+            $("#yy_btn").hide();
+            $("#bd_btn").html("取消");
+            $("#bd_btn").css("background","#fe8a00");
+        }
+    }
+    function GetQueueList(str) {
+        var source_code = $("#serialNum").html();
+        if (source_code.length > 2) {
+            $.ajax({
+                type: "POST",
+                async: true,
+                url: "/clientPatientQueue/Scan",
+                dataType: "json",
+                data: { "code": source_code, "ip": ip },
+                success: function (data) {
+                    if (data.return_code == "success") {
+                        if (data.count > 0) {
+                            var html = "<div class='rows'><div class='w20'>姓名</div><div class='w20'>队列</div><div class='w20'>状态</div><div class='w20'>排队号</div><div class='w20'>操作</div></div>";
+                            var show2=false;
+                            $.each(data.list, function (i, item) {
+                                var s = "", c = "";
+                                switch (item.state_patient) {
+                                    case 0:
+                                    case 2:
+                                    case 3:
+                                    case 4:
+                                    case 5:
+                                    case 6:
+                                    case 7:
+                                    case 8:
+                                    case 50:
+                                        s = "已报到";
+                                        break;
+                                    case 51:
+                                        s = "正在就诊";
+                                        break;
+                                    case 52:
+                                    case 53:
+                                        s = '已就诊';
+                                        break;
+                                    case 54:
+                                        s='过号';
+                                        break;
+                                    default:
+                                        s = '已过号';
+                                }
+                                //var wait = GetData("SELECT * FROM patient_queue where is_deleted=0 and state_patient NOT IN (1, 51, 52, 53, 54) and is_display=2 and queue_type_id=" + item.queue_type_id + " and  register_id+''<(SELECT register_id+'' FROM patient_queue where id="+item.id+")").count;
+                                var r_id=item.register_id;
+                                if(item.state_patient2!=0&&item.state_patient2!=undefined)
+                                {
+                                    //r_id=data.dqjz.register_id2;
+                                    if(item.state_patient2=="2")
+                                        {
+                                            r_id="复诊-"+item.register_id2;
+                                        }
+                                }
+                                var showbtn=false;
+                                var btnhtml="<div class='back_btn' onclick='baodao(\"" + source_code + "\",\"" + item.queue_type_id + "\",\"" + item.id + "\",\"" + item.reorder_type + "\",\"" + item.is_pretriage + "\",\"" + item.reserve_numlist + "\",\"" + item.print_type + "\")'>报到</div>";
+                                if(item.is_display == 1)
+                                    {
+                                        s="未报到";
+                                        showbtn=true;
+                                        show2=true;
+                                    }
+                                else{
+                                    if(item.state_patient == 1)
+                                        {
+                                            showbtn=true;
+                                            show2=true;
+                                        }
+                                    else if(item.state_patient==53)
+                                    {
+                                        showbtn=true;
+                                        show2=true;
+                                        btnhtml="<div class='back_btn' onclick='baodao(\"" + source_code + "\",\"" + item.queue_type_id + "\",\"" + item.id + "\",\"" + item.reorder_type + "\",\"" + item.is_pretriage + "\",\"" + item.reserve_numlist + "\",\"" + item.print_type + "\")'>复诊报到</div>";
+                                    }
+                                    else
+                                        showbtn=false;
+                                }
+                                html += "<div class='rows'><div class='w20'>" + item.patient_name + "</div><div class='w20'>" + item.queue_type_name + "</div><div class='w20'>" + s + "</div><div class='w20'>" + r_id + "</div><div class='w20'>" + ( !showbtn? "请等候" : btnhtml) + "</div></div>";
+                            });
+                            
+                            if (divClose != null)
+                                clearInterval(divClose);
+                                
+                            $("#showmsg").show();
+                            $("#showmsg").width(1000);
+                           
+                            $("#info_msg").removeClass("btnlist")
+                            $("#info_msg").addClass("btnlist2");
+                            $("#info_msg").html(html);
+                            $("#bg").css("z-index", 1003);
+                            $("#bg").show();
+                            $("#showmsg_btn").hide();
+                        }
+                        else {
+                            if (divClose != null)
+                                clearInterval(divClose);
+                            $("#showmsg").show();
+                            $("#showmsg").width(700);
+                            //$("#showmsg").css('margin-top', -(parseFloat($('#showmsg').height()) / 2) + 'px');
+                            //$("#showmsg").css('margin-left', -350 + 'px');
+                            $("#info_msg").removeClass("btnlist2")
+                            $("#info_msg").addClass("btnlist");
+                            $("#info_msg").html("未查询到信息！");
+                            $("#bg").css("z-index", 1003);
+                            $("#bg").show();
+                            $("#showmsg_btn").hide();
+                        }
+
+                    }
+                    else {
+                        if (divClose != null)
+                            clearInterval(divClose);
+                        $("#showmsg").show();
+                        $("#showmsg").width(700);
+                        //$("#showmsg").css('margin-top', -(parseFloat($('#showmsg').height()) / 2) + 'px');
+                        //$("#showmsg").css('margin-left', -350 + 'px');
+                        $("#info_msg").removeClass("btnlist2")
+                        $("#info_msg").addClass("btnlist");
+                        $("#info_msg").html("未查询到信息！");
+                        $("#bg").css("z-index", 1003);
+                        $("#bg").show();
+                        $("#showmsg_btn").hide();
+                    }
+                },
+                error: function () {
+                    if (divClose != null)
+                        clearInterval(divClose);
+                    $("#showmsg").show();
+                    $("#showmsg").width(700);
+                    $("#info_msg").removeClass("btnlist2")
+                    $("#info_msg").addClass("btnlist");
+                    $("#info_msg").html("操作失败，请联系管理员！");
+                    $("#bg").css("z-index", 1003);
+                    $("#bg").show();
+                    $("#showmsg_btn").hide();
+                }
+            });
+        }
+        else {
+            //if (divClose2 != null)
+            //    clearInterval(divClose2);
+            if (divClose != null)
+                clearInterval(divClose);
+            $("#showmsg").show();
+            $("#showmsg").width(700);
+            //$("#showmsg").css('margin-top', -(parseFloat($('#showmsg').height()) / 2) + 'px');
+            //$("#showmsg").css('margin-left', -350 + 'px');
+            $("#info_msg").removeClass("btnlist2")
+            $("#info_msg").addClass("btnlist");
+            $("#info_msg").html("请刷卡或输入正确的卡号");
+            $("#bg").css("z-index", 1003);
+            $("#bg").show();
+            $("#showmsg_btn").hide();
+        }
+
+    }
+    function baodao(code, queue, id, ttype, is_tri, numlist, print_type) {
+        $.ajax({
+            type: "POST",
+            async: true,
+            url: "/clientPatientQueue/ScanBaodao",
+            dataType: "json",
+            data: { "code": code, 'queue_type_id': queue, 'yl': numlist, "ip": ip },
+            success: function (data) {
+                if (data.return_code == "success") {
+                    var wait = GetData("SELECT count(id) as wait FROM patient_queue where is_deleted=0 and state_patient NOT IN (1, 51, 52, 53, 54) and is_display=2 and queue_type_id=" + queue + " and id<>" + data.id);
+                    // var wait_count = 0;
+                    // if (wait.count == 1
+                    //     wait_count = wait.list[0].wait
+                    if (divClose != null)
+                        clearInterval(divClose);
+                    $("#showmsg").show();
+                    $("#showmsg").width(900);
+                    //$("#showmsg").css('margin-top', -(parseFloat($('#showmsg').height()) / 2) + 'px');
+                    //$("#showmsg").css('margin-left', -350 + 'px');
+                    $("#info_msg").removeClass("btnlist2")
+                    $("#info_msg").addClass("btnlist");
+                    var r_id=data.register_id;
+                    if(data.state_patient2!=0&&data.state_patient2!=undefined)
+                    {
+                        //r_id=data.dqjz.register_id2;
+                        if(data.state_patient2=="2")
+                            {
+                                r_id="复诊-"+data.register_id2;
+                            }
+                    }
+                    $("#info_msg").html(data.patient_name + "  排队号：" + r_id);
+                    $("#bg").css("z-index", 1003);
+                    $("#bg").show();
+                    $("#showmsg_btn").hide();
+                    if (is_print=="true")
+                    {
+                        var myDate = new Date();
+                        PrintXml(data.patient_name, data.queue_type_name, 0, myDate.toLocaleString(), r_id);
+                    }
+                }
+                else {
+                    if (divClose != null)
+                        clearInterval(divClose);
+                    $("#showmsg").show();
+                    $("#showmsg").width(700);
+                    $("#info_msg").removeClass("btnlist2")
+                    $("#info_msg").addClass("btnlist");
+                    $("#info_msg").html(data.return_msg);
+                    $("#bg").css("z-index", 1003);
+                    $("#bg").show();
+                    $("#showmsg_btn").hide();土
+                }
+            }
+        });
+    }
+    function quhaoWait(id) {
+        var count = 0;
+        $.ajax({
+            type: "GET",
+            async: false,
+            url: "/clientPatientQueue/listPatient_wait",
+            dataType: "json",
+            data: { "queue_number": id,"ip":ip },
+            cache: false,
+            async: false,
+            success: function (data) {
+                count= data.count
+            }
+        });
+        return count;
+    }
+    function quhaoWait2(id, r_id) {
+        var count = 0;
+        $.ajax({
+            type: "GET",
+            async: false,
+            url: "/clientPatientQueue/getWait2?t=" + new Date().getTime(),
+            dataType: "json",
+            data: { "queue_number": id, "r_id": r_id },
+            cache: false,
+            async: false,
+            success: function (data) {
+                count = data.wait
+            }
+        });
+        return count;
+    }
+
+    $("#serialOK").keypress(function () {
+        if (event.keyCode == "13") {
+            GetPatientInfo();
+        }
+    });
+
+    //查询患者卡号
+    function GetPatientInfo() {
+        $("#bg").css("z-index", 1001);
+        $("#bg").show();
+    }
+
+    var iNum = 16;
+    var divClose = null;
+    function showTimer() {
+        if ($("#divTimer").css("display") == "none") {
+            $("#divTimer").show();
+        }
+        if (iNum == 0) {
+            clearInterval(divClose);
+            divClose = null;
+            iNum = 16;
+            $("#divTimer").hide();
+            isSwipeCard = 0;
+            keystring = "";
+            if (validate != "false") {
+                $("#divAlter").hide();
+                $("#quhao_content").show();
+            }
+            $("#showmsg").hide();
+            $("#bg").hide();
+            $("#serialNum").html("");
+        }
+        else {
+            iNum--;
+            $("#spanSec").html(iNum.toString());
+        }
+    }
+    function closediv() {
+        iNum = 0;
+        patientname = "";
+        old_source_code = "";
+        showTimer();
+    }
+    function quhaoTips(disname, name, id) {
+        if (divClose == null)
+            divClose = setInterval(showTimer, 1000);
+        if(validate=="true")
+        {$.ajax({
+            type: "GET",
+            async: false,
+            url: "/clientPatientQueue/Manual_quhao_check?t=" + new Date().getTime(),
+            dataType: "json",
+            data: { "source_code": old_source_code, "queue_type_id": id },
+            cache: false,
+            success: function (data) {
+                if (data.return_code == "success") {
+                    if (divClose == null)
+                        divClose = setInterval(showTimer, 1000);
+                    $("#info_msg").html("姓名：" + data.patient.patient_name + "<br />排队号：" + data.patient.register_id + "<br />前面等候人数：" + quhaoWait2(id, data.patient.register_id));
+                    $("#showmsg").show();
+                    $("#showmsg").width(700);
+                    $("#bg").css("z-index", 1003);
+                    $("#bg").show();
+                    $("#showmsg_btn").hide();
+                }
+                else {
+                    $.ajax({
+                        type: "GET",
+                        async: false,
+                        url: "/clientPatientQueue/listPatient_wait?t=" + new Date().getTime(),
+                        dataType: "json",
+                        data: { "queue_number": id },
+                        cache: false,
+                        success: function (data) {
+                            if (divClose == null)
+                                divClose = setInterval(showTimer, 1000);
+                            $("#showmsg").show();
+                            $("#showmsg").width(700);
+                            $("#info_msg").html(name + "当前等候人数：" + data.count);
+                            $("#bg").css("z-index", 1003);
+                            $("#bg").show();
+                            $("#showmsg_btn").unbind("click");
+                            $("#showmsg_btn").show();
+                            $("#showmsg_btn").bind("click", function () {
+                                quhao(disname, name, id, data.count,type);
+                            });
+                        },
+                        error: function () {
+                            if (divClose == null)
+                                divClose = setInterval(showTimer, 1000);
+                            $("#info_msg").html("<span style='color:red'>出现错误，请稍后重试</span>");
+                            $("#showmsg").show();
+                            $("#showmsg").width(700);
+                            $("#bg").css("z-index", 1003);
+                            $("#bg").show();
+                            $("#showmsg_btn").hide();
+                        }
+                    });
+                }
+            },
+            error: function () {
+                if (divClose == null)
+                    divClose = setInterval(showTimer, 1000);
+                $("#info_msg").html("<span style='color:red'>出现错误，请稍后重试</span>");
+                $("#showmsg").show();
+                $("#showmsg").width(700);
+                $("#bg").css("z-index", 1003);
+                $("#bg").show();
+                $("#showmsg_btn").hide();
+            }
+        });
+        }
+        else{
+            var wait=quhaoWait(id);
+            quhao(disname, name, id, wait,"2");
+        }
+    }
+    function quhaoTipsyy_choose(disname, name, id)
+    {
+        //try {
+            var datetime ="2019-05-09";// window.Callobject.getDateTime();
+            var year = datetime.split(' ')[0].split('-')[0].toString() + '-' + datetime.split(' ')[0].split('-')[1].toString() + '-' + datetime.split(' ')[0].split('-')[2].toString() ;
+            
+            var t1=addDate(year,1);
+            var t2=addDate(year,2);
+            var t3=addDate(year,3);
+            var t1_wait=0;
+            var t2_wait=0;
+            var t3_wait=0;
+            $("#showmsg").show();
+            $("#showmsg").width(1200);
+            var data_reserve_wait=GetData("SELECT count(*) as re_wait,reserve_time from patient_queue_reserve WHERE queue_type_id="+id+" and TO_DAYS(reserve_time)-TO_DAYS(NOW()) > 0 GROUP BY TO_DAYS(reserve_time)");
+            for(var i=0;i<data_reserve_wait.list.length;i++)
+            {
+                //var date = new Date(data_reserve_wait.list[i].reserve_time);
+                var rdate=addDate(data_reserve_wait.list[i].reserve_time,0);
+                if(t1==rdate)
+                    t1_wait=data_reserve_wait.list[i].re_wait;
+                else if(t2==rdate)
+                    t2_wait=data_reserve_wait.list[i].re_wait;
+                else if(t3==rdate)
+                    t3_wait=data_reserve_wait.list[i].re_wait;
+            }
+            var html="<div class='btn_time' onclick='quhaoTipsyy(\""+disname+"\",\""+name+"\",\""+id+"\",\""+t1+"\")'>明天("+t1_wait+")</div><div class='btn_time' onclick='quhaoTipsyy(\""+disname+"\",\""+name+"\",\""+id+"\",\""+t2+"\")'>后天("+t2_wait+")</div><div class='btn_time' onclick='quhaoTipsyy(\""+disname+"\",\""+name+"\",\""+id+"\",\""+t3+"\")'>外天("+t3_wait+")</div>";
+            $("#info_msg").html(html);
+            $("#bg").css("z-index", 1003);
+            $("#bg").show();
+            $("#showmsg_btn").unbind("click");
+            $("#showmsg_btn").hide();
+            if (divClose == null)
+                divClose = setInterval(showTimer, 1000);
+        //}
+        //catch (ex) { }
+        
+    }
+    function quhaoTipsyy(disname,name,id,t)
+    {
+        $.ajax({
+            type: "POST",
+            async: false,
+            url: "/clientPatientQueue/Manual_quhao2_reserve?t=" + new Date().getTime(),
+            dataType: "json",
+            cache: false,
+            //data: { "patientName": disname, "QueueNumber": id },
+            data: { "patientName": disname, "QueueNumber": id, "type": 2, "source_code":old_source_code ,"date":t},
+            success: function (data) {
+                if (data.return_code == "success") {
+                    reserve_show();
+                    
+                    PrintXmlRe(disname + data.resever_id, name, t, data.dtime, data.resever_id,data.patient_code);
+                    setTimeout(() => {
+                        PrintXmlRe(disname + data.resever_id, name, t, data.dtime, data.resever_id,data.patient_code);
+                    }, 2000);
+                    
+                }
+            },
+            error: function () {
+                $("#info_msg").html("<span style='color:red'>出现错误，请稍后重试</span>");
+            }
+        });
+    }
+    function addDate(date, days) {
+            
+            var date = new Date(date);
+            date.setDate(date.getDate() + days);
+            var month = date.getMonth() + 1;
+            var day = date.getDate();
+            return date.getFullYear() + '-' + getFormatDate(month) + '-' + getFormatDate(day);
+        }
+    function getFormatDate(arg) {
+        if (arg == undefined || arg == '') {
+            return '';
+        }
+
+        var re = arg + '';
+        if (re.length < 2) {
+            re = '0' + re;
+        }
+
+        return re;
+    }
+    function GetData(sql) {
+        var datalist = null;
+        $.ajax({
+            type: "GET",
+            async: false,
+            url: "/client/commSelect",
+            contentType: "application/text;charset=utf-8",
+            dataType: "json",
+            data: { "sql": sql },
+            cache: false,
+            success: function (pdata) {
+                datalist = pdata;
+            }
+        });
+        return datalist;
+    }
+    function quhao(disname, name, id, wait,type) {
+        //alert(window.Callobject.CheckPaper());
+        //if (window.Callobject.CheckPaper() == 1) {
+        $.ajax({
+            type: "POST",
+            async: false,
+            url: "/clientPatientQueue/Manual_quhao2?t=" + new Date().getTime(),
+            dataType: "json",
+            cache: false,
+            //data: { "patientName": disname, "QueueNumber": id },
+            data: { "patientName": disname, "QueueNumber": id, "type": type, "source_code":old_source_code },
+            success: function (data) {
+                if (data.return_code == "success") {
+                    $("#showmsg_btn").hide();
+                    $("#showmsg").show();
+                    $("#showmsg").width(700);
+                    $("#info_msg").html("当前号：" + data.number + " ,当前等候人数：" + wait);
+                    $("#bg").css("z-index", 1003);
+                    $("#bg").show();
+                    $("#showmsg_btn").unbind("click");
+                    $("#showmsg_btn").hide();
+                    PrintXml(disname + data.number, name, wait, data.dtime, data.number);
+                    setTimeout(() => {
+                        PrintXml(disname + data.number, name, wait, data.dtime, data.number);
+                    }, 2000);
+                    
+                }
+            },
+            error: function () {
+                $("#info_msg").html("<span style='color:red'>出现错误，请稍后重试</span>");
+            }
+        });
+        //}
+        //else {
+        //    $("#info_msg").append("<br /><span style='color:red'>取号机缺纸，暂时无法提供取号打印服务，请联系工作人员！</span>");
+        //    $("#showmsg_btn").hide();
+        //}
+    }
+    function printHtml() {
+        var myIframe = document.getElementById("print");
+        myIframe.src = '/screen/hall?page=print&name=123&nmb=1&wait=0&queue=test';
+    }
+        //printHtml();
+        function PrintXml(patient_name, queue_type_name, waiting_count, time, register_id) {
+            var printXml = '! 0 200 200 100 1\n';
+            printXml += '! 0 200 200 100 1\n';
+            printXml += 'CENTER\n';
+            printXml += 'TEXT 24 11 0 40 生殖中心\n';
+            printXml += 'PRINT\n';
+
+            printXml += '! 0 200 200 32 1\n';
+            printXml += 'TEXT 24 0 0 0 您是第\n';
+            printXml += 'PRINT\n';
+
+            printXml += '! 0 200 200 64 1\n';
+            printXml += 'CENTER\n';
+            printXml += 'TEXT 24 11 0 0 ' + patient_name + '\n';
+            printXml += 'PRINT\n';
+
+            printXml += '! 0 200 200 200 1\n';
+            printXml += 'TEXT 24 0 0 0 所属业务：' + queue_type_name + '\n';
+            printXml += 'TEXT 24 0 0 32 等候人数：' + waiting_count + ' \n';
+            printXml += 'TEXT 24 0 0 64 过号请重新取号!\n';
+            printXml += 'TEXT 24 0 0 96 谢谢您的合作!\n';
+            printXml += 'TEXT 24 0 0 128 ' + time + '\n\n';
+            printXml += 'TEXT 24 0 0 160 \n';
+            printXml += '! 0 200 200 100 1\n';
+            printXml += 'PRINT\n'
+            window.Callobject.PrintXml(printXml);
+        }
+        function PrintXmlRe(patient_name, queue_type_name, waiting_count, time, register_id,code) {
+            var printXml = '! 0 200 200 100 1\n';
+            printXml += '! 0 200 200 100 1\n';
+            printXml += 'CENTER\n';
+            printXml += 'TEXT 24 11 0 40 生殖中心\n';
+            printXml += 'PRINT\n';
+
+            printXml += '! 0 200 200 32 1\n';
+            printXml += 'TEXT 24 0 0 0 您是第\n';
+            printXml += 'PRINT\n';
+
+            printXml += '! 0 200 200 64 1\n';
+            printXml += 'CENTER\n';
+            printXml += 'TEXT 24 11 0 0 ' + patient_name + '\n';
+            printXml += 'PRINT\n';
+
+            printXml += '! 0 200 200 200 1\n';
+            printXml += 'TEXT 24 0 0 0 所属业务：' + queue_type_name + '\n';
+            printXml += 'TEXT 24 0 0 32 预约时间：' + waiting_count + ' \n';
+            printXml += 'TEXT 24 0 0 64 过号请扫描条码重新签到!\n';
+            printXml += 'TEXT 24 0 0 96 谢谢您的合作!\n';
+            printXml += 'TEXT 24 0 0 128 ' + time + '\n\n';
+            printXml += 'TEXT 24 0 0 160 \n';
+            printXml += '! 0 200 200 100 1\n';
+            printXml += 'PRINT\n'
+
+            printXml += '! 0 200 200 210 1\n';
+            printXml += 'BARCODE  128 2 2 100 160 10 ' + code + '\n';
+            printXml += 'TEXT 24 0 0 180 流水号： ' + code + ' \n';
+            printXml += 'PRINT\n'
+            window.Callobject.PrintXml(printXml);
+        }
+
+        ////解决缩放问题
+
+        //var spots = {}, touches, timer;
+
+        //document.addEventListener('touchstart', function (e) {
+        //    e.preventDefault();
+        //    [].forEach.call(e.targetTouches, function (touch) {
+        //        //对每一根触摸在屏幕上的手指都生成一个元素，并且用touch.identifier作为该元素的唯一标识，触摸结束后清除引用的元素
+        //        if (spots[touch.identifier]) {
+        //            return;
+        //        }
+        //        var spot = spots[touch.identifier] = document.createElement('div');
+        //        spot.classList.add('spot');
+        //        spot.style.top = touch.pageY - 35;
+        //        spot.style.left = touch.pageX - 35;
+        //        document.body.appendChild(spot);
+        //    })
+        //    timer = setInterval(function () {
+        //        renderTouches(touches);
+        //    }, 16);
+        //}, false);
+
+        //document.addEventListener('touchmove', function (e) {
+        //    e.preventDefault();
+        //    touches = e.touches;
+        //});
+
+        //function renderTouches(touches) {
+        //    if (!touches) {
+        //        return;
+        //    };
+        //    [].forEach.call(touches, function (touch) {
+        //        var spot = spots[touch.identifier];
+        //        if (spot) {
+        //            spot.style.top = touch.pageY - 35;
+        //            spot.style.left = touch.pageX - 35;
+        //        }
+        //    })
+        //}
+
+        //document.addEventListener('touchend', function (e) {
+        //    e.preventDefault();
+        //    [].forEach.call(e.changedTouches, function (touch) {
+        //        var spot = spots[touch.identifier];
+        //        if (spot) {
+        //            document.body.removeChild(spot);
+        //            delete spots[touch.indentifier];
+        //        }
+        //    })
+        //    if (e.changedTouches.length === 0) {
+        //        clearInterval(timer);
+        //    }
+        //});
+
+</script>

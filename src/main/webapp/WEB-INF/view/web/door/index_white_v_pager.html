@@ -1,0 +1,679 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>诊室门口</title>
+<link href="/static/web/door/style_white_v.css" rel="stylesheet" />
+<script src="/static/web/door/jquery.min.js"></script>
+</head>
+<body>
+	<div class="container">
+		<!--上部-->
+		<div class="top">
+			<div class="logo">
+				<img src="/static/web/image/logo.png">
+			</div>
+			<div class="date" id="divDate"></div>
+			<div class="time" id="divTime"></div>
+		</div>
+
+		<!--中部-->
+		<div class="main" id="mainCall" style="display: none;">
+
+			<div class="table">
+				<!--诊室-->
+				<div class="zhenshi" id="divPagerName"></div>
+
+				<!--医生一-->
+				<div class="doc">
+					<div class="pic">
+						<img onload="javascript:DrawImage(this,480,480)" id="imgDoctor"
+							src="images/pic.jpg" />
+					</div>
+					<div class="d-right">
+						<div class="d-n" id="divDoctorName"></div>
+						<div class="d-z" id="divDoctorTitle"></div>
+						<div class="d-jianjie">
+							<div id="divDoctorDesc"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+			<!--患者-->
+			<div class="huanzhe">
+				<div class="hz-zheng">
+					<div class="zheng-l">正在就诊</div>
+					<div class="zheng-r-3" id="divPatientName"></div>
+					<div id="divPatientId"></div>
+				</div>
+				<div class="hz-deng">
+					<div class="deng-l">等候就诊</div>
+					<div id="divList" class="deng-list">
+						<!-- <div class="deng-r"> -->
+						<!-- <div class="deng-n-3"></div> -->
+						<!-- <div class="deng-num"></div> -->
+						<!-- </div> -->
+						<div class="dhlist" id="dh_list1"></div>
+						<div class="dhlist" id="dh_list2"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="main1" id="mainInit">
+			<!--诊室-->
+			<div class="zhenshi" id="divPagerName1"></div>
+			<!--提示-->
+			<div class="tishi">
+				<div class="line-1">
+					上午开诊时间 08:00-12:00<br /> 下午开诊时间 13:00-17:00
+				</div>
+				<div class="line-2">请耐心等候</div>
+			</div>
+		</div>
+
+		<div class="bottom">温馨提示：请保管好您的随身物品,耐心等候！！！</div>
+	</div>
+	<div id="tips"></div>
+</body>
+</html>
+<script type="text/javascript">
+    var is_yinsi = true; //是否开启隐私保护
+    var Getdata = "";
+    var indata = "";
+    
+    function ShowTime() {
+        try {
+            var obj, n, y, r, s, f, x;
+            var weekday = new Array(7)
+            weekday[0] = "日"
+            weekday[1] = "一"
+            weekday[2] = "二"
+            weekday[3] = "三"
+            weekday[4] = "四"
+            weekday[5] = "五"
+            weekday[6] = "六"
+            obj = new Date();
+            n = obj.getYear() + 1900;
+            if (obj.getMonth() < 9) {
+                y = "0" + (obj.getMonth() + 1);
+            }
+            else {
+                y = obj.getMonth() + 1;
+            }
+            if (obj.getDate() < 10) {
+                r = "0" + obj.getDate();
+            }
+            else {
+                r = obj.getDate();
+            }
+            x = "星期" + weekday[obj.getDay()];
+            if (obj.getHours() < 10) {
+                s = "0" + obj.getHours();
+            }
+            else {
+                s = obj.getHours();
+            }
+            if (obj.getMinutes() < 10) {
+                f = "0" + obj.getMinutes();
+            }
+            else {
+                f = obj.getMinutes();
+            }
+            Getdata = n + "年" + y + "月" + r + "日";
+            indata = s + ":" + f;
+            $("#divDate").html(x + '<br />' + Getdata);
+            $("#divTime").html(indata);
+        }
+        catch (ex) { }
+    }
+
+    function yinsibaohu(str) {
+        if (is_yinsi) {
+            if (str.length > 3)
+                return str.substr(0, 1) + "*" + str.substr(str.length - 1); //str.replace(/^(\S{1})\S{2}(.*)$/, '$1*$2');
+            else
+                return str.replace(/^(\S{1})\S{1}(.*)$/, '$1*$2');
+        }
+        else
+            return str;
+    }
+    $(document).ready(
+        function () {
+            ShowTime();
+            setInterval(ShowTime, 30000);
+        });
+
+    function DrawImage(ImgD, iwidth, iheight) {
+        //参数(图片,允许的宽度,允许的高度)
+        var image = new Image();
+        image.src = ImgD.src;
+        if (image.width > 0 && image.height > 0) {
+            if (image.width / image.height >= iwidth / iheight) {
+                if (image.width > iwidth) {
+                    ImgD.width = iwidth;
+                    ImgD.height = (image.height * iwidth) / image.width;
+                } else {
+                    ImgD.width = image.width;
+                    ImgD.height = image.height;
+                }
+            } else {
+                if (image.height > iheight) {
+                    ImgD.height = iheight;
+                    ImgD.width = (image.width * iheight) / image.height;
+                } else {
+                    ImgD.width = image.width;
+                    ImgD.height = image.height;
+                }
+            }
+        }
+    }
+
+    //var zoom = getUrlParam("zoom");
+    //if (parseFloat(zoom) > 0) {
+    //    $(".main").css("zoom", zoom);
+    //    //$("#tips").css("zoom", 1.67);
+    //}
+    var zsmc = "未知诊室";
+    var pagerip = "";
+    var login_id = "";
+    var doctor_id = "";
+    var callList = new Array();
+    //var ip = getUrlParam("ip");
+    //$("#tips").height(window.screen.availHeight);
+    //alert(document.body.scrollWidth);
+    //var rows = parseInt((window.screen.availHeight - 380) / 110);
+
+    function GetInfo() {
+        try {
+            $.ajax({
+                type: "GET",
+                async: false,
+                url: "/clientdoctor/doctor_room_door?t=" + new Date().getTime(),
+                contentType: "application/text;charset=utf-8",
+                dataType: "json",
+                cache: false,
+                success: function (data) {
+                    if (data.return_code == "success") {
+                        $("#mainInit").hide();
+                        $("#mainCall").show();
+                        $("#divTerminalName").html(data.doctorinfo.zsmc);
+                        $("#divDoctorName").html(data.doctorinfo.name);
+                        $("#divDoctorTitle").html(data.doctorinfo.title);
+                        $("#divPagerName").html(data.doctorinfo.zsmc);
+                        //$("#divDoctorDesc").html(data.doctorinfo.description.length >= 143 ? ('<marquee width="390" height="485" scrollamount="3" direction="up">' + data.doctorinfo.description + '</marquee>') : data.doctorinfo.description);
+                        $("#divDoctorDesc").html(data.doctorinfo.description);
+                        //document.getElementById("imgDoctor").src = "/web/images/" + this.Login_id + ".jpg";
+                        $("#imgDoctor").attr("src", "/static/web/image/" + data.doctorinfo.login_id + ".jpg");
+                        pagerip = data.doctorinfo.ip;
+                        zsmc = data.doctorinfo.zsmc;
+                        login_id = data.doctorinfo.login_id;
+                        doctor_id = data.doctorinfo.doctor_id;
+                    }
+                    else {
+                        $.ajax({
+                            type: "GET",
+                            url: "/clientterminal/pager_name?t=" + new Date().getTime(),
+                            contentType: "application/text;charset=utf-8",
+                            dataType: "json",
+                            cache: false,
+                            async: false,
+                            success: function (data) {
+                                if (data.return_code == "success")
+                                    zsmc = data.zsmc;
+                                else
+                                    zsmc = "";
+                            }
+                        });
+                        $("#divDoctorName").html("");
+                        $("#divDoctorTitle").html("");
+                        $("#divPagerName").html("");
+                        $("#divDoctorDesc").html("");
+                        $("#divList").html('');
+                        $("#divPatientName").html('');
+                        $("#divPatientId").html('');
+                        document.getElementById("imgDoctor").src = "images/logo2.jpg";
+                        $("#mainInit").show();
+                        $("#mainCall").hide();
+                        $("#divPagerName1").html(zsmc);
+                    }
+                },
+                error: function () {
+
+                }
+            });
+        }
+        catch (err) { }
+    }
+
+    function GetList() {
+        var count = 0;
+        var h_l = "";
+        //try {
+        $.ajax({
+            type: "GET",
+            url: "/call_patient/list_patient_pager?status=wait&type=page&t=" + new Date().getTime(),
+            //url: "/clientPatientQueue/list_roomdoor?t=" + new Date().getTime(),
+            contentType: "application/text;charset=utf-8",
+            dataType: "json",
+            cache: false,
+            async: false,
+            success: function (data) {
+                if (data.count > 0) {
+                    $.each(data.list, function (i, item) {
+                        //h_l += "<li>(" + item.register_id + ")" + hideword(item.patient_name) + "</li>";
+                        h_l += '<div class="deng-r">';
+                        if (item.patient_name.length < 4)
+                            h_l += '<div class="deng-n-3">' + yinsibaohu(item.patient_name) + '</div>';
+                        else
+                            h_l += '<div class="deng-n">' + yinsibaohu(item.patient_name) + '</div>';
+                        h_l += '<div class="deng-num">' + item.register_id  + '</div>';
+                        h_l += '</div>';
+                    });
+                }
+                else {
+                    h_l = "";
+                }
+
+                //var aname = '';
+                //$("#divList").html('');
+                //$(result.PatientWaitData).each(function () {
+                //    aname += '<div class="deng-r">';
+                //    if (this.name.length < 4)
+                //        aname += '<div class="deng-n-3">' + yinsibaohu(this.name) + '</div>';
+                //    else
+                //        aname += '<div class="deng-n">' + yinsibaohu(this.name) + '</div>';
+                //    aname += '<div class="deng-num">' + this.id + '</div>';
+                //    aname += '</div>';
+                //})
+                //$("#divList").html(aname);
+            },
+            error: function () {
+                h_l = "";
+                count = 0;
+            }
+        });
+        // }
+        // catch (err) { }
+        return { "count": count, "h_l": h_l };
+    }
+    function animation(str) {
+        if (str.length > 5)
+            return "<div direction='left' style='float:right'>" + str + "</div>";
+        else
+            return str;
+    }
+    function PagerCall() {
+        try {
+            $.ajax({
+                type: "GET",
+                url: "/clientPatientQueue/list_roomdoor_jz?t=" + new Date().getTime(),
+                contentType: "application/text;charset=utf-8",
+                dataType: "json",
+                cache: false,
+                success: function (data) {
+                    if (data.return_code == "success") {
+
+                        if (data.dqjz.patient_name.length < 4) {
+                            $("#divPatientName").removeClass("zheng-r");
+                            $("#divPatientName").addClass("zheng-r-3");
+                        }
+                        else {
+                            $("#divPatientName").removeClass("zheng-r-3");
+                            $("#divPatientName").addClass("zheng-r");
+                        }
+                        $("#divPatientName").html(yinsibaohu(data.dqjz.patient_name));
+                        $("#divPatientId").html('<div class="zheng-num">' + data.dqjz.register_id + '</div>');
+
+                        //$("#jz_name").html("(" + data.dqjz.register_id + ")" + hideword(data.dqjz.patient_name));
+                        if (data.dqjz.caller == pagerip) {
+                            var call = yinsibaohu(data.dqjz.patient_name) + "," + "请 " + data.dqjz.register_id + "号" + data.dqjz.patient_name + " 到" + zsmc + "就诊。";
+                            callList.push(call);
+                            //$("#tips").html(yinsibaohu(data.dqjz.patient_name));
+                            //$("#tips").show(0).delay(5000).hide(0);
+                            //var callText = "<?xml version=\"1.0\" encoding=\"GB18030\"?>"
+                            //    + "<Contents><Content>"
+                            //    + "<Voice Num=\"1\" Speed=\"1000\" digitMode=\"1\">"
+                            //    + "请 " + data.dqjz.register_id + "号" + data.dqjz.patient_name + " 到" + zsmc + "就诊。"
+                            //    + "</Voice>"
+                            //    + "</Content></Contents>";
+                            //window.Callobject.playVoice(callText)
+                        }
+                    }
+                    else {
+                        $("#divPatientName").removeClass("zheng-r");
+                        $("#divPatientName").addClass("zheng-r-3");
+                        $("#divPatientName").html("");
+                        $("#divPatientId").html("");
+                    }
+                },
+                error: function () {
+
+                }
+            });
+        }
+        catch (err) { }
+    }
+    GetInfo();
+    PagerCall();
+
+    //window.setInterval(GetList, 2000);
+    window.setInterval(PagerCall, 2000);
+    window.setInterval(GetInfo, 10000);
+    
+    //var rows = parseInt((window.screen.availHeight - 380) / 110);
+    var div = $("#divDoctorDesc");
+    //按页滚动
+    var px = 440, time = 10000;
+    //按行滚动
+    //var px = 35, time = 2000;
+    var count = Math.ceil(div.height() / px);
+    var page = 0;
+    if (count > 1) {
+        window.setInterval(Scoll, time);
+    }
+    function Scoll() {
+        if (page == count)
+            page = 0;
+        if (page > 0)
+            div.animate({ marginTop: -(page * px) }, 1000);
+        else
+            div.animate({ marginTop: -(page * px) }, 0);
+        page += 1;
+    }
+
+
+    var ul1 = $("#dh_list1");
+    var ul2 = $("#dh_list2");
+    var div2 = $("#divList");
+    var move = 0;
+    var now = 0;
+    var h1 = 0;
+    var h2 = 0;
+    var json2 = GetList();
+
+    ul1.html(json2.h_l);
+    h1 = ul1.height();
+    setTimeout(Scoll2, 5000);
+    function Scoll2() {
+        if (h1 > 500) {
+            var m = h1 + now;
+            if (m > 500) {
+                now -= 1;
+                div2.css("marginTop", now);
+                setTimeout(Scoll2, 10);
+            }
+            else {
+                if (move == 0) {
+                    json2 = GetList();
+                    ul2.html(json2.h_l);
+                    move = 1;
+                }
+                if (m > 0) {
+                    now -= 1;
+                    div2.css("marginTop", now);
+                    setTimeout(Scoll2, 10);
+                }
+                else if (m == 0) {
+                    now = 0;
+                    ul1.html(json2.h_l);
+                    h1 = ul1.height();
+                    move = 0;
+                    div2.css("marginTop", now);
+                    setTimeout(Scoll2, 5000);
+                }
+
+            }
+        }
+        else {
+            json2 = GetList();
+            ul1.html(json2.h_l);
+            h1 = ul1.height();
+            setTimeout(Scoll2, 5000)
+        }
+    }
+
+    var keystring = ""; //记录按键的字符串
+    var isSwipeCard = 0;
+    function keypress(e) {
+        if (isSwipeCard == 1) {
+            keystring = "";
+            return;
+        }
+        else {
+            var currKey = 0, CapsLock = 0, e = e || event;
+            currKey = e.keyCode || e.which || e.charCode;
+            CapsLock = currKey >= 65 && currKey <= 90;
+
+            if (currKey == 13) {
+                //获取对应的条形码后执行数据查询
+                if (keystring.length > 3) {
+                    // if ($("#serialNum"))
+                    //    $("#serialNum").html(keystring);
+                    isSwipeCard = 1;
+                    var key3 = keystring.substr(0, 3);
+                    if (key3 != "004" && key3 != "008" && key3 != "024")
+                        keystring = keystring.substr(0, keystring.length - 1);
+                    scanbaodao(keystring);
+                    keystring = "";
+                    setTimeout(setIsSwipeCart, 5000);
+                }
+                else {
+                    $("#scan").html("操作错误，请重新扫描刷卡！");
+                    $("#scan").show(0).delay(5000).hide(0);
+                }
+            }
+            else {
+                switch (currKey) {
+                    //屏蔽了退格、制表、回车、空格、方向键、删除键                  
+                    case 8: case 9: case 16: case 17: case 18: case 32: case 37: case 38: case 39: case 40: case 46: keyName = ""; break;
+                    default: keyName = String.fromCharCode(currKey); break;
+                }
+
+                keystring += keyName;
+            }
+        }
+    }
+    function setIsSwipeCart() {
+        isSwipeCard = 0;
+    }
+    window.onkeydown = keypress;
+
+    function scanbaodao(code) {
+        if (login_id != "" && login_id != undefined) {
+            try {
+                $.ajax({
+                    type: "GET",
+                    url: "/clientPatientQueue/ScanBaodaoBydoor",
+                    contentType: "application/text;charset=utf-8",
+                    dataType: "json",
+                    data: { "code": code },
+                    cache: false,
+                    async: false,
+                    success: function (data) {
+                        if (data.return_code == "success") {
+                            if (data.count >= 1) {
+                                $.each(data.list, function (i, item) {
+                                    if (item.doctor_id == doctor_id) {
+                                        if (item.is_display == 2) {
+                                            //$("#scan").hide(0);
+                                            //$("#scan").html("您已报到成功，请勿重复报到！");
+                                            //$("#scan").show(0).delay(5000).hide(0);
+                                            //var callText1 = "<?xml version=\"1.0\" encoding=\"GB18030\"?>"
+                                            //                + "<Contents><Content>"
+                                            //                + "<Voice Num=\"1\" Speed=\"1000\" digitMode=\"1\">"
+                                            //                + "您已报到成功，请勿重复报到。"
+                                            //                + "</Voice>"
+                                            //                + "</Content></Contents>";
+                                            //window.Callobject.playVoice(callText1);
+                                            var call = "";
+                                            if (item.state_patient == 53) {
+                                                $.ajax({
+                                                    type: "GET",
+                                                    url: "/clientPatientQueue/SanAddBydoorFZ",
+                                                    contentType: "application/text;charset=utf-8",
+                                                    dataType: "json",
+                                                    data: { "code": code, "queue_type_id": item.queue_type_id },
+                                                    cache: false,
+                                                    async: false,
+                                                    success: function (data2) {
+                                                        if (data2.return_code == "success") {
+                                                            call = yinsibaohu(data2.patient_name) + " 复诊报到成功,报到成功";
+                                                            callList.push(call);
+                                                        }
+                                                        else {
+                                                            call = "报到失败，请联系护士分诊台！,报到失败";
+                                                            callList.push(call);
+                                                        }
+                                                    },
+                                                    error: function (err) {
+                                                        var call = err + ",";
+                                                        callList.push(call);
+                                                    }
+                                                });
+                                            }
+                                            else if (item.state_patient == 1) {
+                                                $.ajax({
+                                                    type: "GET",
+                                                    url: "/clientPatientQueue/SanAddBydoorGH",
+                                                    contentType: "application/text;charset=utf-8",
+                                                    dataType: "json",
+                                                    data: { "code": code, "queue_type_id": item.queue_type_id },
+                                                    cache: false,
+                                                    async: false,
+                                                    success: function (data2) {
+                                                        if (data2.return_code == "success") {
+                                                            call = yinsibaohu(data2.patient_name) + " 过号报到成功,报到成功";
+                                                            callList.push(call);
+                                                        }
+                                                        else {
+                                                            call = "报到失败，请联系护士分诊台！,报到失败";
+                                                            callList.push(call);
+                                                        }
+                                                    },
+                                                    error: function (err) {
+                                                        var call = err + ",";
+                                                        callList.push(call);
+                                                    }
+                                                });
+                                            }
+                                            else
+                                                call = "您已报到成功，请勿重复报到！,您已报到成功，请勿重复报到";
+                                            callList.push(call);
+                                        }
+                                        else {
+
+                                            try {
+                                                $.ajax({
+                                                    type: "GET",
+                                                    url: "/clientPatientQueue/SanAddBydoor",
+                                                    contentType: "application/text;charset=utf-8",
+                                                    dataType: "json",
+                                                    data: { "code": code, "queue_type_id": item.queue_type_id },
+                                                    cache: false,
+                                                    async: false,
+                                                    success: function (data2) {
+                                                        if (data2.return_code == "success") {
+                                                            var regesit_id = "";
+                                                            $.ajax({
+                                                                type: "GET",
+                                                                url: "/clientPatientQueue/ScanBaodaoBydoor",
+                                                                contentType: "application/text;charset=utf-8",
+                                                                dataType: "json",
+                                                                data: { "code": code },
+                                                                cache: false,
+                                                                async: false,
+                                                                success: function (data3) {
+                                                                    regesit_id = data3.list[0].register_id;
+                                                                }
+                                                            });
+                                                            var call = yinsibaohu(data2.patient_name) + " 报到成功，排队号" + regesit_id + "," + data2.patient_name + "报到成功，排队号" + regesit_id;
+                                                            callList.push(call);
+                                                        }
+                                                        else {
+                                                            var call = "报到失败，请联系护士分诊台！,报到失败";
+                                                            callList.push(call);
+                                                        }
+                                                    },
+                                                    error: function (err) {
+                                                        var call = err + ",";
+                                                        callList.push(call);
+                                                    }
+                                                });
+                                            }
+                                            catch (err) {
+                                                var call = err + ",";
+                                                callList.push(call);
+                                            }
+
+                                        }
+                                    }
+                                });
+                            }
+                            else {
+                                //$("#scan").hide(0);
+                                //$("#scan").html("未在该诊室查询到您的信息！");
+                                //$("#scan").show(0).delay(5000).hide(0);
+                                var call = "未在该诊室查询到您的信息,";
+                                callList.push(call);
+                            }
+                        }
+                        else {
+                            var call = "未在该诊室查询到您的信息,";
+                            callList.push(call);
+                        }
+                    },
+                    error: function (err) {
+                        var call = err + ",";
+                        callList.push(call);
+                    }
+                });
+            }
+            catch (err) {
+                var call = err + ",";
+                callList.push(call);
+            }
+        }
+        else {
+            //$("#scan").html("未开诊！暂时无法报到，请稍等...");
+            //$("#scan").show(0).delay(5000).hide(0);
+            var call = "未开诊！暂时无法报到，请稍等...,";
+            callList.push(call);
+        }
+    }
+    var timeback = null;
+    var timelist = null;
+
+    function callshow() {
+        clearInterval(timeback);
+        if (callList.length == 0) {
+            timeback = setInterval(callshow, 1000);
+        }
+        else {
+            var call = callList[0].toString().split(",");
+            $("#tips").html(call[0].toString());
+            var t = 0;
+            if (call[1].toString().length > 0) {
+                t = call[1].toString().length * 400;
+                var callText = "<?xml version=\"1.0\" encoding=\"GB18030\"?>"
+                + "<Contents><Content>"
+                + "<Voice Num=\"1\" Speed=\"1000\" digitMode=\"1\">"
+                + call[1].toString()
+                + "</Voice>"
+                + "</Content></Contents>";
+                window.Callobject.playVoice(callText);
+                //var callText = call[1].toString();//"请 " + id + "号" + name + " 到" + jhqmc + "就诊。"
+                //SSMSObject.PlayVoice(callText, 3, 5, 5);
+            }
+            else {
+                t = call[0].toString().length * 400;
+            }
+            $("#tips").show(0).delay(t).hide(0);
+            timeback = setTimeout(callshow, t);
+            callList.splice(0, 1);
+        }
+    }
+    callshow();
+</script>

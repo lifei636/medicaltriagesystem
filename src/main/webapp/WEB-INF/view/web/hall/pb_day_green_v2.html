@@ -1,0 +1,451 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>今日排班</title>
+    <link href="/static/web/hall/style-pb-green-v-day_v2.css" rel="stylesheet" />
+    <script src="/static/web/hall/jquery.min.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <!--上部-->
+        <div class="top">
+            <div class="logo">
+                <img src="/static/web/image/logo.png">
+            </div>
+            <div class="name" id="jrczzj">今日出诊专家</div>
+        </div>
+
+        <!--中部-->
+        <div id="w_title" class="main_title"></div>
+        <div class="main" id="main">
+            
+            <div id="list"></div>
+        </div>
+        <div class="bottom">
+            <div class="title">
+                <div class="span">&nbsp;</div>
+                <div class="span mline">&nbsp;</div>
+                <div class="span2">温馨提示</div>
+                <div class="span mline">&nbsp;</div>
+                <div class="span">&nbsp;</div>
+            </div>
+            <div class="tipcontent">
+                1、我院实行实名制就诊。请持身份证办卡或完善就诊卡信息。<br />
+                2、我院开放7天内的号源预约，每日7：30放号。请提前预约挂号。预约方式有：微信、支付宝、医院网站、电话、114、现场等。
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
+<script type="text/javascript">
+    //参数说明：
+    //week:星期一到星期日数字;1,2,3,4,5,6,7;示列：week=1;week=6,7;不含参数时为当日;
+    var data;
+    var px = 1540, time = 5000;
+    var count = 1;
+    var page = 1;
+    var soc = null;
+    function ShowTime() {
+        try {
+            var datetime = window.Callobject.getDateTime();
+            var year = datetime.split(' ')[0].split('-')[0].toString() + '年' + datetime.split(' ')[0].split('-')[1].toString() + '月' + datetime.split(' ')
+
+            [0].split('-')[2].toString() + '日';
+            var week = "　星期" + "日一二三四五六".charAt(datetime.split(' ')[2].toString().trim().replace('7', '0'));
+            var time = datetime.split(' ')[1].toString();
+            $("#now_date").html(year + week);
+            $("#now_time").html(time.split(':')[0] + ':' + time.split(':')[1]);
+        }
+        catch (ex) { }
+    }
+
+    function getUrlParam(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return unescape(r[2]); return null;
+    }
+    var ip = getUrlParam("ip");
+    var week_param = getUrlParam("week");
+    
+    var weekday=["0","1","2","3","4","5","6"];
+    var strday=["日","一","二","三","四","五","六"];
+    if(week_param==null||week_param==undefined)
+    {
+        week_param= week_today;
+    }
+    var w = new Array();
+    var wstr=new Array();
+    if (week_param) {
+        var ws = week_param.split(",");
+        var str = "";
+        for (var i = 0; i < ws.length; i++) {
+            var ss=ws[i]=="7"?"0":ws[i];
+            var j=0;
+            var mydate=new Date();
+            var myddy=mydate.getDay();//获取存储当前日期
+            //var m=mydate.getDate();
+            do{
+                
+                var week_today=weekday[myddy];
+                if(ss==week_today)
+                {
+                    wstr.push(mydate.getYear() + 1900+"-"+(mydate.getMonth()+1)+"-"+mydate.getDate());
+                    str+=strday[myddy]+"、";
+                    w.push(strday[myddy]);
+                    break;
+                }
+                else{
+                    j++;
+                    //var day1=mydate.getDate();
+                    //mydate=mydate.setDate(mydate.getDate()+1);
+                    //mydate=new Date(mydate);
+                    //var date = new Date(date);
+                    mydate=new Date(mydate.getTime() + 24*60*60*1000);
+                    //mydate=new Date(mydate.getDate() + 1);
+                    myddy=mydate.getDay();
+                }
+                
+            }
+            while(j<7)
+        }
+        str = str.substr(0, str.length - 1);
+        //if (str.length > 1)
+         //   $("#jrczzj").html("<span style='font-size:36px'>星期" + str + "出诊专家</span>");
+        //else
+            $("#jrczzj").html("星期" + str + "出诊专家");
+    }
+
+    //var wait = getUrlParam("wait");
+    var day = 0;
+    var nextday=false;
+    var m=0,n=0;
+    function PagerShow() {
+        $("#list").html("");
+        if(m==0)
+        {
+            if(day<w.length&&nextday)
+            {
+                day++;
+                nextday=false;
+            }
+            if (w.length == 1)
+            {
+                $("#w_title").hide();
+                px=1540;
+                $("#main").height(px);
+            }
+            else{
+                px=1430;
+                $("#main").height(px);
+                $("#w_title").show();
+                $("#w_title").html("星期"+w[day]+"出诊专家");
+            }
+            
+            data=GetList(wstr[day]);
+        }
+        var rows_count=px/110;
+        var rows=0;
+        var li=1;
+        var html="";
+        for(var i=m;i<data.list.length;i++)
+        {
+            if((rows+1)>=rows_count)
+            {
+                html+="</div>";
+                rows=0;
+            }
+            if(rows==0)
+                html+='<div class="left">';
+            var item=data.list[i];
+            html += '<div class="title"><div class="span2">' + item.name + '</div></div>';
+            rows++;
+            html += '<ul>';
+            var k=1;
+            m++;
+            for(var j=n;j<item.data.length;j++)
+            {
+                var doctor=item.data[j];
+                var duty = "全天";
+                if (doctor.onduty2 == 2)
+                    duty = "上午";
+                else if (doctor.onduty2 == 3)
+                    duty = "下午";
+                else if (doctor.onduty2==4)
+                    duty = "上午";
+                else if (doctor.onduty2>=5)
+                    duty = "全天";
+                html += '<li>';
+                html += '<div class="img"><img src="/static/web/image/' + doctor.login_id + '.jpg" width="66" height="88" /></div>';
+                html += '<div class="doc">';
+                //html += '<div class="doczj"></div>';
+                html += '<div class="docname">' + doctor.docname + '</div>';
+                html += '<div class="doctitle">' + (doctor.title.indexOf("级别")>=0?doctor.title2:doctor.title )+ '</div>';
+                html += '<div class="doctime">' + duty + '</div>';
+                html += '</div>';
+                html += '</li>';
+                
+                if(k%2==1)
+                {
+                    rows++;
+                }
+                k++;
+                n++;
+                if((j>0&&j%2==0))
+                {
+                    if(rows>=rows_count)
+                    {
+                        if(j<item.data.length-1)
+                        {
+                            m--;
+                            i--;
+                            n--;
+                            break;
+                        }
+                    }
+                }
+                if(j==item.data.length-1)
+                    n=0;
+            }
+            html += '</ul>';
+            
+            if(rows+1>=rows_count)
+            {
+                li++;
+            }
+            if(li>2)
+            {
+                html+="</div>";
+                break;
+            }
+        }
+        if(m>=data.list.length)
+        {
+            nextday=true;
+            m=0;
+            n=0;
+            if(day==w.length-1)
+            {
+                day=-1;
+            }
+        }
+        $("#list").html(html);
+    }
+    function sortObjectArray(objArr, keyArr, type) {
+        for (var x = 0; x < objArr.length; x++) {
+            objArr[x].oldIndex = x;
+        }
+        if (type != undefined && type != 'asc' && type != 'desc') {
+            return 'error';
+        }
+        var order = 1;
+        if (type != undefined && type == 'desc') {
+            order = -1;
+        }
+        var key = keyArr[0];
+        objArr.sort(function (objA, objB) {
+            if (objA[key] > objB[key]) {
+                return order;
+            } else if (objA[key] < objB[key]) {
+                return 0 - order;
+            } else {
+                if (objA.oldIndex > objB.oldIndex) {
+                    return order;
+                } else if (objA.oldIndex < objB.oldIndex) {
+                    return 0 - order;
+                } else {
+
+                    return 0;
+                }
+            }
+        })
+
+        for (var i = 1; i < keyArr.length; i++) {
+            var key = keyArr[i];
+            for (var y = 0; y < objArr.length; y++) {
+                objArr[y].oldIndex = y;
+            }
+            objArr.sort(function (objA, objB) {
+                for (var j = 0; j < i; j++) {
+                    if (objA[keyArr[j]] != objB[keyArr[j]]) {
+                        if (objA.oldIndex > objB.oldIndex) {
+                            return order;
+                        } else if (objA.oldIndex < objB.oldIndex) {
+                            return 0 - order;
+                        } else {
+                            return 0;
+                        }
+                    }
+                }
+                if (objA[key] > objB[key]) {
+                    return order;
+                } else if (objA[key] < objB[key]) {
+                    return 0 - order;
+                } else {
+                    if (objA.oldIndex > objB.oldIndex) {
+                        return order;
+                    } else if (objA.oldIndex < objB.oldIndex) {
+                        return 0 - order;
+                    } else {
+                        return 0;
+                    }
+                }
+            })
+        }
+        return objArr;
+    }
+    function setsort(pdata) {
+        var newdata = [];
+        if (pdata.length > 0) {
+            //按部门排序使用“,”分隔，同一序列内使用“|”分隔
+            //var deptArray = ["心血管", "呼吸", "神经", "消化", "肾病|内分泌科", "肝病", "感染", "胃肠|小儿", "肝胆甲乳", "泌尿烧伤", "神经", "骨一科", "骨二科", "妇科", "产科", "儿科", "儿保", "五官", "康复", "口腔", "皮肤", "中医", "疼痛", "护理"];
+            //var deptArray = ["妇科", "产科", "儿科"];
+            var titleArray = ["级别1","主任医师", "副主任医师", "主治医师", "医师", "护师", "护士"];
+            var deptArray=[];
+            //是否显示全部科室还是显示指定科室
+            var showall=true;
+            for(var i=0;i<pdata.length;i++){
+                if(showall)
+                {
+                    var deptName=pdata[i].department;
+                    if(deptArray.indexOf(deptName)>=0)
+                        continue;
+                    else
+                        deptArray.push(deptName);
+                }
+                
+            }
+            for (var i = 0; i < pdata.length; i++) {
+                var item = pdata[i];
+                item.departmentsort = 1000;
+
+                for (var j = 0; j < deptArray.length; j++) {
+                    var deptlist = deptArray[j].split("|");
+                    if (deptlist.length > 1) {
+                        for (j1 = 0; j1 < deptlist.length; j1++) {
+                            if (item.department.indexOf(deptlist[j1]) >= 0) {
+                                item.departmentsort = j;
+                                newdata.push(item);
+                                break;
+                            }
+                        }
+                    }
+                    else {
+                        if (item.department.indexOf(deptArray[j]) >= 0) {
+                            item.departmentsort = j;
+                            newdata.push(item);
+                            break;
+                        }
+                    }
+                }
+                item.titlesort = 10;
+                for (var k = 0; k < titleArray.length; k++) {
+                    if (item.title.indexOf(titleArray[k]) >= 0) {
+                        item.titlesort = k;
+                        break;
+                    }
+                }
+            }
+        }
+        pdata = sortObjectArray(pdata, ['departmentsort', 'titlesort', 'login_id']);
+        var newpdata=pdata;
+        for (var i = 0; i <newpdata.length;i++) {
+            if (newpdata[i].departmentsort >= 1000)
+                pdata.splice(i);
+        }
+        return pdata;
+    }
+    function jsonGrop(json) {
+        var arr = json;
+        var map = {};
+        var dest = [];
+        var k = 0;
+        for (var i = 0; i < arr.length; i++) {
+            var ai = arr[i];
+            if (!map[ai.departmentsort]) {
+
+                dest.push({
+                    id: ai.departmentsort,
+                    name: ai.department,
+                    data: [ai],
+                    count: k
+                });
+                map[ai.departmentsort] = ai;
+            } else {
+                for (var j = 0; j < dest.length; j++) {
+                    var dj = dest[j];
+                    if (dj.id == ai.departmentsort) {
+                        dj.data.push(ai);
+                        break;
+                    }
+                }
+            }
+        }
+        /* for (var i = 0; i < arr.length; i++) {
+            var ai = arr[i];
+            if (!map[ai.department]) {
+
+                dest.push({
+                    id: ai.department,
+                    name: ai.department,
+                    data: [ai],
+                    count:k
+                });
+                map[ai.department] = ai;
+            } else {
+                for (var j = 0; j < dest.length; j++) {
+                    var dj = dest[j];
+                    if (dj.id == ai.department) {
+                        dj.data.push(ai);
+                        break;
+                    }
+                }
+            }
+        } */
+        return { "count": dest.length, "list": dest };
+    }
+    function select(pdata) {
+        var sdata = new Array();
+        var c = 0;
+        var showdoctlist = ["2771", "2772"];
+        if (pdata.count > 0) {
+            for (var i = 0; i < pdata.count; i++) {
+                var item = pdata.list[i];
+                for (var j = 0; j < showdoctlist.length; j++) {
+                    if (item.login_id == showdoctlist[j]) {
+                        sdata.push(item);
+                        c++;
+                        break;
+                    }
+                }
+            }
+        }
+        return { "count": c, "list": sdata };
+    }
+    function GetList(sdate) {
+        var sdata=null;
+        var sql="call getdoctorpb('"+sdate+"')";
+        $.ajax({
+            type: "GET",
+            async: false,
+            url: "/client/commSelect",
+            contentType: "application/text;charset=utf-8",
+            data: { "sql": sql},
+            dataType: "json",
+            cache: false,
+            success: function (pdata) {
+                sdata = jsonGrop(setsort(pdata.list));
+            }
+        });
+        return sdata;
+    }
+    PagerShow();
+    setInterval(PagerShow,5000);
+    
+    ShowTime();
+    window.setInterval(ShowTime, 5000);
+</script>

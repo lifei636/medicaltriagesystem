@@ -1,0 +1,23 @@
+@layout("/common/_curd/_container.html"){
+
+	<form class="form-horizontal" role="form">
+		<!-- 表单 -->
+		@ var _col=[
+			
+@			  {name:"", index:"id", type:"text",newline:true,length:8},
+		@			  {name:"", index:"db_source_id", type:"text",newline:true,length:8},
+		@			  {name:"", index:"name", type:"text",newline:true,length:8},
+		@			  {name:"", index:"type", type:"text",newline:true,length:8},
+		@			  {name:"", index:"sqlstring", type:"text",newline:true,length:8},
+		@			  {name:"", index:"Search_fields", type:"text",newline:true,length:8},
+		@			  {name:"", index:"description", type:"text",newline:true,length:8},
+		@			  {name:"", index:"interval", type:"text",newline:true,length:8},
+		@			  {name:"", index:"last_time", type:"text",newline:true,length:8}		
+		@		   ];
+		@ include("/common/_curd/_view.html", {"col":_col}){}
+		
+		<!-- 按钮 -->
+		@ include("/common/_curd/_btn.html", {btn_close:"关闭"}) {}
+	</form>
+
+@}

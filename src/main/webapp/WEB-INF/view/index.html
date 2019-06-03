@@ -1,0 +1,198 @@
+@layout("/common/_container.html"){
+
+		<div class="row" style="padding:10px 16px 10px 16px;">
+			<div class="col-xs-12">
+				<!-- PAGE CONTENT BEGINS -->
+				<div class="alert alert-block alert-success">
+					<button type="button" class="close" data-dismiss="alert">
+						<i class="ace-icon fa fa-times"></i>
+					</button>
+
+					<i class="ace-icon fa fa-check green"></i>
+					欢迎使用
+					<strong class="green">
+						智能排队系统
+						<small>(v2.0.8)</small>
+					</strong>
+				</div>
+				
+				<div class="alert alert-block alert-success">
+					<button type="button" class="close" data-dismiss="alert">
+						<i class="ace-icon fa fa-times"></i>
+					</button>
+
+					<i class="ace-icon fa fa-check green"></i>
+					流程图:
+					<strong class="green">
+						<img alt="" src="../upload/20170802/1501662528034.jpg">
+					</strong>
+				</div>
+				<!--<div class="alert alert-block alert-success">
+					<button type="button" class="close" data-dismiss="alert">
+						<i class="ace-icon fa fa-times"></i>
+					</button>
+
+					<i class="ace-icon fa fa-check green"></i>
+					json传输数据示例:<br/>
+					<strong class="green">
+						医生信息：http://localhost:8081/doctor/save_doctor?doctors=[{login_id:'123123',name:'sfdddds'},{login_id:'1231234',name:'sfds2'}]<br/>
+						队列信息：http://localhost:8081/queueType/save_queue?queuetypes=[{'source_id':'12113123','name':'sfd123sdds','displayname':'sdfd123sfds'},{'source_id':'123133234','name':'sfd675fds2','displayname':'sdfds432fds'}]<br/>
+						排班信息：http://localhost:8081/rlt_doctor2queue_type/save_rostering?schedulings=[{'login_id':'123123','queue_type_source_id':'12113123','onduty':'1111111'}]<br/>
+						患者信息：http://localhost:8081/patient_queue/save_patient?patients=[{'patient_id':'20170101','patient_name':'张三','queue_type_source_id':'12113123','source_code':'123456789','register_id':'123456','queue_num':'123456','sub_queue_order':0,'sub_queue_type':'初诊','time_interval':0,'doctor_source_id':'123123','is_deleted':0,'fre_date':'2017-07-18 12:45:25.000'}]
+					</strong>
+				</div>-->
+				<!--<div class="alert alert-block alert-success">
+					<button type="button" class="close" data-dismiss="alert">
+						<i class="ace-icon fa fa-times"></i>
+					</button>
+
+					<i class="ace-icon fa fa-check green"></i>
+					1.	医生信息表（doctor）:<br/>
+					<pre><strong class="green">
+					属性名称	属性说明		字段		类型		取值域		备注（his视图取值范围）
+					医生编号	唯一标识	必要	login_id	Varchar(100)	NOT NULL	医生登录使用的ID：（门诊医生取医生工作站登录id，检查科室医生取工作站登录id或各自熟知的工号）
+					姓名		必要	name		Varchar(50)	NOT NULL	医生姓名
+					医生所属科室				department	Varchar(50)	医生所属科室（页面显示使用；当存在多个所属科室时，取主科室）
+					职称					title		Varchar(50)	医生职位（主任、副主任、主治医师等
+					</strong></pre>
+				</div>
+				<div class="alert alert-block alert-success">
+					<button type="button" class="close" data-dismiss="alert">
+						<i class="ace-icon fa fa-times"></i>
+					</button>
+
+					<i class="ace-icon fa fa-check green"></i>
+					2.	队列类型信息表（queue_type）:<br/>
+					<pre><strong class="green">
+					
+					属性名称	属性说明			字段		类型		取值域		备注（his视图取值范围）
+					队列类型编号	唯一标识	必要	source_id	Varchar(100)	NOT NULL	排队队列的编码
+					队列类型名称		必要	name		Varchar(100)	NOT NULL	排队队列的名称
+					队列类型显示名称			displayname	Varchar(255)	NOT NULL	默认与name相同，如有特殊需求，可更改此显示名称默认值
+					
+					</strong></pre>
+				</div>
+				<div class="alert alert-block alert-success">
+					<button type="button" class="close" data-dismiss="alert">
+						<i class="ace-icon fa fa-times"></i>
+					</button>
+
+					<i class="ace-icon fa fa-check green"></i>
+					3.	医生与队列类型关系表（rlt_doctor2queue_type）:<br/>
+					<pre><strong class="green">
+						
+					属性名称		属性说明		字段			类型		取值域		备注（his视图取值范围）
+					医生编号	外键	必要		login_id		Varchar(100)	NOT NULL	对应doctor医生视图中login_id字段
+					队列类型编号	外键	必要	queue_type_source_id	Varchar(100)	NOT NULL	对应Queue_Type排队队列视图中source_id字段
+					排班标识		必要		onduty			Varchar(7)	NOT NULL	可选列
+																	7位为每周上下午的标识，
+																	0不出诊
+																	1全天
+																	2上午
+																	3下午
+																	例如：0131111
+																	表示周一不出诊
+																	周三下午出诊
+																	其他时间全天
+					
+					</strong></pre>
+				</div>
+				<div class="alert alert-block alert-success">
+					<button type="button" class="close" data-dismiss="alert">
+						<i class="ace-icon fa fa-times"></i>
+					</button>
+
+					<i class="ace-icon fa fa-check green"></i>
+					4.	患者挂号信息表 （patient_queue）:<br/>
+					<pre><strong class="green">
+					属性名称		属性说明		字段			类型		取值域		备注(his视图取值范围)
+					患者编号		必要		patient_id		Varchar(50)	NOT NULL	患者唯一编号
+					病人姓名		必要		patient_name		Varchar(20)	NOT NULL	
+					队列类型编号	必要		queue_type_source_id	Varchar (100)	NOT NULL	对应Queue_type排队队列视图中source_id字段
+					数据源扫描条码			source_code						注：多种条码时可自定义字段名称
+																例如：
+																source_code1
+																source_code2	Varchar(200)		可设置多个扫描条码，磁条卡号码等
+					挂号单号或检查单号		register_id		varchar(20)	NOT NULL	显示患者编号用，如有特殊需求可对此项定制。例如“+1号”；取排队队列的序号或科室排队队列的序号（挂号条上的队列排队序号）
+					队列编号				queue_num		Double 	NOT NULL		每种队列的排队顺序，默认与register_id(数据为整数的情况下)相同，如需按照挂号时间先后排序，可将此项值设置为0
+					队列级别				sub_queue_order		Tinyint(4)	NOT NULL	如队列有多种优先组合时使用。叫号优先级，默认情况下固定值为0，如有特殊群体需叫号优先请取值1或更大数字。数字越大优先级越高。
+					队列级别名称			sub_queue_type		Varchar(20)	NOT NULL	不同叫号优先级队列级别的显示名称：军人、预约、初诊等
+					午别				time_interval		Tinyint(4)			0,1,2	0,全天
+					1,上午
+					2,下午
+					医生编号				doctor_source_id	Varchar (100)			挂号或开检查单时指定医生时使用
+					对应视图Doctor中的Login_id
+					退号标识				is_deleted		Tinyint	0,1			退号，退费等数据对比删除处理；如不存在此项处理则固定0 as is_deleted
+					1，	需删除；
+					0，正常
+					时间戳				fre_date		Datetime	NOT NULL	挂号时间、登记时间、取号时间等
+						
+					
+					</strong></pre>
+				</div>-->
+				<!--
+				<div class="alert alert-block alert-success">
+					<button type="button" class="close" data-dismiss="alert">
+						<i class="ace-icon fa fa-times"></i>
+					</button>
+
+					<i class="ace-icon fa fa-check green"></i>
+					ECharts范例官网
+					<strong class="green">
+						<a class="green" href="http://echarts.baidu.com/examples.html" target="_blank">http://echarts.baidu.com/examples.html</a>
+					</strong>
+				</div>
+				
+				<div class="alert alert-block alert-success">
+					<button type="button" class="close" data-dismiss="alert">
+						<i class="ace-icon fa fa-times"></i>
+					</button>
+
+					<i class="ace-icon fa fa-check green"></i>
+					Beetl在线编码帮助
+					<strong>
+						<a class="green" href="http://ibeetl.com:8080/beetlonline/" target="_blank">http://ibeetl.com:8080/beetlonline/</a>
+					</strong>
+				</div>
+				
+				<div class="alert alert-block alert-success">
+					<button type="button" class="close" data-dismiss="alert">
+						<i class="ace-icon fa fa-times"></i>
+					</button>
+
+					<i class="ace-icon fa fa-check green"></i>
+					BeetlSql文档
+					<strong>
+						<a class="green" href="http://ibeetl.com/guide/beetlsql.html" target="_blank">http://ibeetl.com/guide/beetlsql.html</a>
+					</strong>
+				</div>
+				
+				<div class="alert alert-block alert-success">
+					<button type="button" class="close" data-dismiss="alert">
+						<i class="ace-icon fa fa-times"></i>
+					</button>
+
+					<i class="ace-icon fa fa-check green"></i>
+					BootStrap在线帮助
+					<strong>
+						<a class="green" href="http://www.runoob.com/bootstrap/bootstrap-tutorial.html" target="_blank">http://www.runoob.com/bootstrap/bootstrap-tutorial.html</a>
+					</strong>
+				</div> 
+				
+				<div class="alert alert-block alert-success">
+					<button type="button" class="close" data-dismiss="alert">
+						<i class="ace-icon fa fa-times"></i>
+					</button>
+
+					<i class="ace-icon fa fa-check green"></i>
+					菜单图标选择
+					<strong>
+						<a class="green" href="http://fontawesome.io/icons/" target="_blank">http://fontawesome.io/icons/</a>
+					</strong>
+				</div>
+				-->
+			
+			</div>
+	  </div>
+	  
+@}	

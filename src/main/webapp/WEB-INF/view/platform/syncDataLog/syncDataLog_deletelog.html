@@ -1,0 +1,9 @@
+﻿@layout("/common/_curd/_container.html"){
+
+<form data-url="${basePath}/${code}/deletelog" method="post" class="form-horizontal" role="form">
+    <!-- 表单 -->
+    确实要清空吗？
+    <!-- 按钮 -->
+    @ include("/common/_curd/_btn.html", {btn_save:"确定", btn_close:"关闭"}) {}
+</form>
+@}

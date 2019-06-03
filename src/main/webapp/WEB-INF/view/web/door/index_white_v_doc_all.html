@@ -1,0 +1,935 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>诊室门口</title>
+
+<link href="/static/web/door/style_white_v_all.css" rel="stylesheet" />
+<script src="/static/web/door/jquery.min.js"></script>
+</head>
+<body>
+	<div class="container">
+		<div class="content">
+			<!--上部-->
+			<div class="top">
+				<div class="logo" id="divPagerName"></div>
+				<div class="date" id="divDate"></div>
+				<div class="time" id="divTime"></div>
+			</div>
+			<div class="jz">
+				<div class="pat r_b">
+					<div class="p_title">
+						正在<br />就诊
+					</div>
+					<div class="p_name" id="divPatientName"></div>
+				</div>
+				<div class="pat">
+					<div class="p_title">
+						下一位<br />就诊
+					</div>
+					<div class="p_name color" id="next_patient"></div>
+				</div>
+			</div>
+			<div class="title">当日初诊患者请签到等候</div>
+			<div class="dh">
+				<ul id="dh">
+					<!--<li><span class="c_wait"><b>1</b><label>张三</label><a>请等候</a></span><span class="c_pass"><b>2</b><label>张三</label><a>已过号</a></span><span class="c_sign"><b>3</b><label>张三</label><a>请签到</a></span><span class="c_wait"><b>4</b><label>张三</label><a>请等候</a></span></li>
+                    <li><span class="c_wait"><b>1</b><label>张三</label><a>请等候</a></span><span class="c_pass"><b>2</b><label>张三</label><a>已过号</a></span><span class="c_sign"><b>3</b><label>张三</label><a>请签到</a></span><span class="c_wait"><b>4</b><label>张三</label><a>请等候</a></span></li>
+                    <li><span class="c_wait"><b>1</b><label>张三</label><a>请等候</a></span><span class="c_pass"><b>2</b><label>张三</label><a>已过号</a></span><span class="c_sign"><b>3</b><label>张三</label><a>请签到</a></span><span class="c_wait"><b>4</b><label>张三</label><a>请等候</a></span></li>
+                    <li><span class="c_wait"><b>1</b><label>张三</label><a>请等候</a></span><span class="c_pass"><b>2</b><label>张三</label><a>已过号</a></span><span class="c_sign"><b>3</b><label>张三</label><a>请签到</a></span><span class="c_wait"><b>4</b><label>张三</label><a>请等候</a></span></li>
+                    <li><span class="c_wait"><b>1</b><label>张三</label><a>请等候</a></span><span class="c_pass"><b>2</b><label>张三</label><a>已过号</a></span><span class="c_sign"><b>3</b><label>张三</label><a>请签到</a></span><span class="c_wait"><b>4</b><label>张三</label><a>请等候</a></span></li>-->
+				</ul>
+			</div>
+			<div class="title">当日复/回诊患者请签到等候</div>
+			<div class="fz">
+				<ul id="fz">
+					<!--<li><span class="c_wait"><b>1</b><label>张三</label><a>请等候</a></span><span class="c_pass"><b>2</b><label>张三</label><a>已过号</a></span><span class="c_sign"><b>3</b><label>张三</label><a>请签到</a></span><span class="c_wait"><b>4</b><label>张三</label><a>请等候</a></span></li>
+                    <li><span class="c_wait"><b>1</b><label>张三</label><a>请等候</a></span><span class="c_pass"><b>2</b><label>张三</label><a>已过号</a></span><span class="c_sign"><b>3</b><label>张三</label><a>请签到</a></span><span class="c_wait"><b>4</b><label>张三</label><a>请等候</a></span></li>-->
+				</ul>
+			</div>
+			<div class="doctor">
+				<div class="pic">
+					<img style="width: 100%; height: 100%" id="imgDoctor"
+						src="images/pic.jpg" />
+				</div>
+				<div class="d-right">
+					<div class="d-n">
+						<label id="divDoctorName"></label><span id="divDoctorTitle"></span>
+					</div>
+					<div class="d-jianjie">
+						<div id="divDoctorDesc"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="img_tips">
+			<div class="left">
+				<img src="/static/web/door/images/p1.gif" width="100%" height="100%"
+					border="0" />
+			</div>
+			<div class="right">
+				<img src="/static/web/door/images/p2.jpg" width="100%" height="100%"
+					border="0" />
+			</div>
+		</div>
+		<div class="bottom">患者请先扫码报到，再耐心等候叫号就诊！</div>
+	</div>
+	<div class="tips" id="mainInit">
+		<!--诊室-->
+		<div class="zhenshi" id="divPagerName1"></div>
+		<!--提示-->
+		<div class="">
+			<div class="line-1">
+				上午开诊时间 08:00-12:00<br /> 下午开诊时间 13:00-17:00
+			</div>
+			<div class="line-2">请耐心等候</div>
+		</div>
+	</div>
+	<div class="tips" id="tips">
+		<div style="line-height: 500%; font-size: 500%" id="tips_name"></div>
+	</div>
+	<div class="scan" id="scan"></div>
+</body>
+</html>
+<script type="text/javascript">
+    var is_yinsi = true; //是否开启隐私保护
+    var Getdata = "";
+    var indata = "";
+
+    function ShowTime() {
+        try {
+            var obj, n, y, r, s, f, x;
+            var weekday = new Array(7)
+            weekday[0] = "日"
+            weekday[1] = "一"
+            weekday[2] = "二"
+            weekday[3] = "三"
+            weekday[4] = "四"
+            weekday[5] = "五"
+            weekday[6] = "六"
+            obj = new Date();
+            n = obj.getYear() + 1900;
+            if (obj.getMonth() < 9) {
+                y = "0" + (obj.getMonth() + 1);
+            }
+            else {
+                y = obj.getMonth() + 1;
+            }
+            if (obj.getDate() < 10) {
+                r = "0" + obj.getDate();
+            }
+            else {
+                r = obj.getDate();
+            }
+            x = "星期" + weekday[obj.getDay()];
+            if (obj.getHours() < 10) {
+                s = "0" + obj.getHours();
+            }
+            else {
+                s = obj.getHours();
+            }
+            if (obj.getMinutes() < 10) {
+                f = "0" + obj.getMinutes();
+            }
+            else {
+                f = obj.getMinutes();
+            }
+            Getdata = n + "年" + y + "月" + r + "日";
+            indata = s + ":" + f;
+            $("#divDate").html(x + '<br />' + Getdata);
+            $("#divTime").html(indata);
+        }
+        catch (ex) { }
+    }
+
+    function hideword(str) {
+        if (is_yinsi) {
+            if (str.length > 3)
+                return str.substr(0, 1) + "*" + str.substr(str.length - 1); //str.replace(/^(\S{1})\S{2}(.*)$/, '$1*$2');
+            else
+                return str.replace(/^(\S{1})\S{1}(.*)$/, '$1*$2');
+        }
+        else
+            return str;
+    }
+    function addPreZero(num){
+        var t = (num+'').length,
+         s = '';
+  
+        for(var i=0; i<3-t; i++){
+            s += '0';
+        }
+  
+        return s+num;
+    }
+    function check_patient(id, str, state,display) {
+        str = hideword(str);
+        id = addPreZero(id);
+        var name = "";
+        var name_display = "";
+        if (display == 2) {
+            if (str != "" && str != undefined) {
+                switch (state) {
+                    case 2:
+                        name = str + "复";
+                        name_display = "<span class=\"c_wait\"><b>" + id + "</b><label>" + str + "</label><a>请等候</a></span>";//str + "<b style='color:#fff100'>&nbsp;&nbsp;|&nbsp;&nbsp;复</b>";
+                        break;
+                    case 5:
+                        name = str + "优";
+                        name_display = "<span class=\"c_first\"><b>" + id + "</b><label>" + str + "</label><a>已优先</a></span>";
+                        break;
+                    case 54:
+                        name = str + "过";
+                        name_display = "<span class=\"c_pass\"><b>" + id + "</b><label>" + str + "</label><a>已过号</a></span>";
+                        break;
+                    case 8:
+                        name = str + "迟";
+                        name_display = "<span class=\"c_pass\"><b>" + id + "</b><label>" + str + "</label><a>已迟到</a></span>";
+                        break;
+                    default:
+                        name = id + str;
+                        name_display = "<span class=\"c_wait\"><b>" + id + "</b><label>" + str + "</label><a>请等候</a></span>";
+                        break;
+                }
+            }
+        }
+        else {
+            name_display = "<span class=\"c_sign\"><b>" + id + "</b><label>" + str + "</label><a>请签到</a></span>";
+        }
+        //if (name.length > 5)
+        //    return " <marquee direction='left' width='100%' height='100'>" + name_display + "</marquee>";
+        //else
+        return name_display;
+    }
+    $(document).ready(
+        function () {
+            ShowTime();
+            setInterval(ShowTime, 30000);
+        });
+
+    function DrawImage(ImgD, iwidth, iheight) {
+        //参数(图片,允许的宽度,允许的高度)
+        var image = new Image();
+        image.src = ImgD.src;
+        if (image.width > 0 && image.height > 0) {
+            if (image.width / image.height >= iwidth / iheight) {
+                if (image.width > iwidth) {
+                    ImgD.width = iwidth;
+                    ImgD.height = (image.height * iwidth) / image.width;
+                } else {
+                    ImgD.width = image.width;
+                    ImgD.height = image.height;
+                }
+            } else {
+                if (image.height > iheight) {
+                    ImgD.height = iheight;
+                    ImgD.width = (image.width * iheight) / image.height;
+                } else {
+                    ImgD.width = image.width;
+                    ImgD.height = image.height;
+                }
+            }
+        }
+    }
+
+    //var zoom = getUrlParam("zoom");
+    //if (parseFloat(zoom) > 0) {
+    //    $(".main").css("zoom", zoom);
+    //    //$("#tips").css("zoom", 1.67);
+    //}
+    var zsmc = "未知诊室";
+    var pagerip = "";
+    var login_id = "";
+    var doctor_id = "";
+    var callList = new Array();
+    //var ip = getUrlParam("ip");
+    //$("#tips").height(window.screen.availHeight);
+    //alert(document.body.scrollWidth);
+    //var rows = parseInt((window.screen.availHeight - 380) / 110);
+    
+    function GetInfo() {
+        try {
+            $.ajax({
+                type: "GET",
+                async: false,
+                url: "/clientdoctor/doctor_room_door?t=" + new Date().getTime(),
+                contentType: "application/text;charset=utf-8",
+                dataType: "json",
+                cache: false,
+                success: function (data) {
+                    if (data.return_code == "success") {
+                        $("#mainInit").hide();
+                        $("#divTerminalName").html(data.doctorinfo.zsmc);
+                        $("#divDoctorName").html(data.doctorinfo.name);
+                        $("#divDoctorTitle").html(data.doctorinfo.title);
+                        $("#divPagerName").html(data.doctorinfo.zsmc.length > 5 ? "<span>" + data.doctorinfo.zsmc + "</span>" : data.doctorinfo.zsmc);
+                        //$("#divDoctorDesc").html(data.doctorinfo.description.length >= 143 ? ('<marquee width="390" height="485" scrollamount="3" direction="up">' + data.doctorinfo.description + '</marquee>') : data.doctorinfo.description);
+                        $("#divDoctorDesc").html(data.doctorinfo.description);
+                        //document.getElementById("imgDoctor").src = "/web/images/" + this.Login_id + ".jpg";
+                        $("#imgDoctor").attr("src", "/static/web/image/" + data.doctorinfo.login_id + ".jpg");
+                        pagerip = data.doctorinfo.ip;
+                        login_id = data.doctorinfo.login_id;
+                        zsmc = data.doctorinfo.zsmc;
+                        doctor_id = data.doctorinfo.doctor_id;
+                    }
+                    else {
+                        $.ajax({
+                            type: "GET",
+                            url: "/clientterminal/pager_name?t=" + new Date().getTime(),
+                            contentType: "application/text;charset=utf-8",
+                            dataType: "json",
+                            cache: false,
+                            async: false,
+                            success: function (data) {
+                                if (data.return_code == "success")
+                                    zsmc = data.zsmc;
+                                else
+                                    zsmc = "";
+                            }
+                        });
+                        $("#divDoctorName").html("");
+                        $("#divDoctorTitle").html("");
+                        $("#divPagerName").html(zsmc.length > 5 ? "<span>" + zsmc + "</span>" : zsmc);
+                        $("#divDoctorDesc").html("");
+                        $("#divPatientName").html('');
+                        $("#divPatientId").html('');
+                        document.getElementById("imgDoctor").src = "images/logo2.jpg";
+                        $("#mainInit").show();
+                        $("#mainCall").hide();
+                        $("#divPagerName1").html(zsmc);
+                        login_id = "";
+                        pagerip = "";
+                        doctor_id = "";
+                    }
+                },
+                error: function () {
+
+                }
+            });
+        }
+        catch (err) { }
+    }
+
+    function GetList2() {
+        var count = 0;
+        var h_l = "";
+        //try {
+        $.ajax({
+            type: "GET",
+            url: "/call_patient/list_patient_pager?status=wait&type=page&t=" + new Date().getTime(),
+            //url: "/clientPatientQueue/list_roomdoor?t=" + new Date().getTime(),
+            contentType: "application/text;charset=utf-8",
+            dataType: "json",
+            cache: false,
+            async: false,
+            success: function (data) {
+                if (data.count > 0) {
+                    $.each(data.list, function (i, item) {
+                        //h_l += "<li>(" + item.register_id + ")" + hideword(item.patient_name) + "</li>";
+                       h_l += '<div class="deng-n">' + yinsibaohu(item.patient_name) + '<span>&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;'+item.register_id+'</span></div>';
+
+                    });
+                }
+                else {
+                    h_l = "";
+                }
+
+                //var aname = '';
+                //$("#divList").html('');
+                //$(result.PatientWaitData).each(function () {
+                //    aname += '<div class="deng-r">';
+                //    if (this.name.length < 4)
+                //        aname += '<div class="deng-n-3">' + yinsibaohu(this.name) + '</div>';
+                //    else
+                //        aname += '<div class="deng-n">' + yinsibaohu(this.name) + '</div>';
+                //    aname += '<div class="deng-num">' + this.id + '</div>';
+                //    aname += '</div>';
+                //})
+                //$("#divList").html(aname);
+            },
+            error: function () {
+                h_l = "";
+                count = 0;
+            }
+        });
+        // }
+        // catch (err) { }
+        return { "count": count, "h_l": h_l };
+    }
+
+    var dh = new Array(), fz = new Array();
+
+    function GetList_dh() {
+        dh = new Array();
+        try {
+            $.ajax({
+                type: "GET",
+                url: "/clientPatientQueue/list_roomdoor",
+                contentType: "application/text;charset=utf-8",
+                dataType: "json",
+                cache: false,
+                async:false,
+                success: function (data) {
+                    if (data.count > 0) {
+                        $("#next_patient").html(addPreZero(data.list[0].register_id) + "&nbsp;" + hideword(data.list[0].patient_name));
+                        $.each(data.list, function (i, item) {
+                            if (item.state_patient != 2)
+                            {
+                                dh.push(item);
+                            }
+                        });
+                    }
+                },
+                error: function () {
+
+                }
+            });
+            $.ajax({
+                type: "GET",
+                url: "/clientPatientQueue/list_roomdoor_nodisplay",
+                contentType: "application/text;charset=utf-8",
+                dataType: "json",
+                cache: false,
+                async: false,
+                success: function (data_no) {
+                    if (data_no.count > 0) {
+                        
+                        $.each(data_no.list, function (i, item) {
+                            //if (item.state_patient != 2) {
+                                dh.push(item);
+                            //}
+                        });
+                    }
+                },
+                error: function () {
+
+                }
+            });
+            dh.sort(function (a, b) {
+                const first = a.time_interval - b.time_interval;
+                if (first !== 0) {
+                    return first;
+                }
+
+                return a.register_id - b.register_id;
+            });
+        }
+        catch (err) { }
+    }
+
+    var page_dh = 1;
+    function dh_show()
+    {
+        var rows=20
+        try {
+        //$("#dh").html("");
+        var dh_span = "";
+        var dh_html = "";
+            var c = parseInt(dh.length);
+            if (c > 0) {
+                var i = 0, j = rows;
+                var html = "";
+                if (c <= rows) {
+                    j = c;
+                    setTimeout(GetList_dh, 10000);
+                }
+                else {
+                    if (c > rows * page_dh) {
+                        i = (rows * (page_dh - 1));
+                        j = rows * page_dh;
+                        page_dh = page_dh + 1;
+                    }
+                    else {
+                        i = (rows * (page_dh - 1));
+                        j = c;
+                        page_dh = 1;
+                        GetList_dh();
+                    }
+                }
+                
+                for (var n = i; n < j; n++) {
+                    var item = dh[n];
+                    dh_span += check_patient(item.register_id, item.patient_name, item.state_patient, item.is_display);
+                    if (n>i+1&&n % 4 == 0) {
+                        dh_html += "<li>" + dh_span + "</li>";
+                        dh_span = "";
+                    }
+                    if (n % 4 != 0 && n == j-1)
+                        dh_html += "<li>" + dh_span + "</li>";
+                    else if(n==c-1)
+                        dh_html += "<li>" + dh_span + "</li>";
+                }
+            }
+            else {
+
+                setTimeout(GetList_dh, 10000);
+            }
+            $("#dh").html(dh_html);
+            setTimeout(dh_show, 10000);
+        }
+        catch (err) { setTimeout(dh_show, 10000); }
+    }
+
+    function GetList_fz() {
+        try {
+            $.ajax({
+                type: "GET",
+                url: "/clientPatientQueue/list_roomdoor",
+                contentType: "application/text;charset=utf-8",
+                dataType: "json",
+                cache: false,
+                async: false,
+                success: function (data) {
+                    if (data.count > 0) {
+                        //$("#next_patient").html(addPreZero(data.list[0].register_id) + "&nbsp;" + hideword(data.list[0].patient_name));
+                        var h_l = "";
+                        
+                        fz = new Array();
+                        $.each(data.list, function (i, item) {
+                            if (item.state_patient == 2) {
+                                fz.push(item);
+                            }
+                        });
+                        //$("#dh").html(dh_html);
+                    }
+                    else {
+                        //$("#dh").html("");
+                        //setTimeout(GetList_dh, 2000);
+                    }
+                },
+                error: function () {
+
+                }
+            });
+        }
+        catch (err) { }
+    }
+
+    var page_fz = 1;
+    function fz_show() {
+        var rows = 8
+        try {
+        //$("#fz").html("");
+        var fz_span = "";
+        var fz_html = "";
+        var c = parseInt(fz.length);
+        if (c > 0) {
+            var i = 0, j = rows;
+            var html = "";
+            if (c <= rows) {
+                j = c;
+                setTimeout(GetList_fz, 5000);
+            }
+            else {
+                if (c > rows * page_fz) {
+                    i = (rows * (page_fz - 1));
+                    j = rows * page_fz;
+                    page_fz = page_fz + 1;
+                }
+                else {
+                    i = (rows * (page_fz - 1));
+                    j = c;
+                    page_fz = 1;
+                    GetList_fz();
+                }
+            }
+           
+           
+            for (var n = i; n < j; n++) {
+                var item = fz[n];
+                fz_span += check_patient(item.register_id, item.patient_name, item.state_patient, item.is_display);
+                if (n > i + 1 && n % 4 == 0) {
+                    fz_html += "<li>" + fz_span + "</li>";
+                    fz_span = "";
+                }
+                if ( n == j - 1)
+                    fz_html += "<li>" + fz_span + "</li>";
+                else if(n==c-1)
+                    fz_html += "<li>" + fz_span + "</li>";
+            }
+        }
+        else {
+            setTimeout(GetList_fz, 5000);
+        }
+        $("#fz").html(fz_html);
+        setTimeout(fz_show, 5000);
+        }
+        catch (err) {
+            setTimeout(fz_show, 5000);
+        }
+    }
+    var callList = new Array();
+    function PagerCall() {
+        try {
+            $.ajax({
+                type: "GET",
+                url: "/clientPatientQueue/list_roomdoor_jz?t=" + new Date().getTime(),
+                contentType: "application/text;charset=utf-8",
+                dataType: "json",
+                cache: false,
+                success: function (data) {
+                    if (data.return_code == "success") {
+                        $("#divPatientName").html(addPreZero(data.dqjz.register_id) + "&nbsp;" + hideword(data.dqjz.patient_name));
+                        //if (data.dqjz.caller == pagerip)
+                        if (data.dqjz.caller == "2") {
+                            //$("#tips_name").html(addPreZero(data.dqjz.register_id) + "&nbsp;" + hideword(data.dqjz.patient_name));
+                            //$("#tips").show(0).delay(5000).hide(0);
+                            //var callText = "<?xml version=\"1.0\" encoding=\"GB18030\"?>"
+                            //    + "<Contents><Content>"
+                            //    + "<Voice Num=\"1\" Speed=\"1000\" digitMode=\"1\">"
+                            //    + "请 " + data.dqjz.register_id + "号" + data.dqjz.patient_name + " 到" + zsmc + "就诊。"
+                            //    + "</Voice>"
+                            //    + "</Content></Contents>";
+                            //window.Callobject.playVoice(callText);
+                            //var callText = "请 " + data.dqjz.register_id + "号" + data.dqjz.patient_name + " 到" + zsmc + "就诊。"
+                            //SSMSObject.PlayVoice(callText, 3, 5, 5);
+
+                            var call = addPreZero(data.dqjz.register_id) + "&nbsp;" + hideword(data.dqjz.patient_name) + "," + "请 " + data.dqjz.register_id + "号" + data.dqjz.patient_name + " 到" + zsmc + "就诊。"
+                            //$("#tips").html(yinsibaohu(data.dqjz.patient_name));
+                            //$("#tips").show(0).delay(5000).hide(0);
+                            //var callText = "<?xml version=\"1.0\" encoding=\"GB18030\"?>"
+                            //    + "<Contents><Content>"
+                            //    + "<Voice Num=\"1\" Speed=\"1000\" digitMode=\"1\">"
+                            //    + "请 " + data.dqjz.register_id + "号" + data.dqjz.patient_name + " 到" + zsmc + "就诊。"
+                            //    + "</Voice>"
+                            //    + "</Content></Contents>";
+                            //window.Callobject.playVoice(callText)
+                            callList.push(call);
+                        }
+                    }
+                    else {
+                        $("#divPatientName").html("&nbsp;");
+                        //$("#divPatientId").html("");
+                    }
+                },
+                error: function () {
+
+                }
+            });
+        }
+        catch (err) { }
+    }
+    GetInfo();
+    PagerCall();
+    GetList_dh();
+    dh_show();
+    GetList_fz();
+    fz_show();
+    //window.setInterval(GetList, 2000);
+    window.setInterval(PagerCall, 2000);
+    window.setInterval(GetInfo, 10000);
+
+    //var rows = parseInt((window.screen.availHeight - 380) / 110);
+    var div = $("#divDoctorDesc");
+    //按页滚动
+    var px = 310, time = 10000;
+    //按行滚动
+    //var px = 35, time = 2000;
+    var count = Math.ceil(div.height() / px);
+    var page = 0;
+    if (count > 1) {
+        window.setInterval(Scoll, time);
+    }
+    function Scoll() {
+        if (page == count)
+            page = 0;
+        if (page > 0)
+            div.animate({ marginTop: -(page * px) }, 1000);
+        else
+            div.animate({ marginTop: -(page * px) }, 0);
+        page += 1;
+    }
+
+
+    //var ul1 = $("#dh_list1");
+    //var ul2 = $("#dh_list2");
+    //var div2 = $("#divList");
+    //var move = 0;
+    //var now = 0;
+    //var h1 = 0;
+    //var h2 = 0;
+    //var json2 = GetList();
+
+    //ul1.html(json2.h_l);
+    //h1 = ul1.height();
+    ////setTimeout(Scoll2, 5000);
+    //function Scoll2() {
+    //    if (h1 > 500) {
+    //        var m = h1 + now;
+    //        if (m > 500) {
+    //            now -= 1;
+    //            div2.css("marginTop", now);
+    //            setTimeout(Scoll2, 10);
+    //        }
+    //        else {
+    //            if (move == 0) {
+    //                json2 = GetList();
+    //                ul2.html(json2.h_l);
+    //                move = 1;
+    //            }
+    //            if (m > 0) {
+    //                now -= 1;
+    //                div2.css("marginTop", now);
+    //                setTimeout(Scoll2, 10);
+    //            }
+    //            else if (m == 0) {
+    //                now = 0;
+    //                ul1.html(json2.h_l);
+    //                h1 = ul1.height();
+    //                move = 0;
+    //                div2.css("marginTop", now);
+    //                setTimeout(Scoll2, 5000);
+    //            }
+
+    //        }
+    //    }
+    //    else {
+    //        json2 = GetList();
+    //        ul1.html(json2.h_l);
+    //        h1 = ul1.height();
+    //        setTimeout(Scoll2, 5000)
+    //    }
+    //}
+
+    //$(document).keypress(function (e) {
+    //    if (e.ctrlKey && e.which == 13)
+    //        $("form").submit();
+    //})
+    //键盘操作 
+    var keystring = ""; //记录按键的字符串
+    var isSwipeCard = 0;
+    function keypress(e) {
+        if (isSwipeCard == 1) return;
+
+        var currKey = 0, CapsLock = 0, e = e || event;
+        currKey = e.keyCode || e.which || e.charCode;
+        CapsLock = currKey >= 65 && currKey <= 90;
+
+        if (currKey == 13) {
+            //获取对应的条形码后执行数据查询
+            if (keystring.length > 0) {
+               // if ($("#serialNum"))
+                //    $("#serialNum").html(keystring);
+                isSwipeCard = 1;
+                scanbaodao(keystring);
+                
+                keystring = "";
+                isSwipeCard = 0;
+            }
+            else {
+                $("#scan").html("操作错误，请重新扫描刷卡！");
+                $("#scan").show(0).delay(5000).hide(0);
+            }
+        }
+        else {
+            switch (currKey) {
+                //屏蔽了退格、制表、回车、空格、方向键、删除键                  
+                case 8: case 9: case 16: case 17: case 18: case 32: case 37: case 38: case 39: case 40: case 46: keyName = ""; break;
+                default: keyName = String.fromCharCode(currKey); break;
+            }
+
+            keystring += keyName;
+        }
+    }
+
+    window.onkeydown = keypress;
+
+    function scanbaodao(code)
+    {
+        if (login_id != "" && login_id != undefined) {
+            try {
+                $.ajax({
+                    type: "GET",
+                    url: "/clientPatientQueue/ScanBaodaoBydoor",
+                    contentType: "application/text;charset=utf-8",
+                    dataType: "json",
+                    data: { "code": code},
+                    cache: false,
+                    success: function (data) {
+                        if (data.return_code == "success") {
+                            if (data.count >= 1) {
+                                $.each(data.list, function (i, item) {
+                                    if (item.doctor_id == doctor_id) {
+                                        if (item.is_display == 2) {
+                                            //$("#scan").hide(0);
+                                            //$("#scan").html("您已报到成功，请勿重复报到！");
+                                            //$("#scan").show(0).delay(5000).hide(0);
+                                            //var callText1 = "<?xml version=\"1.0\" encoding=\"GB18030\"?>"
+                                            //                + "<Contents><Content>"
+                                            //                + "<Voice Num=\"1\" Speed=\"1000\" digitMode=\"1\">"
+                                            //                + "您已报到成功，请勿重复报到。"
+                                            //                + "</Voice>"
+                                            //                + "</Content></Contents>";
+                                            //window.Callobject.playVoice(callText1);
+                                            var call = "";
+                                            if (item.state_patient == 53) {
+                                                $.ajax({
+                                                    type: "GET",
+                                                    url: "/clientPatientQueue/SanAddBydoorFZ",
+                                                    contentType: "application/text;charset=utf-8",
+                                                    dataType: "json",
+                                                    data: { "code": code, "queue_type_id": item.queue_type_id },
+                                                    cache: false,
+                                                    success: function (data2) {
+                                                        if (data2.return_code == "success") {
+                                                            call = hideword(data2.patient_name) + " 复诊报到成功,报到成功";
+                                                            callList.push(call);
+                                                        }
+                                                        else {
+                                                            call = "报到失败，请联系护士分诊台！,报到失败";
+                                                            callList.push(call);
+                                                        }
+                                                    },
+                                                    error: function (err) {
+                                                        var call = err + ",";
+                                                        callList.push(call);
+                                                    }
+                                                });
+                                            }
+                                            else if (item.state_patient == 1) {
+                                                $.ajax({
+                                                    type: "GET",
+                                                    url: "/clientPatientQueue/SanAddBydoorGH",
+                                                    contentType: "application/text;charset=utf-8",
+                                                    dataType: "json",
+                                                    data: { "code": code, "queue_type_id": item.queue_type_id },
+                                                    cache: false,
+                                                    async: false,
+                                                    success: function (data2) {
+                                                        if (data2.return_code == "success") {
+                                                            call = hideword(data2.patient_name) + " 过号报到成功,报到成功";
+                                                            callList.push(call);
+                                                        }
+                                                        else {
+                                                            call = "报到失败，请联系护士分诊台！,报到失败";
+                                                            callList.push(call);
+                                                        }
+                                                    },
+                                                    error: function (err) {
+                                                        var call = err + ",";
+                                                        callList.push(call);
+                                                    }
+                                                });
+                                            }
+                                            else
+                                                call = "您已报到成功，请勿重复报到！,您已报到成功，请勿重复报到";
+                                            callList.push(call);
+                                        }
+                                        else {
+
+                                            try {
+                                                $.ajax({
+                                                    type: "GET",
+                                                    url: "/clientPatientQueue/SanAddBydoor",
+                                                    contentType: "application/text;charset=utf-8",
+                                                    dataType: "json",
+                                                    data: { "code": code, "queue_type_id": item.queue_type_id },
+                                                    cache: false,
+                                                    success: function (data2) {
+                                                        if (data2.return_code == "success") {
+                                                            var call = hideword(data2.patient_name) + " 报到成功," + data2.patient_name + "报到成功";
+                                                            callList.push(call);
+                                                        }
+                                                        else {
+                                                            var call = "报到失败，请联系护士分诊台！,报到失败";
+                                                            callList.push(call);
+                                                        }
+                                                        //if (data2.return_code == "success") {
+                                                        //    $("#scan").hide(0);
+                                                        //    $("#scan").html(hideword(data2.patient_name) + " 报到成功,就诊号：" + data2.register_id);
+                                                        //    $("#scan").show(0).delay(5000).hide(0);
+                                                        //    var callText2 = "<?xml version=\"1.0\" encoding=\"GB18030\"?>"
+                                                        //    + "<Contents><Content>"
+                                                        //    + "<Voice Num=\"1\" Speed=\"1000\" digitMode=\"1\">"
+                                                        //    + "报到成功。"
+                                                        //    + "</Voice>"
+                                                        //    + "</Content></Contents>";
+                                                        //    window.Callobject.playVoice(callText2);
+                                                        //}
+                                                        //else {
+                                                        //    $("#scan").hide(0);
+                                                        //    $("#scan").html("报到失败，请联系护士分诊台！");
+                                                        //    var callText3 = "<?xml version=\"1.0\" encoding=\"GB18030\"?>"
+                                                        //    + "<Contents><Content>"
+                                                        //    + "<Voice Num=\"1\" Speed=\"1000\" digitMode=\"1\">"
+                                                        //    + "报到失败。"
+                                                        //    + "</Voice>"
+                                                        //    + "</Content></Contents>";
+                                                        //    window.Callobject.playVoice(callText3);
+                                                        //    $("#scan").show(0).delay(5000).hide(0);
+                                                        //}
+                                                    },
+                                                    error: function (err) {
+                                                        var call = err + ",";
+                                                        callList.push(call);
+                                                    }
+                                                });
+                                            }
+                                            catch (err) {
+                                                var call = err + ",";
+                                                callList.push(call);
+                                            }
+
+                                        }
+                                    }
+                                });
+                            }
+                            else {
+                                var call = "未在该诊室查询到您的信息,";
+                                callList.push(call);
+                            }
+                        }
+                        else {
+                            var call = "未在该诊室查询到您的信息,";
+                            callList.push(call);
+                        }
+                    },
+                    error: function (err) {
+                        var call = err + ",";
+                        callList.push(call);
+                    }
+                });
+            }
+            catch (err) {
+                var call = err + ",";
+                callList.push(call);
+            }
+        }
+        else {
+            var call = "未开诊！暂时无法报到，请稍等...,";
+            callList.push(call);
+        }
+    }
+    var timeback = null;
+    var timelist = null;
+
+    function callshow() {
+        clearInterval(timeback);
+        if (callList.length == 0) {
+            timeback = setInterval(callshow, 1000);
+        }
+        else {
+            var call = callList[0].toString().split(",");
+            $("#tips_name").html(call[0].toString());
+            var t = 0;
+            if (call[1].toString().length > 0) {
+                t = call[1].toString().length * 400;
+                var callText = "<?xml version=\"1.0\" encoding=\"GB18030\"?>"
+                + "<Contents><Content>"
+                + "<Voice Num=\"1\" Speed=\"1000\" digitMode=\"1\">"
+                + call[1].toString()
+                + "</Voice>"
+                + "</Content></Contents>";
+                window.Callobject.playVoice(callText);
+            }
+            else {
+                t = call[0].toString().length * 400;
+            }
+            $("#tips").show(0).delay(t).hide(0);
+            timeback = setInterval(callshow, t);
+            callList.splice(0, 1);
+        }
+    }
+    callshow();
+</script>

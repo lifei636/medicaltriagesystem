@@ -1,0 +1,362 @@
+@font-face {
+	font-family: FZLTHK;
+	src: url("FZLTHK.TTF"); /*方正兰亭黑_GBK*/
+}
+
+@font-face {
+	font-family: FZLTZCHK;
+	src: url("FZLTZCHK.TTF"); /*方正兰亭中粗黑_GBK*/
+}
+
+@font-face {
+	font-family: FZLTXCHK;
+	src: url("FZLTXCHK.TTF"); /*方正兰亭细黑_GBK*/
+}
+
+body {
+	margin: 0px;
+	padding: 0px;
+	font-family: "FZLTHK";
+}
+
+/*整体*/
+.container {
+	width: 1920px;
+	height: 1080px;
+	float: left;
+	background: left top url(images/main_back_h.jpg) no-repeat;
+	overflow: hidden;
+}
+
+/*上部*/
+.top {
+	width: 1920px;
+	height: 150px;
+	margin-top: 12px;
+	overflow: hidden;
+}
+
+.top .logo {
+	width: 460px;
+	height: 150px;
+	float: left;
+}
+
+.top .name {
+	width: 800px;
+	height: 150px;
+	float: left;
+	font-size: 90px;
+	line-height: 150px;
+	text-align: center;
+	color: #fff100;
+}
+
+.top .date {
+	width: 370px;
+	height: 150px;
+	float: left;
+	color: #c8e9ee;
+	font-size: 28px;
+	text-align: right;
+	line-height: 45px;
+	margin-top: 43px;
+	font-family: "FZLTHK";
+	letter-spacing: 1px;
+}
+
+.top .time {
+	width: 290px;
+	height: 150px;
+	float: left;
+	font-size: 90px;
+	color: #c8e9ee;
+	text-align: right;
+	line-height: 90px;
+	margin-top: 43px;
+	font-family: "FZLTXCHK";
+	letter-spacing: 3px;
+}
+
+/*中间*/
+.main {
+	width: 1790px;
+	height: 700px;
+	float: left;
+	margin-top: 80px;
+	margin-left: 90px;
+}
+
+/*医生部分*/
+.main .doc {
+	width: 1110px;
+	height: 700px;
+	float: left;
+	overflow: hidden;
+}
+
+.main .doc .pic {
+	width: 542px;
+	height: 700px;
+	text-align: center;
+	overflow: hidden;
+	float: left;
+}
+
+.main .doc .jianjie {
+	width: 500px;
+	height: 670px;
+	padding-left: 20px;
+	padding-top: 20px;
+	padding-bottom: 10px;
+	padding-right: 19px;
+	background-color: #d3eaf3;
+	float: right;
+	overflow: hidden;
+}
+
+    .main .doc .jianjie .d-n {
+        width:50%;
+        font-size: 60px;
+        font-family: FZLTZCHK;
+        line-height: 100px;
+        color: #0a7cbd;
+        text-align: justify;
+        text-align-last: justify;
+    }
+
+.main .doc .jianjie .d-z {
+	font-size: 40px;
+	font-family: FZLTHK;
+	color: #535353;
+	line-height: 80px;
+}
+
+.main .doc .jianjie .d-jianjie {
+	width: 100%;
+	height: 490px;
+	font-size: 30px;
+	font-family: FZLTHK;
+	color: #535353;
+	line-height: 45px;
+	text-align: justify;
+	word-break: normal;
+	letter-spacing: 2px;
+	text-indent: 2em;
+	overflow: hidden;
+}
+
+.main .huanzhe {
+	width: 500px;
+	height: 700px;
+	float: left;
+	margin-left: 180px;
+	overflow: hidden;
+}
+
+.main .huanzhe .hz-zheng {
+	width: 100%;
+	height: 200px;
+	float: left;
+	margin-top: 20px;
+}
+
+.main .huanzhe .hz-zheng .zheng-l {
+	width: 200px;
+	height: 40px;
+	font-size: 30px;
+	line-height: 40px;
+	color: #535353;
+	font-family: FZLTHK;
+	border-radius: 20px;
+	background-color: #d3eaf3;
+	text-align: center;
+}
+
+.main .huanzhe .hz-zheng .zheng-r {
+	width: 100%;
+	height: 160px;
+	font-size: 72px;
+	color: #fff100;
+	line-height: 160px;
+	font-family: "FZLTZCHK";
+	text-align: left;
+}
+
+.main .huanzhe .hz-zheng span {
+	font-size: 30px;
+}
+
+.main .huanzhe .hz-deng {
+	width: 100%;
+	height: 500px;
+	float: left;
+	overflow: hidden;
+}
+
+.main .huanzhe .hz-deng .deng-l {
+	width: 200px;
+	height: 40px;
+	font-size: 30px;
+	line-height: 40px;
+	color: #535353;
+	font-family: FZLTHK;
+	border-radius: 20px;
+	background-color: #d3eaf3;
+	text-align: center;
+}
+
+.main .huanzhe .hz-deng .deng-list {
+	width: 500px;
+	height: auto;
+	float: left;
+	overflow-y: hidden;
+	overflow: hidden;
+}
+
+.main .huanzhe .hz-deng .deng-list .dhlist {
+	width: 100%;
+	height: auto;
+	overflow-y: hidden;
+	overflow: hidden;
+}
+
+.main .huanzhe .hz-deng .deng-list .dhlist .deng-n {
+	width: 100%;
+	height: 160px;
+	font-size: 72px;
+	color: #fff;
+	line-height: 160px;
+	font-family: "FZLTZCHK";
+	text-align: left;
+}
+
+.main .huanzhe .hz-deng .deng-list .dhlist .deng-n span {
+	font-size: 30px;
+}
+
+.main1 {
+	width: 1500px;
+	height: 800px;
+	float: left;
+	border-radius: 10px;
+	background: #fff;
+	position: absolute;
+	top: 162px;
+	left: 210px;
+	z-index: 999;
+	line-height: 816px;
+	font-size: 200px;
+	text-align: center;
+	color: #fe8a00;
+	overflow: hidden;
+}
+
+/*诊室部分*/
+.main1 .zhenshi {
+	width: 100%;
+	height: 300px;
+	float: left;
+	font-size: 150px;
+	color: #fe8a00;
+	line-height: 300px;
+	font-family: "FZLTZCHK";
+	text-align: center;
+	letter-spacing: 5px;
+	margin-top: 40px;
+}
+
+/*提示部分*/
+.main1 .tishi {
+	width: 100%;
+	height: 500px;
+	float: left;
+}
+
+.main1 .tishi .line-1 {
+	width: 100%;
+	height: 200px;
+	float: left;
+	font-size: 56px;
+	color: #55cab1;
+	line-height: 100px;
+	font-family: "FZLTZCHK";
+	text-align: center;
+	margin-top: 80px;
+}
+
+.main1 .tishi .line-2 {
+	width: 100%;
+	height: 180px;
+	float: left;
+	font-size: 48px;
+	color: #4e3f49;
+	line-height: 90px;
+	text-align: center;
+	margin-top: 50px;
+}
+
+.bottom {
+	width: 1920px;
+	height: 90px;
+	float: left;
+	/*background: url(images/bottom_back.jpg) no-repeat;*/
+	font-size: 42px;
+	color: #c8e9ee;
+	text-align: center;
+	line-height: 105px;
+	bottom: 0px;
+	position: absolute;
+}
+
+#tips {
+	width: 1500px;
+	height: 800px;
+	float: left;
+	border-radius: 10px;
+	background: #fff;
+	position: absolute;
+	top: 162px;
+	left: 210px;
+	z-index: 999;
+	line-height: 816px;
+	font-size: 200px;
+	text-align: center;
+	color: #fe8a00;
+	overflow: hidden;
+	display: none;
+}
+#tips2 {
+    width: 1500px;
+    height: 800px;
+    float: left;
+    border-radius: 10px;
+    background: #fff;
+    position: absolute;
+    top: 162px;
+    left: 210px;
+    z-index: 999;
+    font-size: 200px;
+    text-align: center;
+    color: #fe8a00;
+    overflow: hidden;
+    display: none;
+}
+
+    #tips2 .jhqmcs {
+        width: 100%;
+        height: 300px;
+        font-size: 100px;
+        overflow: hidden;
+        text-align: center;
+        line-height: 300px;
+    }
+
+    #tips2 .names {
+        width: 100%;
+        height: 300px;
+        font-size: 200px;
+        overflow: hidden;
+        text-align: center;
+        line-height: 300px;
+    }

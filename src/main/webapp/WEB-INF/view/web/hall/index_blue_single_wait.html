@@ -1,0 +1,271 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>大厅等候</title>
+<link href="/static/web/hall/style_blue_wait.css" rel="stylesheet" />
+<script src="/static/web/hall/jquery.min.js"></script>
+</head>
+<body style="zoom: 1">
+	<div class="container">
+		<!--上部-->
+		<div class="top">
+			<div class="logo">
+				<img src="/static/web/image/logo.png">
+			</div>
+			<div class="name" id="triage_name"></div>
+			<div class="date" id="now_date"></div>
+			<div class="time" id="now_time"></div>
+		</div>
+
+		<!--中部-->
+		<div class="main">
+			<div class="list">
+				<div class="title">
+					以下医保已审核通过，可办理结算
+				</div>
+				<div id="list">
+					
+				</div>
+			</div>
+
+		</div>
+
+
+		<div class="bottom">温馨提示：请保管好您的随身物品,耐心等候！！！</div>
+	</div>
+	<div class="tips_back" id="tips">
+		<div class="tips">
+			<div class="title" id="tips_zsmc"></div>
+			<div class="content">
+				<b id="hz_name"></b>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
+<script type="text/javascript">
+    var page = 1;
+    var data;
+    function ShowTime() {
+        try {
+            var datetime = window.Callobject.getDateTime();
+            var year = datetime.split(' ')[0].split('-')[0].toString() + '年' + datetime.split(' ')[0].split('-')[1].toString() + '月' + datetime.split(' ')[0].split('-')[2].toString() + '日';
+            var week = "　星期" + "日一二三四五六".charAt(datetime.split(' ')[2].toString().trim().replace('7', '0'));
+            var time = datetime.split(' ')[1].toString();
+            $("#now_date").html(year + week);
+            $("#now_time").html(time.split(':')[0] + ':' + time.split(':')[1]);
+        }
+        catch (ex) { }
+    }
+
+    function getUrlParam(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return unescape(r[2]); return null;
+    }
+    var ip = getUrlParam("ip");
+    //var wait = getUrlParam("wait");
+    var rows = 15;
+    function PagerShow() {
+        $("#list").html("");
+        var c = parseInt(data.count);
+        if (c > 0) {
+            var i = 0, j = rows;
+            var html = "";
+            if (c <= rows) {
+                j = c;
+                page = 1;
+                setTimeout(GetList, 5000);
+            }
+            else {
+                if (c > rows * page) {
+                    i = (rows * (page - 1));
+                    j = rows * page;
+                    page = page + 1;
+                }
+                else {
+                    i = (rows * (page - 1));
+                    j = c;
+                    page = 1;
+                    setTimeout(GetList, 5000);
+                }
+            }
+           
+            for (var n = i; n < j; n++) {
+                try {
+                    html += "<div class=\"rows\"><div class=\"name\">" + data.list[n].patient_name + "</div><div class=\"noid\">" + data.list[n].register_id + "</div></div>";
+                } catch (e) {
+
+                }
+                
+            }
+            
+        }
+        else
+        {
+            setTimeout(GetList,5000);
+        }
+
+
+        $("#list").html(html);
+    }
+    function sortObjectArray(objArr, keyArr, type) {
+        for (var x = 0; x < objArr.length; x++) {
+            objArr[x].oldIndex = x;
+        }
+        if (type != undefined && type != 'asc' && type != 'desc') {
+            return 'error';
+        }
+        var order = 1;
+        if (type != undefined && type == 'desc') {
+            order = -1;
+        }
+        var key = keyArr[0];
+        objArr.sort(function (objA, objB) {
+            if (objA[key] > objB[key]) {
+                return order;
+            } else if (objA[key] < objB[key]) {
+                return 0 - order;
+            } else {
+                if (objA.oldIndex > objB.oldIndex) {
+                    return order;
+                } else if (objA.oldIndex < objB.oldIndex) {
+                    return 0 - order;
+                } else {
+
+                    return 0;
+                }
+            }
+        })
+
+        for (var i = 1; i < keyArr.length; i++) {
+            var key = keyArr[i];
+            for (var y= 0; y < objArr.length; y++) {
+                objArr[y].oldIndex = y;
+            }
+            objArr.sort(function (objA, objB) {
+                for (var j = 0; j < i; j++) {
+                    if (objA[keyArr[j]] != objB[keyArr[j]]) {
+                        if (objA.oldIndex > objB.oldIndex) {
+                            return order;
+                        } else if (objA.oldIndex < objB.oldIndex){
+                            return 0 - order;
+                        } else {
+                            return 0;
+                        }
+                    }
+                }
+                if (objA[key] > objB[key]) {
+                    return order;
+                } else if (objA[key] < objB[key]){
+                    return 0 - order;
+                } else {
+                    if (objA.oldIndex > objB.oldIndex) {
+                        return order;
+                    } else if (objA.oldIndex < objB.oldIndex){
+                        return 0 - order;
+                    } else {
+                        return 0;
+                    }
+                }
+            })
+        }
+        return objArr;
+    }
+    function setsort(pdata)
+    {
+        if (pdata.count > 0) {
+            //按部门排序使用“,”分隔，同一序列内使用“|”分隔，不能超过100个部门
+            var deptArray = ["普外", "五官", "心血管", "呼吸", "神经", "消化", "肾病|内分泌科", "肝病", "感染", "胃肠|小儿", "肝胆甲乳", "泌尿烧伤", "神经", "骨一科", "骨二科", "妇科", "产科", "儿科", "儿保", "康复", "口腔", "皮肤", "中医", "疼痛", "护理"];
+            var titleArray = ["主任医师", "副主任医师", "主治医师", "医师", "护师", "护士"];
+
+            for (var i = 0; i < pdata.count; i++) {
+                var item = pdata.list[i];
+                item.departmentsort = 100;
+                item.titlesort = 10;
+                for (var j = 0; j < deptArray.length; j++) {
+                    var deptlist = deptArray[j].split("|");
+                    if (deptlist.length > 1) {
+                        for (j1 = 0; j1 < deptlist.length; j1++)
+                        {
+                            if (item.department.indexOf(deptlist[j1]) >= 0)
+                            {
+                                item.departmentsort = j;
+                                break;
+                            }
+                        }
+                    }
+                    else {
+                        if (item.department.indexOf(deptArray[j]) >= 0) {
+                            item.departmentsort = j;
+                            break;
+                        }
+                    }
+                }
+                for (var k = 0; k < titleArray.length; k++)
+                {
+                    if (item.title==titleArray[k])
+                    {
+                        item.titlesort = k;
+                        break;
+                    }
+                }
+            }
+        }
+        pdata.list = sortObjectArray(pdata.list, ['departmentsort', 'titlesort', 'login_id']);
+        var newpdata=pdata.list;
+        for (var i = 0; i <newpdata.length;i++) {
+            if (newpdata[i].departmentsort >= 100)
+                pdata.list.splice(i);
+        }
+
+        return pdata;
+    }
+    function GetData(sql) {
+        var datalist = null;
+        $.ajax({
+            type: "GET",
+            async: false,
+            url: "/client/commSelect",
+            contentType: "application/text;charset=utf-8",
+            dataType: "json",
+            data: { "sql": sql },
+            cache: false,
+            success: function (pdata) {
+                datalist = pdata;
+            }
+        });
+        return datalist;
+    }
+    function GetList()
+    {
+        data = GetData("SELECT  register_id,patient_name FROM patient_queue where queue_type_id=259352 and is_deleted=0 and is_display=2 ORDER BY time_interval,register_id+''");
+        //$.ajax({
+        //    type: "GET",
+        //    async: false,
+        //    url: "/paiban/DoctorPaibanWeekByDatabase",
+        //    contentType: "application/text;charset=utf-8",
+        //    dataType: "json",
+        //    cache: false,
+        //    success: function (pdata) {
+
+        //        pdata.list = sortObjectArray(pdata.list, ['other']);
+
+        //        //pdata.list = sortObjectArray(pdata.list, ['departmentsort', 'titlesort', 'login_id']);
+        //        var newpdata = new Array();
+        //        for (var i = 0; i < pdata.list.length; i++) {
+        //            if (pdata.list[i].other != null && pdata.list[i].other != "")
+        //                newpdata.push(pdata.list[i]);
+        //        }
+        //        //return pdata;
+        //        data = newpdata;
+        //    }
+        //});
+    }
+    GetList();
+    ShowTime();
+    PagerShow();
+    window.setInterval(ShowTime, 5000);
+    window.setInterval(PagerShow, 5000);
+</script>

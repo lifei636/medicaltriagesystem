@@ -1,0 +1,241 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>大厅等候</title>
+    <link href="/static/web/hall/style_green_map.css" rel="stylesheet" />
+    <link href="/static/web/hall/swiper.css" rel="stylesheet" />
+    <script src="/static/web/hall/jquery.min.js"></script>
+    <script src="/static/web/hall/swiper.js"></script>
+    <script src="/static/web/hall/jquery.mobile-1.3.2.min.js"></script>
+    <script src="/static/web/hall/touch.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!--上部-->
+        <div class="top">
+            <div class="logo">
+                <img src="/static/web/image/logo.png">
+            </div>
+            <div class="name" id="triage_name">交互式查询系统</div>
+            <div class="date" id="now_date"></div>
+            <div class="time" id="now_time"></div>
+        </div>
+
+        <!--中部-->
+        <div class="main">
+            <div class="menu">
+                <div class="left_title">科室介绍</div>
+                <ul id="kslist">
+                    
+                </ul>
+            </div>
+            <div class="content">
+                <div id="other" style="display:none">
+                    <div class="swiper-container">
+                        <div class="swiper-wrapper" id="imglist">
+                        </div>
+                        <div class="swiper-pagination"></div>
+                        <div class="swiper-button-prev"></div>
+                        <div class="swiper-button-next"></div>
+                    </div>
+                </div>
+                <div id="floor">
+                    <img  src="/static/web/mapimg/f0.jpg" usemap="#contentMap" id="content" onload="DrawImage(this,1400,822)" onclick="scanzoomimg()" />
+                </div>
+                <!--<map name="contentMap">
+                    <area shape="rect" coords="325,700,1050,2460" onclick="changemap('超声科')" id="1">
+                    <area shape="rect" coords="1979,2118,3479,2458" href="#">
+                </map>-->
+            </div>
+            <div class="menu">
+                <div class="right_logo" id="f0"><img src="/static/web/mapimg/maplogo.png" /></div>
+                <div class="floor" id="f1">1F <span>门诊楼</span></div>
+                <div class="floor" id="f2">2F <span>门诊楼</span></div>
+                <div class="floor" id="f3">3F <span>门诊楼</span></div>
+            </div>
+        </div>
+        <div class="bottom">精诚关爱&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;健康永伴</div>
+    </div>
+	
+</body>
+</html>
+<script type="text/javascript">
+
+    var page = 1;
+    var data;
+    function ShowTime() {
+        try {
+            var datetime = window.Callobject.getDateTime();
+            var year = datetime.split(' ')[0].split('-')[0].toString() + '年' + datetime.split(' ')[0].split('-')[1].toString() + '月' + datetime.split(' ')
+
+            [0].split('-')[2].toString() + '日';
+            var week = "　星期" + "日一二三四五六".charAt(datetime.split(' ')[2].toString().trim().replace('7', '0'));
+            var time = datetime.split(' ')[1].toString();
+            $("#now_date").html(year + week);
+            $("#now_time").html(time.split(':')[0] + ':' + time.split(':')[1]);
+        }
+        catch (ex) { }
+    }
+    
+    ShowTime();
+    window.setInterval(ShowTime, 5000);
+
+    function DrawImage(ImgD, iwidth, iheight) {
+        //参数(图片,允许的宽度,允许的高度)
+        var image = new Image();
+        image.src = ImgD.src;
+        if (image.width > 0 && image.height > 0) {
+            if (image.width / image.height >= iwidth / iheight) {
+                if (image.width > iwidth) {
+                    ImgD.width = iwidth;
+                    ImgD.height = (image.height * iwidth) / image.width;
+                } else {
+                    ImgD.width = image.width;
+                    ImgD.height = image.height;
+                }
+            } else {
+                if (image.height > iheight) {
+                    ImgD.height = iheight;
+                    ImgD.width = (image.width * iheight) / image.height;
+                } else {
+                    ImgD.width = image.width;
+                    ImgD.height = image.height;
+                }
+            }
+        }
+    }
+
+
+
+    function changemap(img)
+    {
+        $("#content").attr("src", "/static/web/mapimg/" + img + ".jpg");
+        $("#floor").show();
+        $("#other").hide();
+        $(".floor").css("color", "#1fa337");
+        $("#" + img).css("color", "#f39800");
+    }
+    $("#f0").bind("vmousedown", function () {
+        changemap("f0");
+    });
+    $("#f1").bind("vmousedown", function () {
+        changemap("f1");
+        showks(1);
+    });
+    $("#f2").bind("vmousedown", function () {
+        changemap("f2");
+        showks(2);
+    });
+    $("#f3").bind("vmousedown", function () {
+        changemap("f3");
+        showks(3);
+    });
+    function showimg(ks)
+    {
+        var data = GetData("SELECT * FROM mapimg WHERE ksid=" + ks + " ORDER BY imgsort");
+        var html = "";
+        if (data.count > 0) {
+            for (var i = 0; i < data.count; i++) {
+                html += "<div class='swiper-slide'><img src='/static/web/mapimg/" + data.list[i].imgurl + "'></div>";
+            }
+            $("#imglist").html(html);
+            $("#floor").hide();
+            $("#other").show();
+            beginshowimg();
+            $(".ks").css("color", "#1fa337");
+            $("#ks" + ks).css("color", "#f39800");
+        }
+    }
+    function showks(f)
+    {
+        var data = GetData("SELECT * FROM mapks WHERE fid="+f+" order by kssort");
+        var html = "";
+        changeimg();
+        for (var i = 0; i < data.count; i++) {
+            html += "<li class='ks' id='ks"+data.list[i].id+"' onclick='showimg("+data.list[i].id+")'>" + data.list[i].ksname + "</li>";
+        }
+        $("#kslist").html(html);
+    }
+    function GetData(sql) {
+        var datalist = null;
+        $.ajax({
+            type: "GET",
+            async: false,
+            url: "/client/commSelect",
+            contentType: "application/text;charset=utf-8",
+            dataType: "json",
+            data: { "sql": sql },
+            cache: false,
+            success: function (pdata) {
+                datalist = pdata;
+            }
+        });
+        return datalist;
+    }
+
+    function beginshowimg()
+        //	查看全部图片 滑动数字联动
+    {
+        var mySwiper = new Swiper('.swiper-container', {
+            autopaly:true,
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            },
+            
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            }
+        });
+    }
+
+    function changeimg() {
+        var target = document.getElementById("content");
+        target.style.webkitTransition = 'all ease 0.05s';
+
+        touch.on('#content', 'touchstart', function (ev) {
+            ev.preventDefault();
+        });
+
+        var initialScale = -10;
+        var currentScale;
+        var dx, dy;
+        touch.on('#content', 'pinchend', function (ev) {
+            //if ($("#content").hasClass('viewerimg')) {
+            //    $("#content").removeClass("viewerimg");
+            //};
+            currentScale = ev.scale - 1;
+            currentScale = initialScale + currentScale;
+            currentScale = currentScale > 2 ? 2 : currentScale;
+            currentScale = currentScale < 1 ? 1 : currentScale;
+            //if (currentScale == 1) {
+            //    $("#content").addClass("viewerimg");
+            //};
+            this.style.webkitTransform = 'scale(' + currentScale + ')';
+            //console.log("当前缩放比例为:" + currentScale + ".");
+
+        });
+
+        touch.on('#content', 'pinchend', function (ev) {
+            initialScale = currentScale;
+
+        });
+
+        touch.on('#content', 'drag', function (ev) {
+            dx = dx || 0;
+            dy = dy || 0;
+            this.style.webkitTransform = 'scale(' + currentScale + ')';
+            console.log("当前x值为:" + dx + ", 当前y值为:" + dy + ".");
+            var offx = dx + ev.x + "px";
+            var offy = dy + ev.y + "px";
+            this.style.webkitTransform = "translate3d(" + offx + "," + offy + ",0)";
+        });
+
+        touch.on('#content', 'dragend', function (ev) {
+            dx += ev.x;
+            dy += ev.y;
+        });
+    }
+</script>

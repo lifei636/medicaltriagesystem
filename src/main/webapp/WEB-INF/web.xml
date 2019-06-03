@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	id="WebApp_ID" version="2.5">
+	<filter>
+		<filter-name>jfinal</filter-name>
+		<filter-class>com.jfinal.core.JFinalFilter</filter-class>
+		<init-param>
+			<param-name>configClass</param-name>
+			<param-value>com.common.config.MainConfig</param-value>
+		</init-param>
+	</filter>
+	<listener>
+		<listener-class>org.apache.shiro.web.env.EnvironmentLoaderListener</listener-class>
+	</listener>
+	<listener>
+		<listener-class>com.shine.controller.SessionHandler</listener-class>
+	</listener>
+	
+	<session-config>
+		<session-timeout>5</session-timeout>
+	</session-config>
+	<filter>
+		<filter-name>shiro</filter-name>
+		<filter-class>org.apache.shiro.web.servlet.ShiroFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>shiro</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>jfinal</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	<display-name>medicaltriagesystem</display-name>
+	<welcome-file-list>
+		<welcome-file>index.html</welcome-file>
+		<welcome-file>index.htm</welcome-file>
+		<welcome-file>index.jsp</welcome-file>
+		<welcome-file>default.html</welcome-file>
+		<welcome-file>default.htm</welcome-file>
+		<welcome-file>default.jsp</welcome-file>
+	</welcome-file-list>
+	<listener>  
+        <listener-class>
+            com.sun.xml.ws.transport.http.servlet.WSServletContextListener  
+        </listener-class>
+    </listener>
+    <servlet>
+        <servlet-name>zlplatform</servlet-name>  
+        <servlet-class>
+            com.sun.xml.ws.transport.http.servlet.WSServlet  
+        </servlet-class>
+    </servlet>  
+    <servlet-mapping>  
+        <servlet-name>zlplatform</servlet-name>  
+        <url-pattern>/service/zlplatform</url-pattern>  
+    </servlet-mapping>
+</web-app>

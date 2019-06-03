@@ -1,0 +1,132 @@
+body {
+	margin: 0px;
+	padding: 0px;
+	font-family: FZLTHK;
+}
+
+/*整体*/
+@font-face {
+	font-family: FZLTHK;
+	src: url("FZLTHK.TTF"); /*方正兰亭黑_GBK*/
+}
+
+@font-face {
+	font-family: FZLTZCHK;
+	src: url("FZLTZCHK.TTF"); /*方正兰亭中粗黑_GBK*/
+}
+
+@font-face {
+	font-family: FZLTXCHK;
+	src: url("FZLTXCHK.TTF"); /*方正兰亭细黑_GBK*/
+}
+
+.container {
+    width: 1920px;
+    height: 1080px;
+    margin: 0px auto;
+    float: left;
+    background: url(images/blue_back_zjpb.jpg) no-repeat;
+}
+
+/*上部*/
+.top {
+    width: 1920px;
+    height: 150px;
+    margin-top: 12px;
+    overflow: hidden;
+}
+
+    .top .logo {
+        width: 460px;
+        height: 150px;
+        float: left;
+    }
+
+    .top .name {
+        width: 800px;
+        height: 150px;
+        float: left;
+        font-size: 90px;
+        line-height: 150px;
+        text-align: center;
+        color: #fff100;
+    }
+
+    .top .date {
+        width: 370px;
+        height: 150px;
+        float: left;
+        color: #c8e9ee;
+        font-size: 28px;
+        text-align: right;
+        line-height: 45px;
+        margin-top: 43px;
+        font-family: "FZLTHK";
+        letter-spacing: 1px;
+    }
+
+    .top .time {
+        width: 290px;
+        height: 150px;
+        float: left;
+        font-size: 90px;
+        color: #c8e9ee;
+        text-align: right;
+        line-height: 90px;
+        margin-top: 43px;
+        font-family: "FZLTXCHK";
+        letter-spacing: 3px;
+    }
+
+/*中间*/
+.main {
+    width: 1611px;
+    height: 757px;
+    float: left;
+    margin-top: 40px;
+    margin-left: 270px;
+}
+    .main .doclist {
+        width:400px;
+        height:757px;
+        float:left;
+        overflow:hidden;
+    }
+        .main .doclist .img {
+            width:230px;
+            height:307px;
+            margin:46px 80px;
+            overflow:hidden;
+        }
+        .main .doclist .info {
+            width:100%;
+            height:70px;
+            overflow:hidden;
+            line-height:70px;
+            color:#fff;
+            font-size:36px;
+            text-align:center;
+        }
+        .main .doclist .info2 {
+            width: 100%;
+            height: 70px;
+            overflow: hidden;
+            line-height: 70px;
+            color: #faed14;
+            font-size: 36px;
+            text-align: center;
+        }
+
+/*底部*/
+.bottom {
+	width: 1920px;
+	height: 82px;
+	float: left;
+    position:absolute;
+    bottom:0px;
+	font-size: 42px;
+	color: #fe8a00;
+	text-align: center;
+	line-height: 82px;
+    z-index:1000;
+}

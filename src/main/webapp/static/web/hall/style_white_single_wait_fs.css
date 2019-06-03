@@ -1,0 +1,199 @@
+@font-face {
+	font-family: FZLTHK;
+	src: url("FZLTHK.TTF"); /*方正兰亭黑_GBK*/
+}
+
+@font-face {
+	font-family: FZLTZCHK;
+	src: url("FZLTZCHK.TTF"); /*方正兰亭中粗黑_GBK*/
+}
+
+@font-face {
+	font-family: FZLTXCHK;
+	src: url("FZLTXCHK.TTF"); /*方正兰亭细黑_GBK*/
+}
+
+body {
+	margin: 0px;
+	padding: 0px;
+	font-family: "FZLTHK";
+}
+
+/*整体*/
+.container {
+	width: 1920px;
+	height: 1080px;
+	margin: 0px auto;
+	float: left;
+	background: url(images/main_back_white.jpg) no-repeat;
+}
+
+/*上部*/
+.top {
+	width: 1880px;
+	height: 170px;
+	float: left;
+	border-bottom-left-radius: 10px;
+	border-bottom-right-radius: 10px;
+	background: #FFF;
+	margin: 0 20px;
+}
+
+.top .logo {
+	width: 380px;
+	height: 140px;
+	float: left;
+	margin: 15px 30px;
+}
+
+.top .name {
+	width: 730px;
+	height: 140px;
+	float: left;
+	color: #fd8a00;
+	font-size: 76px;
+	text-align: center;
+	line-height: 140px;
+	margin-top: 15px;
+	font-family: "FZLTZCHK";
+	letter-spacing: 1px;
+}
+
+.top .date {
+	width: 370px;
+	height: 90px;
+	float: left;
+	color: #9f8b97;
+	font-size: 28px;
+	text-align: right;
+	line-height: 45px;
+	margin-top: 43px;
+	font-family: "FZLTHK";
+	letter-spacing: 1px;
+}
+
+.top .time {
+	width: 290px;
+	height: 90px;
+	float: left;
+	font-size: 90px;
+	color: #4e3f49;
+	text-align: right;
+	line-height: 90px;
+	margin-top: 43px;
+	font-family: FZLTXCHK;
+	letter-spacing: 3px;
+}
+
+/*中间*/
+.main {
+    width: 1880px;
+    height: 816px;
+    float: left;
+    margin: 10px 0 0 20px;
+    background: url(images/back-white_single_wait.png) no-repeat;
+}
+
+/*列表部分*/
+.main .table {
+	width: 1880px;
+	height: 816px;
+	float: left;
+}
+
+.table .title {
+	width: 1880px;
+	height: 90px;
+	float: left;
+	color: #55cab1;
+	line-height: 90px;
+	text-align: center;
+	font-size: 46px;
+}
+.w10 {
+    width:10%;
+    float:left;
+    overflow:hidden;
+}
+.w20 {
+    width: 20%;
+    float: left;
+    overflow: hidden;
+}
+.w30 {
+    width: 30%;
+    float: left;
+    overflow: hidden;
+}
+.w15 {
+    width: 15%;
+    float: left;
+    overflow: hidden;
+}
+.w50 {
+    width: 50%;
+    float: left;
+    overflow: hidden;
+}
+
+.table .down {
+	width: 1880px;
+	height: 726px;
+	float: left;
+}
+
+.down .line {
+    width: 1880px;
+    height: 145px;
+    float: left;
+    color: #4e3f49;
+    line-height: 145px;
+    text-align:center;
+    font-size: 49px;
+    font-family: "FZLTZCHK";
+    overflow: hidden;
+    background-color:#ccc;
+}
+
+.cell-n {
+    width: 250px;
+    height: 145px;
+    float: left;
+    font-size: 49px;
+    color: #4e3f49;
+    line-height: 145px;
+    font-family: "FZLTZCHK";
+    text-align: right;
+    margin-right: 44px;
+    margin-left: 46px;
+    display: inline-block;
+    text-align: justify;
+    text-align-last: justify;
+}
+.cell-num {
+    width: 100px;
+    height: 40px;
+    float: left;
+    font-size: 30px;
+    color: #fff;
+    line-height: 43px;
+    font-family: "FZLTZCHK";
+    text-align: center;
+    border-radius: 8px;
+    background: #4e3f49;
+    margin-top: 50px;
+}
+
+
+
+/*底部*/
+.bottom {
+	width: 1920px;
+	height: 82px;
+	float: left;
+	/*background: url(images/bottom_back.jpg) no-repeat;*/
+	font-size: 42px;
+	color: #fe8a00;
+	text-align: center;
+	line-height: 82px;
+}

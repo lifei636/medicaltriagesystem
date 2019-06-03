@@ -1,0 +1,143 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>叫号器</title>
+<link type="text/css" rel="stylesheet"
+	href="/static/web/caller/blue.css" />
+<script type="text/javascript" src="/static/web/caller/jquery.js"></script>
+</head>
+<body>
+	<div id="main" class="main">
+		<div class="login">
+			<div class="left">用户名/工号：</div>
+			<div class="right">
+				<input id="txt_name" class="txt" type="text" maxlength="10"
+					onkeypress="getKey();" /><span id="infos" class="err_info"></span>
+			</div>
+			<div class="left">&nbsp;</div>
+			<div class="right">
+				<input id="btn_login" type="button" class="btn" value="登录"
+					onclick="login()" /><input id="btn_setting" type="button"
+					class="btn" value="设置" onclick="setting()" />
+			</div>
+		</div>
+	</div>
+	<div class="tips_back" id="tips">
+		<div class="main">
+			<div class="login">
+				<div class="left">IP地址：</div>
+				<div class="right">
+					<input id="txt_ip" class="txt" type="text" /><span id="infos2"
+						class="err_info"></span>
+				</div>
+				<div class="left">&nbsp;</div>
+				<div class="right">
+					<input id="btn_ip_save" type="button" class="btn" value="保存"
+						onclick="save_ip()" /><input id="btn_bak" type="button"
+						class="btn" value="返回" onclick="back()" />
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
+<script>
+    var str_json = SSMSObject.GetConfig();
+    var config_json = $.parseJSON(str_json);
+    var ip = config_json.ip;
+    var doctor_id = config_json.doctor_id;
+    var f_time = config_json.f_time;
+    $("#txt_name") = doctor_id;
+    $("#txt_ip") = ip;
+    function getKey() {
+        if (event.keyCode == 13) {
+            login();
+        }
+    }
+    function login() {
+        var id = $("#txt_name");
+        if (id.val()) {
+            $.ajax({
+                type: "get",
+                url: "http://" + ip + "/call_login/call_login",
+                contentType: 'application/x-www-form-urlencoded;charset=UTF-8',
+                crossDomain: true,
+                cache: false,
+                dataType: "json",
+                data: { "login_id": id.val() },
+                beforeSend: function () {
+                    $("#infos").html("正在登录中，请稍后...");
+                },
+                success: function (data) {
+                    if (data.return_code == "success") {
+                        var q_id = 0
+                        if (data.list.queue_type_id)
+                            q_id = data.list.queue_type_id;
+                        SSMSObject.SetConfig(ip, f_time, id.val(), q_id);
+                        $("#infos").html(data.return_msg);
+                        id.attr('class', 'txt2');
+                        window.location.href = "index.html";
+                    }
+                    else {
+                        $("#infos").html(data.return_msg);
+                        id.attr('class', 'txt2');
+                    }
+                },
+                error: function (err) {
+                    $("#infos").html("系统发生错误，请联系管理员");
+                    id.attr('class', 'txt2');
+                }
+            });
+        }
+        else
+            $("#infos").html("请输入用户名或工号");
+    }
+   
+    function setting() {
+        $("#tips").show();
+    }
+    function back() {
+        $("#tips").hide();
+    }
+    function save_ip() {
+        var nip = $("#txt_ip");
+        if (nip.val()) {
+            if (chk_val_ip(nip)) {
+                SSMSObject.SetConfig(nip.val(), f_time, "", 0);
+                ip = nip.val();
+                $("#tips").hide();
+            }
+            else
+                $("#infos2").html("IP地址格式不正确");
+        }
+        else
+            $("#infos2").html("请输入IP地址");
+    }
+    function chk_val_ip(obj) {
+        var ip = obj.val().replace(/(^\s*)|(\s*$)/g, "");
+        if (ip == "") {
+            obj.setAttribute('class', 'txt2');
+            obj.removeClass("txt");
+            obj.addClass("txt2");
+            obj.focus();
+            return false;
+        }
+        else {
+            var reg = /^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5]):\d{0,5}$/;
+            if (reg.test(ip)) {
+                obj.removeClass("txt2");
+                obj.addClass("txt");
+                obj.focus();
+                return true;
+            }
+            else {
+                obj.removeClass("txt");
+                obj.addClass("txt2");
+                obj.focus();
+                return false;
+            }
+        }
+    }
+
+</script>

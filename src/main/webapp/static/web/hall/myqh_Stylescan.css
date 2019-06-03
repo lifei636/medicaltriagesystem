@@ -1,0 +1,396 @@
+﻿body {
+    margin: 0px;
+    padding: 0px;
+    font-family: "微软雅黑";
+    background-size: 100% 100%;
+}
+
+#bg {
+    display: none;
+    position: absolute;
+    top: 0%;
+    left: 0%;
+    width: 100%;
+    height: 100%;
+    background-color: gray;
+    z-index: 1001;
+    -moz-opacity: 0.7;
+    opacity: .70;
+    filter: alpha(opacity=70);
+}
+
+#divConfirm {
+    display: none;
+    position: absolute;
+    top: 15%;
+    left: 30%;
+    z-index: 1002;
+    overflow: auto;
+}
+
+#divPrint {
+    display: none;
+    position: absolute;
+    top: 15%;
+    left: 10%;
+    width: 1200px;
+    height: 800px;
+    z-index: 1003;
+}
+
+/** 美工添加样式 **/
+.continer {
+    width: 1280px;
+    height: 720px;
+    float: left;
+    background: url(myqh_image/3232.png) no-repeat;
+}
+
+/** 刷卡界面样式 **/
+.continer-top {
+    width: 1300px;
+    height: 50px;
+    float: left;
+}
+
+.continer-left {
+    width: 40px;
+    height: 645px;
+    float: left;
+}
+
+.continer-middle {
+    width: 760px;
+    height: 640px;
+    background-color: gray;
+    -moz-box-shadow: 2px 2px 5px #333333;
+    -webkit-box-shadow: 2px 2px 5px #333333;
+    box-shadow: 2px 2px 5px #333333;
+    border-radius: 20px;
+    float: left;
+}
+
+.continer-buttom {
+    width: 1300px;
+    height: 100px;
+    float: left;
+}
+
+/** 列表样式 **/
+.table-top {
+    width: 750px;
+    height: 50px;
+    float: left;
+}
+
+.table {
+    width: 710px;
+    height: 500px;
+    float: left;
+    border-radius: 5px;
+    overflow: auto;
+}
+
+.table-blank {
+    width: 30px;
+    height: 545px;
+    float: left;
+}
+
+.table-tiao {
+    width: 690px;
+    height: 86px;
+    float: left;
+}
+
+.table-tiao1 {
+    width: 265px;
+    height: 86px;
+    float: left;
+    font-family: "微软雅黑";
+    line-height: 86px;
+    font-size: 28px;
+    background-color: #CBCCCF;
+    color: #2f2f2f;
+    padding-left: 36px;
+}
+
+.table-tiao2 {
+    width: 178px;
+    height: 86px;
+    float: left;
+    text-align: center;
+    font-family: "微软雅黑";
+    line-height: 86px;
+    font-size: 28px;
+    background-color: #CBCCCF;
+    color: #2f2f2f;
+}
+
+.table-tiao3 {
+    width: 195px;
+    height: 86px;
+    float: left;
+    border-left: 3px solid white;
+    background-color: #B6B7BA;
+}
+
+.table-tiao21 {
+    width: 265px;
+    height: 86px;
+    float: left;
+    font-family: "微软雅黑";
+    line-height: 86px;
+    font-size: 28px;
+    background-color: #DDDEE0;
+    color: #2f2f2f;
+    padding-left: 36px;
+}
+
+.table-tiao22 {
+    width: 178px;
+    height: 86px;
+    float: left;
+    text-align: center;
+    font-family: "微软雅黑";
+    line-height: 86px;
+    font-size: 28px;
+    background-color: #DDDEE0;
+    color: #2f2f2f;
+}
+
+.table-tiao23 {
+    width: 200px;
+    height: 86px;
+    float: left;
+    border-left: 3px solid white;
+    background-color: #C6C7C9;
+}
+
+.table-tiao3-btn {
+    width: 161px;
+    height: 69px;
+    float: left;
+    margin-top: 9px;
+    margin-left: 19px;
+    background: url(myqh_image/houzhen_btn_up.png) no-repeat;
+    text-align: center;
+    font-family: "微软雅黑";
+    line-height: 69px;
+    font-size: 24px;
+    color: #2f2f2f;
+}
+
+.table-tiao3-btn-down {
+    width: 161px;
+    height: 69px;
+    float: left;
+    margin-top: 9px;
+    margin-left: 19px;
+    background: url(myqh_image/houzhen_btn_down.png) no-repeat;
+    text-align: center;
+    font-family: "微软雅黑";
+    line-height: 69px;
+    font-size: 24px;
+    color: #2f2f2f;
+}
+
+/*弹出*/
+.tanchu-continer {
+    width: 423px;
+    height: 600px;
+    float: left;
+    background: url(myqh_image/tanchu.png) no-repeat;
+}
+
+.tanchu-liebiao1 {
+    width: 423px;
+    height: 50px;
+    float: left;
+}
+
+.tanchu-liebiao2 {
+    width: 423px;
+    height: 78px;
+    margin-top: 20px;
+    float: left;
+    color: #FFF;
+    font-family: "微软雅黑";
+    font-size: 48px;
+    text-align: center;
+    line-height: 78px;
+}
+
+.tanchu-liebiao3 {
+    width: 423px;
+    height: 170px;
+    float: left;
+    color: #f4d222;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 170px;
+    text-align: center;
+    line-height: 170px;
+}
+
+.tanchu-liebiao4 {
+    width: 423px;
+    height: 100px;
+    float: left;
+    color: #FFF;
+    text-align: center;
+    line-height: 100px;
+    font-size: 48px;
+    font-family: "微软雅黑";
+}
+
+.tanchu-liebiao5 {
+    width: 423px;
+    height: 35px;
+    float: left;
+}
+
+.tanchu-liebiao6 {
+    width: 423px;
+    height: 60px;
+    float: left;
+    font-family: "微软雅黑";
+    font-size: 30px;
+    color: #FFF;
+    line-height: 60px;
+}
+
+.tanchu-liebiao6-1 {
+    width: 25px;
+    height: 60px;
+    float: left;
+}
+
+.tanchu-liebiao6-2 {
+    width: 373px;
+    height: 60px;
+    float: left;
+}
+
+.tanchu-liebiao7 {
+    width: 423px;
+    height: 150px;
+    float: left;
+    font-family: "微软雅黑";
+    font-size: 30px;
+    color: #FFF;
+}
+
+.table-tiao3 {
+    width: 200px;
+    height: 86px;
+    float: left;
+}
+
+.table-tiao3-btn {
+    width: 161px;
+    height: 69px;
+    float: left;
+    margin-top: 9px;
+    margin-left: 19px;
+    background: url(myqh_image/houzhen_btn_up.png) no-repeat;
+    text-align: center;
+    font-family: "微软雅黑";
+    line-height: 69px;
+    font-size: 24px;
+    color: #2f2f2f;
+}
+
+/*简单取号按钮*/
+.continer-easy-btn {
+    width: 800px;
+    height: 165px;
+    float: left;
+    font-size: 80px;
+    text-align: center;
+    line-height: 165px;
+    background-color: #f1ecec;
+}
+
+.continer-easy-blank {
+    width: 40px;
+    height: 165px;
+    float: left;
+}
+
+.continer-easy-blank2 {
+    width: 1640px;
+    height: 35px;
+    float: left;
+}
+
+.backgroundmyqh_image {
+    background-color: #f1ecec;
+    background-myqh_image: -webkit-gradient(linear, left top, left bottom, from(#9ece79),color-stop(0.51, #cbfba7), to(#9ece79));
+    background-myqh_image: -ms-linear-gradient(#9ece79 0%, #cbfba7 50%,#9ece79 100%);
+}
+
+.backgroundmyqh_image-down {
+    background-color: #f1ecec;
+    background-myqh_image: -webkit-gradient(linear, left top, left bottom, from(#EEEEEE),color-stop(0.51, #AAAAAA), to(#EEEEEE));
+}
+
+/*简单一行显示*/
+.continer-easy-left {
+    width: 140px;
+    height: 830px;
+    float: left;
+}
+
+.continer-easy-top1 {
+    width: 1640px;
+    height: 20px;
+}
+
+.continer-easy-btn1 {
+    width: 1640px;
+    height: 165px;
+    float: left;
+    font-size: 80px;
+    text-align: center;
+    line-height: 165px;
+}
+
+.continer-easy-blank1 {
+    width: 1640px;
+    height: 35px;
+    float: left;
+}
+
+/*简单三行显示*/
+.continer-easy-btn3 {
+    width: 520px;
+    height: 165px;
+    float: left;
+    font-size: 42px;
+    text-align: center;
+    line-height: 165px;
+}
+
+.continer-easy-blank4 {
+    width: 40px;
+    height: 165px;
+    float: left;
+}
+
+.continer-easy-blank3 {
+    width: 1640px;
+    height: 35px;
+    float: left;
+}
+
+/*其他*/
+.timeback {
+    position: absolute;
+    left: 30%;
+    top: 70px;
+    display: none;
+    font-family: "微软雅黑";
+    font-size: 32px;
+    text-align: center;
+    color: White;
+}

@@ -1,0 +1,288 @@
+@font-face {
+	font-family: FZLTHK;
+	src: url("FZLTHK.TTF"); /*方正兰亭黑_GBK*/
+}
+
+@font-face {
+	font-family: FZLTZCHK;
+	src: url("FZLTZCHK.TTF"); /*方正兰亭中粗黑_GBK*/
+}
+
+@font-face {
+	font-family: FZLTXCHK;
+	src: url("FZLTXCHK.TTF"); /*方正兰亭细黑_GBK*/
+}
+
+body {
+	margin: 0px;
+	padding: 0px;
+	font-family: "FZLTHK";
+}
+
+/*整体*/
+.container {
+	width: 1920px;
+	height: 1080px;
+	float: left;
+	background: left top url(images/main_back_h_jcs.jpg) no-repeat;
+	overflow: hidden;
+}
+
+/*上部*/
+.top {
+	width: 1920px;
+	height: 150px;
+	margin-top: 12px;
+	overflow: hidden;
+
+}
+
+.top .logo {
+	width: 460px;
+	height: 150px;
+	float: left;
+}
+
+.top .name {
+	width: 800px;
+	height: 150px;
+	float: left;
+	font-size: 90px;
+	line-height: 150px;
+	text-align: center;
+	color: #fff100;
+}
+
+.top .date {
+	width: 370px;
+	height: 150px;
+	float: left;
+	color: #c8e9ee;
+	font-size: 28px;
+	text-align: right;
+	line-height: 45px;
+	margin-top: 43px;
+	font-family: "FZLTHK";
+	letter-spacing: 1px;
+}
+
+.top .time {
+	width: 290px;
+	height: 150px;
+	float: left;
+	font-size: 90px;
+	color: #c8e9ee;
+	text-align: right;
+	line-height: 90px;
+	margin-top: 43px;
+	font-family: "FZLTXCHK";
+	letter-spacing: 3px;
+}
+
+/*中间*/
+.main {
+	width: 1840px;
+	height: 800px;
+	float: left;
+	margin-top: 28px;
+	margin-left: 40px;
+}
+
+    .main .title {
+        width: 1600px;
+        height: 160px;
+        background-color: #d3eaf3;
+        border-radius: 80px;
+        margin-left: 120px;
+        margin-top: 30px;
+        font-size: 130px;
+        font-family: FZLTZCHK;
+        text-align: center;
+        line-height: 160px;
+        color: #0a7cbd;
+        overflow:hidden;
+    }
+    .main .left {
+        width:450px;
+        float:left;
+    }
+    .main .right {
+        width:1150px;
+        float:left;
+    }
+    .main .hz_title {
+        width: 240px;
+        height: 60px;
+        background-color: #d3eaf3;
+        border-radius: 30px;
+        font-size: 42px;
+        font-family: FZLTHK;
+        text-align: center;
+        line-height: 60px;
+        color: #535353;
+        overflow: hidden;
+    }
+    .main .jz {
+        width: 1600px;
+        height: 170px;
+        margin-top:70px;
+        margin-left:120px;
+        overflow: hidden;
+        float:left;
+    }
+        .main .jz .jz_name {
+            font-family: FZLTZCHK;
+            font-size: 110px;
+            color: #fff100;
+        }
+            .main .jz .jz_name span {
+                font-size:70px;
+            }
+    .main .dh {
+        width: 1600px;
+        height: 370px;
+        margin-left: 120px;
+        overflow: hidden;
+        float:left;
+    }
+        .main .dh .dh_name {
+            width:50%;
+            font-family: FZLTZCHK;
+            font-size: 66px;
+            color: #fff;
+            overflow:hidden;
+            float:left;
+            margin-bottom:40px;
+        }
+            .main .dh .dh_name span {
+                font-size: 48px;
+            }
+
+
+
+
+.main1 {
+	width: 1840px;
+	height: 800px;
+	float: left;
+	border-radius: 10px;
+	background: #fff;
+	position: absolute;
+	top: 190px;
+	left: 40px;
+	z-index: 999;
+	line-height: 816px;
+	font-size: 200px;
+	text-align: center;
+	color: #fe8a00;
+	overflow: hidden;
+}
+
+/*诊室部分*/
+.main1 .zhenshi {
+	width: 100%;
+	height: 300px;
+	float: left;
+	font-size: 150px;
+	color: #fe8a00;
+	line-height: 300px;
+	font-family: "FZLTZCHK";
+	text-align: center;
+	letter-spacing: 5px;
+	margin-top: 40px;
+}
+
+/*提示部分*/
+.main1 .tishi {
+	width: 100%;
+	height: 500px;
+	float: left;
+}
+
+.main1 .tishi .line-1 {
+	width: 100%;
+	height: 200px;
+	float: left;
+	font-size: 56px;
+	color: #55cab1;
+	line-height: 100px;
+	font-family: "FZLTZCHK";
+	text-align: center;
+	margin-top: 80px;
+}
+
+.main1 .tishi .line-2 {
+	width: 100%;
+	height: 180px;
+	float: left;
+	font-size: 48px;
+	color: #4e3f49;
+	line-height: 90px;
+	text-align: center;
+	margin-top: 50px;
+}
+
+.bottom {
+	width: 1920px;
+	height: 90px;
+	float: left;
+	/*background: url(images/bottom_back.jpg) no-repeat;*/
+	font-size: 42px;
+	color: #c8e9ee;
+	text-align: center;
+	line-height: 105px;
+	bottom: 0px;
+	position: absolute;
+}
+
+#tips {
+	width: 1500px;
+	height: 800px;
+	float: left;
+	border-radius: 10px;
+	background: #fff;
+	position: absolute;
+	top: 162px;
+	left: 210px;
+	z-index: 999;
+	line-height: 816px;
+	font-size: 200px;
+	text-align: center;
+	color: #fe8a00;
+	overflow: hidden;
+	display: none;
+}
+#tips2 {
+    width: 1500px;
+    height: 800px;
+    float: left;
+    border-radius: 10px;
+    background: #fff;
+    position: absolute;
+    top: 162px;
+    left: 210px;
+    z-index: 999;
+    font-size: 200px;
+    text-align: center;
+    color: #fe8a00;
+    overflow: hidden;
+    display: none;
+}
+
+    #tips2 .jhqmcs {
+        width: 100%;
+        height: 300px;
+        font-size: 100px;
+        overflow: hidden;
+        text-align: center;
+        line-height: 300px;
+    }
+
+    #tips2 .names {
+        width: 100%;
+        height: 300px;
+        font-size: 200px;
+        overflow: hidden;
+        text-align: center;
+        line-height: 300px;
+    }

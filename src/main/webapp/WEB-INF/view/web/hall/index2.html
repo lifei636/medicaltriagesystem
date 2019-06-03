@@ -1,0 +1,225 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>大厅等候</title>
+<link href="/static/web/hall/css.css" rel="stylesheet" />
+<script src="/static/web/hall/jquery.min.js"></script>
+</head>
+<body>
+	<div class="main">
+		<div class="title">
+			<div class="left" id="hsptl_name">石棉县人民医院</div>
+			<div class="middle">
+				<span id="triage_name">正在读取信息，请稍后...</span>
+			</div>
+			<div class="right">
+				<span id="now_time"></span><br /> <span id="now_date"></span>
+			</div>
+		</div>
+		<div class="tab_title">
+			<div class="left">业务窗口</div>
+			<div class="middle">正在办理</div>
+			<div class="right">等候办理</div>
+
+		</div>
+		<ul id="list"></ul>
+		<div class="bottom">温馨提示：请保管好您的随身物品,耐心等候！！！</div>
+	</div>
+	<div class="tips_back" id="tips">
+		<div class="tips">
+			<div class="title" id="tips_zsmc"></div>
+			<div class="content">
+				<b id="hz_name"></b>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
+<script type="text/javascript">
+    var page = 1;
+    var data;
+    function ShowTime() {
+        try {
+            var datetime = window.Callobject.getDateTime();
+            var year = datetime.split(' ')[0].split('-')[0].toString() + '年' + datetime.split(' ')[0].split('-')[1].toString() + '月' + datetime.split(' ')
+
+            [0].split('-')[2].toString() + '日';
+            var week = "　星期" + "日一二三四五六".charAt(datetime.split(' ')[2].toString().trim().replace('7', '0'));
+            var time = datetime.split(' ')[1].toString();
+            $("#now_date").html(year + week);
+            $("#now_time").html(time.split(':')[0] + ':' + time.split(':')[1]);
+        }
+        catch (ex) { }
+    }
+    function getQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return unescape(r[2]); return null;
+    }
+    function getUrlParam(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return unescape(r[2]); return null;
+    }
+    var ip = getUrlParam("ip");
+    //var wait = getUrlParam("wait");
+    $("#tips").height(window.screen.availHeight);
+    //alert(window.screen.availHeight);
+    var rows =6;// parseInt((window.screen.availHeight - 380) / 110);
+    function PagerShow() {
+        try {
+            $("#list").html("");
+            var c = parseInt(data.count);
+            if (c > 0) {
+                var i = 0, j = rows;
+                var html = "";
+                if (c <= rows) {
+                    j = c;
+                    setTimeout(GetList, 5000);
+                }
+                else {
+                    if (c > rows * page) {
+                        i = (rows * (page - 1));
+                        j = rows * page;
+                        page = page + 1;
+                    }
+                    else {
+                        i = (rows * (page - 1));
+                        j = c;
+                        page = 1;
+                        GetList();
+                    }
+                }
+                for (var n = i; n < j; n++) {
+                    var jz = "";
+                    var dh = "";
+                    if (data.list[n].jzbh != "")
+                        jz = "(" + data.list[n].jzbh + ")";
+                    if (data.list[n].dh_name0 != "" && checkgf(data.list[n].dh_name0) == 0)
+                        dh = "<span><a class='right2'>" + animation(data.list[n].dh_name0) + "</a><a class='left2'>&nbsp;</a></span>";
+                    else
+                        dh = "<span>" + animation(data.list[n].dh_name0) + "</span>";
+                    if (data.list[n].dh_name1 != "" && checkgf(data.list[n].dh_name1) == 0)
+                        dh += "<span><a class='right2'>" + animation(data.list[n].dh_name1) + "</a><a class='left2'>&nbsp;</a></span>";
+                    else
+                        dh += "<span>" + animation(data.list[n].dh_name1) + "</span>";
+                    if (data.list[n].dh_name2 != "" && checkgf(data.list[n].dh_name2) == 0)
+                        dh += "<span><a class='right2'>" + animation(data.list[n].dh_name2) + "</a><a class='left2'>&nbsp;</a></span>";
+                    else
+                        dh += "<span>" + animation(data.list[n].dh_name2) + "</span>";
+                    html += " <li><div class=\"left\">" + data.list[n].zsmc + "</div><div class=\"left\">" + jz + data.list[n].jz_name + "&nbsp;</div><div class=\"right\">" + dh + "</div></li>";
+                }
+            }
+            else {
+                setTimeout(GetList, 5000);
+            }
+            $("#list").html(html);
+        }
+        catch (err) { }
+    }
+
+    function checkgf(str) {
+        if (str.indexOf("过") > 0 || str.indexOf("复") > 0 || str.indexOf("优") > 0)
+            return 1;
+        else
+            return 0;
+    }
+    function animation(str) {
+        //str = str.replace(str.substr(1, 1), "*");
+        if (str.substr(0,str.indexOf("(")).length > 3)
+            return "<b class='animation'>" + str + "</b>";
+        else
+            return str;
+    }
+    function GetList() {
+        try {
+            $.ajax({
+                type: "GET",
+                async: false,
+                url: "/call_patient/list_patient_wait?t=" + new Date().getTime(),
+                contentType: "application/text;charset=utf-8",
+                dataType: "json",
+                cache: false,
+                success: function (pdata) {
+                    data = pdata;
+                },
+                error: function () {
+                    data = { "count": 0, "fztname": "未知" };
+                }
+            });
+        }
+        catch (err) { }
+    }
+
+    function PagerCall() {
+        try {
+            $.ajax({
+                type: "GET",
+                url: "/clientPatientQueue/list_patient_call?t=" + new Date().getTime(),
+                contentType: "application/text;charset=utf-8",
+                dataType: "json",
+                cache: false,
+                success: function (data) {
+                    var k = 0;
+                    for (var i = 0; i < data.list.length; i++) {
+                        //$.each(data.list, function (j, item) {
+                        //    //if (item.hjzt == 1) {
+                        var item = data.list[i];
+
+                        var t = ("请 " + item.patient_name + " 到" + item.jhqmc + "窗口办理。").length * 400;
+                        setTimeout("showtips(" + t + ", '" + item.patient_name + "','" + item.jhqmc + "','" + item.register_id + "')", k);
+
+                        k = k + t;
+
+                    }
+                    if (k == 0)
+                        k = 2000;
+                    setTimeout(PagerCall, k);
+                }
+
+            });
+        }
+        catch (err) { }
+    }
+    function showtips(t, name, jhqmc, id) {
+        try {
+            $("#hz_name").html("(" + id + ")" + name);
+            //$("#hz_id").html(id);
+            $("#tips_zsmc").html(jhqmc);
+            $("#tips").show(0).delay(t).hide(0)
+            var callText = "<?xml version=\"1.0\" encoding=\"GB18030\"?>"
+                + "<Contents><Content>"
+                + "<Voice Num=\"1\" Speed=\"1000\" digitMode=\"1\">"
+                + "请 " + name + " 到" + jhqmc + "窗口办理。"
+                + "</Voice>"
+                + "</Content></Contents>";
+            window.Callobject.playVoice(callText);
+        }
+        catch (err) { }
+    }
+    function AuotBD() {
+        $.ajax({
+            type: "GET",
+            url: "/call_patient/AutoSetPatientDisplay?t=" + new Date().getTime(),
+            contentType: "application/text;charset=utf-8",
+            dataType: "json",
+            cache: false,
+            success: function (data) {
+            }
+        });
+    }
+    GetList();
+    PagerShow();
+    PagerCall();
+    ShowTime();
+
+    $("#triage_name").html(data.fztname);
+    window.setInterval(PagerShow, 10000);
+    //window.setInterval(PagerCall, 5000);
+    window.setInterval(ShowTime, 5000);
+    if (getUrlParam("bd") == "auto") {
+        AuotBD();
+        window.setInterval(AuotBD, 30000);
+    }
+</script>

@@ -1,0 +1,138 @@
+@font-face {
+	font-family: FZLTHK;
+	src: url("FZLTHK.TTF"); /*方正兰亭黑_GBK*/
+}
+
+@font-face {
+	font-family: FZLTZCHK;
+	src: url("FZLTZCHK.TTF"); /*方正兰亭中粗黑_GBK*/
+}
+
+@font-face {
+	font-family: FZLTXCHK;
+	src: url("FZLTXCHK.TTF"); /*方正兰亭细黑_GBK*/
+}
+
+body {
+	margin: 0px;
+	padding: 0px;
+	font-family: "FZLTHK";
+}
+
+ul {
+	margin: 0px;
+	padding: 0px;
+	list-style: none;
+}
+
+/*整体*/
+.container {
+    width: 1080px;
+    height: 1920px;
+    float: left;
+    background: left top url(images/pb_blue_v_bg.jpg) no-repeat;
+    overflow: hidden;
+}
+
+/*上部*/
+.top {
+    width: 1042px;
+    height: 143px;
+    margin-left: 19px;
+    overflow: hidden;
+    background-color: #fff;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+    .top .logo {
+        width: 540px;
+        height: 143px;
+        float: left;
+    }
+
+    .top .name {
+        width: 460px;
+        height: 143px;
+        float: left;
+        font-size: 72px;
+        line-height: 143px;
+        text-align: center;
+        color: #0a7cbd;
+        font-family:FZLTZCHK;
+    }
+
+
+
+/*中间*/
+.main {
+	width: 1042px;
+	height: 1687px;
+	float: left;
+	margin-left: 19px;
+}
+    .main li {
+        width: 1042px;
+        height: 227px;
+        overflow: hidden;
+        border-radius: 10px;
+        background-color: #d3eaf3;
+        margin-top:10px;
+    }
+        .main li .img {
+            width: 149px;
+            height: 195px;
+            border: 1px solid #c8c8d3;
+            overflow:hidden;
+            float:left;
+            margin-left:15px;
+            margin-top:17px;
+        }
+        .main li .info {
+            width:810px;
+            height:195px;
+            margin-left:30px;
+            overflow:hidden;
+            float:left;
+            margin-top:17px;
+        }
+            .main li .info .title {
+                width: 100%;
+                color: #0a7cbd;
+                font-family:FZLTZCHK;
+                height:50px;
+                line-height:50px;
+                font-size:28px;
+            }
+                .main li .info .title .name {
+                    display:inline-block;
+                    font-size:36px;
+                }
+                .main li .info .title span {
+                    float: right;
+                    text-align: right;
+                }
+            .main li .info .desc {
+                width: 100%;
+                color: #0a7cbd;
+                font-family: FZLTXCHK;
+                color: #52464d;
+                font-size:27px;
+                height:95px;
+                line-height:47px;
+                overflow:hidden;
+            }
+
+
+.bottom {
+	width: 1080px;
+	height: 90px;
+	float: left;
+	/*background: url(images/bottom_back.jpg) no-repeat;*/
+	font-size: 42px;
+	color: #c8e9ee;
+	text-align: center;
+	line-height: 90px;
+	
+}
+

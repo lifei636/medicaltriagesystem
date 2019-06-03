@@ -1,0 +1,31 @@
+@layout("/common/_curd/_container.html"){
+
+
+	<form data-url="${basePath}/${code}/save" method="post" class="form-horizontal" role="form">
+	<br/>
+		<div class="form-group">
+		<label class="col-sm-2 control-label no-padding-right" >分诊台列表</label>
+		<div class="col-sm-3">
+			<select id="editable-select" name="pager.triage_id" style="width: 510px;height: 35px;">
+				@for(x in list_triageName){
+					<option value="${x.triage_id!}">${x.name!}</option>
+				@}
+			</select>
+		</div>
+		</div>
+		<!-- 表单 -->
+		@ var _table="pager";
+		@ var _col=[
+		@			  {name:"叫号器名称", index:"name", type:"text",newline:true,length:8,required:"required"},
+		@			  {name:"叫号器显示名称", index:"display_name", type:"text",newline:true,length:8,required:"required"},
+		@			  {name:"IP地址", index:"ip", type:"text",newline:true,length:8,required:"required"},
+		@			  {name:"叫号器类型", index:"type", type:"text",value:"虚拟叫号器",disabled:"disabled",newline:true,length:8,required:"required"},
+		@			  {name:"描述信息", index:"description", type:"text",newline:true,length:8}
+		@		   ];
+		@ include("/common/_curd/_add.html", {"col":_col, "table":_table}){}
+		
+		<!-- 按钮 -->
+		@ include("/common/_curd/_btn.html", {btn_save:"新增", btn_close:"关闭"}) {}
+	</form>
+
+@}

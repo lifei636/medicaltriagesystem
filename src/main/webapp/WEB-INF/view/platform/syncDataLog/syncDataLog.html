@@ -1,0 +1,66 @@
+@layout("/common/_curd/_container.html"){
+
+<script type="text/javascript">
+	var ctx = "${basePath}";
+	var grid_selector = "#grid-table";
+	var pager_selector = "#grid-pager";
+	
+	$(function(){
+		initGrid();
+		initMenuBtn("btns", "${code}");
+	});
+	
+	function initGrid(){
+		var grid_url = ctx + "/${code}/list";
+		var _colnames = ["ID", 
+						"日志名称", 
+						"错误信息", 
+						"详细描述", 
+						"时间", 
+						"类型"];
+		var _colmodel = [{name:"id", index:"id", width:50},
+						{name:"log_name", index:"log_name", width:100},
+						{name:"log_msg", index:"log_msg", width:150},
+						{name:"log_exception", index:"log_exception", width:200},
+						{name:"log_time", index:"log_time", width:50},
+						{name:"log_type", index:"log_type", width:20}];
+		
+		jQuery(grid_selector).jqGrid({
+			url : grid_url,
+		    shrinkToFit : true,
+			colNames : _colnames,
+			colModel : _colmodel, 
+			jsonReader : {id :"id"},
+			pager : pager_selector,
+			postData : {sort : "id", order : "desc"}
+		});
+	}
+</script>
+
+
+	<!-- 配置 grid -->
+	<div class="row">
+        <div class="col-xs-12 tb-grid">
+            <!-- 配置 查询 -->
+            @ var _col=[
+            @		{name:"ID", index:"id", type:"text"},
+            @		{name:"日志名称", index:"log_name", type:"text"},
+            @		{name:"错误信息", index:"log_msg", type:"text"},
+            @		{name:"详细描述", index:"log_exception", type:"text"},
+            @		{name:"时间", index:"log_time", type:"text"},
+            @		{name:"类型", index:"log_type", type:"text"}
+            @];
+            @ include("/common/_function/_search.html",{"col":_col}){}
+            <!-- 按钮 -->
+            <div class="welljq well-sm" id="btns"></div>
+            <!-- grid -->
+            <table id="grid-table"></table>
+            <!-- 分页-->
+            <div id="grid-pager"></div>
+        </div>
+	</div>
+	
+	<!-- 引入所需的js -->
+	@include("/common/_listscript.html"){}
+	
+@}	

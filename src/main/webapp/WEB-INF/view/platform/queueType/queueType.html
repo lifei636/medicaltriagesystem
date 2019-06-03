@@ -1,0 +1,73 @@
+@layout("/common/_curd/_container.html"){
+
+<script type="text/javascript">
+	var ctx = "${basePath}";
+	var grid_selector = "#grid-table";
+	var pager_selector = "#grid-pager";
+	
+	$(function(){
+		initGrid();
+		initMenuBtn("btns", "${code}");
+	});
+	
+	function initGrid(){
+		var grid_url = ctx + "/${code}/list";
+		var _colnames = ["ID", 
+							"队列类型编号", 
+							"队列类型名称", 
+							"显示别名", 
+							"报道", 
+							"预分诊", 
+							"重新排号",
+                            "报到重新排号",
+							"预留号码",
+							"楼层信息"
+							];
+		var _colmodel = [{name:"queue_type_id", index:"queue_type_id", width:100},
+							{name:"source_id", index:"source_id", width:100},
+							{name:"name", index:"name", width:100},
+							{name:"displayname", index:"displayname", width:100},
+							{ name: "is_checkin", index: "is_checkin", width: 100 },
+                            { name: "is_pretriage", index: "is_pretriage", width: 100 },
+							{name:"is_reorder", index:"is_reorder", width:100},
+							{ name: "is_ckin_order", index: "is_ckin_order", width: 100 },
+							{name:"reserve_numlist", index:"reserve_numlist", width:100},
+							{name:"floor", index:"floor", width:100}];
+		
+		jQuery(grid_selector).jqGrid({
+			url : grid_url,
+		    shrinkToFit : true,
+			colNames : _colnames,
+			colModel : _colmodel, 
+			jsonReader : {id :"queue_type_id"},
+			pager : pager_selector,
+			postData : {sort : "queue_type_id", order : "desc"}
+		});
+	}
+</script>
+
+
+	<!-- 配置 grid -->
+	<div class="row">
+		<div class="col-xs-12 tb-grid">
+			<!-- 配置 查询 -->
+			@ var _col=[
+			@		{name:"ID", index:"queue_type_id", type:"text"},
+			@		{name:"队列类型编号", index:"db_source_id", type:"text"},
+			@		{name:"队列类型名称", index:"name", type:"text"},
+			@		{name:"显示别名", index:"displayname", type:"text"}
+			@];
+			@ include("/common/_function/_search.html",{"col":_col}){}
+			<!-- 按钮 -->
+			<div class="welljq well-sm" id="btns"></div>
+			<!-- grid -->
+			<table id="grid-table"></table>
+			<!-- 分页-->
+			<div id="grid-pager"></div>
+		</div>
+	</div>
+	
+	<!-- 引入所需的js -->
+	@include("/common/_listscript.html"){}
+	
+@}	

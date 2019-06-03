@@ -1,0 +1,30 @@
+@layout("/common/_curd/_container.html"){
+
+<form data-url="${basePath}/${code}/save" method="post" class="form-horizontal" role="form">
+    <!-- 表单 -->
+    @ var _table="triage";
+    @ var _col=[
+    @			  {name:"分诊类型", index:"triage_type", type:"select_103",newline:true,length:8,required:"required"},
+    @			  {name:"叫号模式", index:"pager_type", type:"text",value:"顺呼+选呼模式",disabled:"disabled",newline:true,length:8,required:"required"},
+    @			  {name:"分诊台名称", index:"name", type:"text",newline:true,length:8,required:"required"},
+    @			  {name:"IP地址", index:"ip", type:"text",newline:true,length:8,required:"required"},
+    @			  {name:"描述信息", index:"description", type:"text",newline:true,length:8},
+    @			  {name:"排号模式", index:"reorder_type", type:"select_112",newline:true,length:8,required:"required"},
+    @			  {name:"打印模式", index:"print_type", type:"select_113",newline:true,length:8,required:"required"},
+    @			  {name:"优先等待", index:"first_flag_step",value:"2", type:"text",newline:true,length:8,required:"required"},
+    @			  {name:"复诊叫号间隔", index:"return_flag_step",value:"2", type:"text",newline:true,length:8,required:"required"},
+    @			  {name:"迟到间隔", index:"late_flag_step",value:"2", type:"text",newline:true,length:8,required:"required"},
+    @			  {name:"迟到模式", index:"late_type",type:"select_114",newline:true,length:8,required:"required"},
+    @			  {name:"迟到排序", index:"late_show",type:"select_115",newline:true,length:8,required:"required"},
+    @			  {name:"挂号迟到时间(分)", index:"late_time",value:"30", type:"text",newline:true,length:8,required:"required"},
+    @			  {name:"过号间隔", index:"call_buffer", type:"text",value:"2",newline:true,length:8,required:"required"},
+    @			  {name:"过号次数", index:"pass_time", type:"text",value:"2",newline:true,length:8,required:"required"},
+    @			  {name:"登录密码", index:"triage_pwd", type:"text",newline:true,length:8}
+    @		   ];
+    @ include("/common/_curd/_add.html", {"col":_col, "table":_table}){}
+
+    <!-- 按钮 -->
+    @ include("/common/_curd/_btn.html", {btn_save:"新增", btn_close:"关闭"}) {}
+</form>
+
+@}

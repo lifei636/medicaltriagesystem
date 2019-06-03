@@ -1,0 +1,110 @@
+body {
+	margin: 0px;
+	padding: 0px;
+	font-family: FZLTHK;
+}
+
+/*整体*/
+@font-face {
+	font-family: FZLTHK;
+	src: url("FZLTHK.TTF"); /*方正兰亭黑_GBK*/
+}
+
+@font-face {
+	font-family: FZLTZCHK;
+	src: url("FZLTZCHK.TTF"); /*方正兰亭中粗黑_GBK*/
+}
+
+@font-face {
+	font-family: FZLTXCHK;
+	src: url("FZLTXCHK.TTF"); /*方正兰亭细黑_GBK*/
+}
+/*测试1221*/
+.container {
+    width: 1599px;
+    height: 159px;
+    float: left;
+    overflow: hidden;
+    color: #f00;
+    background-color: #000;
+    border-top: 1px solid #f00;
+    border-left: 1px solid #f00;
+    font-size:14px;
+}
+    .container .bd {
+        border-right: 1px solid #f00;
+        border-bottom: 1px solid #f00;
+    }
+    .container .w39 {
+        width:39px;
+        float:left;
+        overflow:hidden;
+    }
+    .container .w59 {
+        width: 59px;
+        float: left;
+        overflow: hidden;
+        line-height:19px;
+    }
+    .container .w38 {
+        width: 38px;
+        float: left;
+        overflow: hidden;
+        line-height: 19px;
+    }
+    .container .w119 {
+        width: 119px;
+        float: left;
+        overflow: hidden;
+        line-height: 19px;
+    }
+    .container .w139 {
+        width: 139px;
+        float: left;
+        overflow: hidden;
+        line-height: 19px;
+    }
+    .container .w69 {
+        width: 68px;
+        float: left;
+        overflow: hidden;
+        line-height: 19px;
+    }
+    .container .w390 {
+        width: 390px;
+        float: left;
+        overflow: hidden;
+    }
+    .container .h18 {
+        height: 18px;
+        overflow: hidden;
+    }
+    .container .h19 {
+        height: 19px;
+        overflow: hidden;
+    }
+    .container .h20 {
+        height: 20px;
+        overflow: hidden;
+    }
+    .container .t-c {
+        text-align: center;
+        overflow: hidden;
+    }
+    .container .t-l {
+        text-align: left;
+        overflow: hidden;
+    }
+    .container .week {
+        width: 38px;
+        height: 139px;
+        overflow:hidden;
+    }
+        .container .week .today {
+            width: 38px;
+            height: 139px;
+            display: table-cell;
+            text-align: center;
+            vertical-align: middle;
+            font-size: 20px;
+        }

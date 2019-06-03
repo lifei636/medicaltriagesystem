@@ -1,0 +1,562 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+    <meta name="viewport" content="width=device-width , initial-scale=1 , maximum-scale=1 , user-scalable=no" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>无标题文档</title>
+    <script src="/static/web/hall/jquery.min.js"></script>
+    <script src="/static/web/hall/myqh_keyboard.js"></script>
+    <script src="/static/web/hall/myqh_TakingManager.js"></script>
+    <script type="text/javascript" src="/static/web/hall/jquery.mobile-1.3.2.min.js"></script>
+
+    <link rel="stylesheet" href="/static/web/hall/myqh_style.css" type="text/css" />
+    <link href="/static/web/hall/myqh_Stylescan.css" rel="stylesheet" type="text/css" />
+    <link href="/static/web/hall/myqh_index.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript">
+        window.document.onload = function () {
+            document.documentElement.style.webkitTouchCallout = "none"; //禁止弹出菜单
+            document.documentElement.style.webkitUserSelect = "none";//禁止选中
+            document.documentElement.style.w
+        }
+	var spots = {} , touches , timer;
+
+    document.addEventListener('touchstart',function(e){
+        e.preventDefault();
+        [].forEach.call(e.targetTouches,function(touch){
+            //对每一根触摸在屏幕上的手指都生成一个元素，并且用touch.identifier作为该元素的唯一标识，触摸结束后清除引用的元素
+            if(spots[touch.identifier]){
+                return;
+            }
+            var spot = spots[touch.identifier] = document.createElement('div');
+            spot.classList.add('spot');
+            spot.style.top = touch.pageY - 35;
+            spot.style.left = touch.pageX - 35;
+            document.body.appendChild(spot);
+        })
+        timer = setInterval(function() {
+            renderTouches(touches);
+        },16);
+    },false);
+
+    document.addEventListener('touchmove',function(e){
+        e.preventDefault();
+        touches = e.touches;
+    });
+
+    function renderTouches(touches){
+        if(!touches){
+            return;
+        };
+        [].forEach.call(touches,function(touch){
+            var spot = spots[touch.identifier];
+            if(spot){
+                spot.style.top = touch.pageY - 35;
+                spot.style.left = touch.pageX - 35;
+            }
+        })
+    }
+
+    document.addEventListener('touchend',function(e){
+        e.preventDefault();
+        [].forEach.call(e.changedTouches,function(touch){
+            var spot = spots[touch.identifier];
+            if(spot){
+                document.body.removeChild(spot);
+                delete spots[touch.indentifier];
+            }
+        })
+        if(e.changedTouches.length === 0){
+            clearInterval(timer);
+        }
+    })
+    function getUrlParam(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return unescape(r[2]); return null;
+    }
+    var ip = getUrlParam("ip");
+    var is_print = getUrlParam("print");
+        var isshow = false;
+        function GetQueueList(source_code) {
+            var checkPaper = checkpaper();
+            if (checkPaper == 1) {
+
+                if (source_code.length > 5) {
+                    $.ajax({
+                        type: "POST",
+                        async: true,
+                        url: "/clientPatientQueue/Scan",
+                        dataType: "json",
+                        data: { "code": source_code, "ip": ip },
+                        success: function (data) {
+                            if (data.return_code == "success") {
+                                if (data.count == 1) {
+                                    var item = data.list[0];
+                                    if (item.is_display == 1)
+                                        baodao(source_code, item.queue_type_id, item.id, item.reorder_type, item.is_pretriage, item.reserve_numlist, item.print_type)
+                                    else {
+                                        if (item.state_patient == 53) {
+                                            baodaoFZ(item.patient_source_code, item.queue_type_id);
+                                        }
+                                        else if (item.state_patient == 1) {
+                                            baodaoGH(item.patient_source_code, item.queue_type_id);
+                                        }
+                                        else
+                                            showdiv("您已报到，请勿重复报到，如有疑问请去咨询导诊护士！");
+                                    }
+
+                                }
+                                else if (data.count > 1) {
+                                    var rname = "";
+                                    if (timerShow == null)
+                                        timerShow = setInterval(CountDown, 1000);
+                                    var i = 0;
+                                    $(data.list).each(function () {
+                                        var queue_type_name = this.queue_type_name;
+                                        var wait = GetData("SELECT count(id) as wait FROM patient_queue where is_deleted=0 and state_patient NOT IN (1, 51, 52, 53, 54) and is_display=2 and queue_type_id=" + this.q_id + " and id<>" + this.id);
+                                        var wait_count = 0;
+                                        if (wait.count == 1)
+                                            wait_count = wait.list[0].wait;
+                                        rname += "<div class=\"table-tiao\">";
+                                        if (i == 0) {
+                                            rname += "<div class=\"table-tiao1\" style=\"border-top-left-radius:5px;\">" + queue_type_name + "</div>";
+                                            rname += "<div class=\"table-tiao2\">" + wait_count + "</div>";
+                                            rname += "<div class=\"table-tiao3\" style=\"border-top-right-radius:5px;\">";
+                                        }
+                                        else if (i < data.list.length - 1) {
+                                            if (i % 2 == 0) {
+                                                rname += "<div class=\"table-tiao1\" style=\"border-bottom-left-radius:5px;\">" + queue_type_name + "</div>";
+                                                rname += "<div class=\"table-tiao2\">" + wait_count + "</div>";
+                                                rname += "<div class=\"table-tiao3\">";
+                                            }
+                                            else {
+                                                rname += "<div class=\"table-tiao21\" style=\"border-bottom-left-radius:5px;\">" + queue_type_name + "</div>";
+                                                rname += "<div class=\"table-tiao22\">" + wait_count + "</div>";
+                                                rname += "<div class=\"table-tiao23\">";
+                                            }
+                                        }
+                                        else {
+                                            if (i % 2 == 0) {
+                                                rname += "<div class=\"table-tiao1\">" + queue_type_name + "</div>";
+                                                rname += "<div class=\"table-tiao2\">" + wait_count + "</div>";
+                                                rname += "<div class=\"table-tiao3\">";
+                                            }
+                                            else {
+                                                rname += "<div class=\"table-tiao21\">" + queue_type_name + "</div>";
+                                                rname += "<div class=\"table-tiao22\">" + wait_count + "</div>";
+                                                rname += "<div class=\"table-tiao23\">";
+                                            }
+                                        }
+                                        if (this.is_display == 1)
+                                            rname += "<div class=\"table-tiao3-btn\" style='color:red;' ontouchstart='baodao(\"" + source_code + "\",\"" + this.queue_type_id + "\",\"" + this.id + "\",\"" + this.reorder_type + "\",\"" + this.is_pretriage + "\",\"" + this.reserve_numlist + "\",\"" + this.print_type + "\")'>初诊报到</div></div></div>";
+                                        else if (this.state_patient == 53)
+                                            rname += "<div class=\"table-tiao3-btn\" style='color:red;' ontouchstart=\"baodaoFZ('" + source_code + "','" + this.queue_type_id + "');\">复诊报到</div></div></div>";
+                                        else if (this.state_patient == 54)
+                                            rname += "<div class=\"table-tiao3-btn\" style='color:red;' ontouchstart=\"baodaoGH('" + source_code + "','" + this.queue_type_id + "');\">过号报到</div></div></div>";
+                                        else
+                                            rname += "<div class=\"table-tiao3-btn\">已排队</div></div></div>";
+                                        rname += "</div></div>";
+                                        i++;
+                                    });
+                                    $("#divPrintList").html(rname);
+                                    $("#bg").show();
+                                    $("#divPrint").show();
+                                    if ($("#divBack").css("display") == "none") {
+                                        $("#divBack").show();
+                                    }
+                                }
+
+                            }
+                            else {
+                                showdiv("未查询到信息！");
+                            }
+
+                        },
+                        error: function () {
+                            layer.msg("操作失败，请联系管理员", { shift: 1, time: 2000 });
+                        }
+                    });
+                }
+                else {
+                    showdiv("<div>请刷卡或输入正确的卡号</div>", "请刷卡或输入正确的卡号！");
+
+                }
+            }
+                
+        }
+
+        $("#serialOK").keypress(function () {
+            if (event.keyCode == "13") {
+                GetQueueList();
+            }
+        });
+        
+        function GetData(sql) {
+            var datalist = null;
+            $.ajax({
+                type: "GET",
+                async: false,
+                url: "/client/commSelect",
+                contentType: "application/text;charset=utf-8",
+                dataType: "json",
+                data: { "sql": sql },
+                cache: false,
+                success: function (pdata) {
+                    datalist = pdata;
+                }
+            });
+            return datalist;
+        }
+        function baodao(code, queue, id, ttype, is_tri, numlist, print_type) {
+            $.ajax({
+                type: "POST",
+                async: true,
+                url: "/clientPatientQueue/ScanBaodao",
+                dataType: "json",
+                data: { "code": code, 'queue_type_id': queue, 'yl': numlist, "ip": ip },
+                success: function (data) {
+                    if (data.return_code == "success") {
+                        var wait = GetData("SELECT count(id) as wait FROM patient_queue where is_deleted=0 and state_patient NOT IN (1, 51, 52, 53, 54) and is_display=2 and queue_type_id=" + queue + " and id<>" + data.id);
+                        var wait_count = 0;
+                        if (wait.count == 1)
+                            wait_count = wait.list[0].wait;
+                        if (divClose == null)
+                            divClose = setInterval(showTimer, 1000);
+                        $("#showmsg").show();
+                        $("#showmsg").width(900);
+                        //$("#showmsg").css('margin-top', -(parseFloat($('#showmsg').height()) / 2) + 'px');
+                        //$("#showmsg").css('margin-left', -350 + 'px');
+                        $("#info_msg").removeClass("btnlist2")
+                        $("#info_msg").addClass("btnlist");
+                        $("#info_msg").html(data.patient_name + "  排队号：" + data.register_id + "；等候人数：" + wait_count);
+                        $("#bg").css("z-index", 1003);
+                        $("#bg").show();
+                        $("#showmsg_btn").hide();
+                        if (is_print) {
+                            var myDate = new Date();
+                            PrintXml(data.patient_name, data.queue_type_name, data.waiting_count, myDate.toLocaleString(), register_id);
+                        }
+                    }
+                    else {
+                        layer.msg(data.return_msg, { shift: 1, time: 2000 });
+                    }
+                }
+            });
+        }
+        
+        function baodaoFZ(code,id)
+        {
+            $.ajax({
+                type: "GET",
+                url: "/clientPatientQueue/SanAddBydoorFZ",
+                contentType: "application/text;charset=utf-8",
+                dataType: "json",
+                data: { "code": code, "queue_type_id": id },
+                cache: false,
+                async: false,
+                success: function (data2) {
+                    if (data2.return_code == "success") {
+                        call = data2.patient_name + " 复诊报到成功,报到成功";
+                        callList.push(call);
+                    }
+                    else {
+                        call = "报到失败，请联系护士分诊台！,报到失败";
+                        showdiv(call);
+                    }
+                },
+                error: function (err) {
+                    showdiv(err);
+                }
+            });
+        }
+        function badaoGH(code, id)
+        {
+            $.ajax({
+                type: "GET",
+                url: "/clientPatientQueue/SanAddBydoorGH",
+                contentType: "application/text;charset=utf-8",
+                dataType: "json",
+                data: { "code": item.patient_source_code, "queue_type_id": item.queue_type_id },
+                cache: false,
+                async: false,
+                success: function (data2) {
+                    if (data2.return_code == "success") {
+                        call = data2.patient_name + " 过号报到成功,报到成功";
+                        showdiv(call);
+                    }
+                    else {
+                        call = "报到失败，请联系护士分诊台！,报到失败";
+                        showdiv(call);
+                    }
+                },
+                error: function (err) {
+                    showdiv(err);
+                }
+            });
+        }
+
+        var timerShow = null;
+        var icount = 30;
+        function CountDown() {
+            if ($("#divTimer").css("display") == "none") {
+                $("#divTimer").show();
+            }
+
+            if (icount == 0) {
+                clearInterval(timerShow);
+                timerShow = null;
+                icount = 30;
+                keystring = "";
+                isSwipeCard = 0;
+                $("#bg").hide();
+                $("#divTimer").hide();
+                $("#divPrint").hide();
+                $("#divBack").hide();
+                $("#serialNum").text("");
+            }
+            else {
+                icount--;
+                $("#spanSec").text(icount.toString());
+            }
+        }
+        var icount1 = 5;
+        function CountDown1() {
+            if ($("#divTimer").css("display") == "none") {
+                $("#divTimer").show();
+            }
+
+            if (icount1 == 0) {
+                clearInterval(timerShow);
+                timerShow = null;
+                icount = 5;
+                keystring = "";
+                isSwipeCard = 0;
+                $("#bg").hide();
+                $("#divTimer").hide();
+                $("#divPrint").hide();
+                $("#divBack").hide();
+                $("#serialNum").text("");
+            }
+            else {
+                icount1--;
+                $("#spanSec").text(icount1.toString());
+            }
+        }
+        function serialOK() {
+            var txtValue = $("#serialNum").text();
+            GetQueueList(txtValue);
+        }
+
+        //打开弹出窗口的遮罩层
+        function showdiv(objcontent, vioce) {
+            $("#bg").show();
+            $("#divConfirm").show();
+            if (divClose == null)
+                divClose = setInterval(showTimer, 1000);
+            if (objcontent.toString().length > 0) {  //弹出提示信息
+                $("#divAlter").show();
+                $("#content").html(objcontent);
+                if (vioce.toString().length > 0)
+                    playVoice(vioce);
+                else
+                    playVoice(objcontent);
+            }
+            else {
+                $("#divInfo").show();
+            }
+        }
+        var iNum = 4;
+        var divClose = null;
+        function showTimer() {
+            if ($("#divTimer").css("display") == "none") {
+                $("#divTimer").show();
+            }
+            if (iNum == 0) {
+                clearInterval(divClose);
+                divClose = null;
+                iNum = 4;
+                $("#divTimer").hide();
+                isSwipeCard = 0;
+                keystring = "";
+                $("#divAlter").hide();
+                $("#content").html("");
+                $("#divInfo").hide();
+                $("#bg").hide();
+                $("#divConfirm").hide();
+                if ($("#serialNum"))
+                    $("#serialNum").html("");
+            }
+            else {
+                iNum--;
+                $("#spanSec").text(iNum.toString());
+            }
+        }
+
+        //返回按钮
+        function showBackColor(obj) {
+            obj.className = "table-tiao3-btn-down";
+            setTimeout(function () {
+                obj.className = "table-tiao3-btn";
+                clearInterval(timerShow);
+                timerShow = null;
+                icount = 30;
+                keystring = "";
+                isSwipeCard = 0;
+                $("#bg").hide();
+                $("#divTimer").hide();
+                $("#divPrint").hide();
+                $("#divBack").hide();
+                $("#serialNum").text("");
+            }, 10);
+        }
+
+
+        function PrintXml(patient_name, queue_type_name, waiting_count, time, register_id,doctorname) {
+            var printXml = "";
+            //'<?xml version="1.0" encoding="utf-8"?>';
+            //printXml += '<print_task charset="utf-8" copy="1">';
+            //printXml += '<line content="qrcode">';
+            //printXml += '<qrcode>';
+
+            //打印内容标题，例如医院分诊台名称等等
+            printXml += '! 0 200 200 160 1\n';
+            printXml += 'CENTER\n';
+            printXml += 'TEXT 24 22 0 20 绵阳市中医医院\n';
+            printXml += 'PRINT\n';
+
+            printXml += '! 0 200 200 64 1\n';
+            printXml += 'TEXT 24 11 0 0 ' + patient_name + '\n';
+            printXml += 'PRINT\n';
+
+            printXml += '! 0 200 200 160 1\n';
+            printXml += 'CENTER\n';
+            printXml += 'TEXT 24 22 0 0 ' + register_id + '号\n';
+            printXml += 'PRINT\n';
+
+	    printXml += '! 0 200 200 384 1\n';
+	    printXml += 'TEXT 24 11 0 0 科室：' + queue_type_name + '\n';
+	    printXml += 'TEXT 24 11 0 64 就诊医生：' + doctorname + '\n';
+            printXml += 'TEXT 24 11 0 128 过号请重新取号！\n';
+            printXml += 'TEXT 24 11 0 192 谢谢您的合作!\n';
+            printXml += 'TEXT 24 11 0 256 ' + time + '\n';
+//            printXml += 'TEXT 24 11 0 320 请耐心等待！\n';
+            printXml += 'PRINT\n'
+
+            //printXml += '</qrcode>';
+            //printXml += '</line>';
+
+            //printXml += '<line content="hexcode">';
+            //printXml += '<hexcode>1B4AF01D56001B4B00B0</hexcode>';
+            //printXml += '</line>';
+
+            //printXml += '</print_task>';
+            window.Callobject.PrintXml(printXml);
+        }
+
+
+        function onRawInput(str) {
+            GetQueueList(str);
+        }
+
+
+        $(document).ready(
+            function () {
+                // ScreenShow();
+            });
+    </script>
+</head>
+<body>
+   
+    <div class="container">
+        <div class="top">
+            <div class="top_logo"></div>
+        </div>
+        <div class="main">
+            <div class="main_left">请刷医疗卡或者手动输入医疗卡号，再点击确认按钮进行取号</div>
+            <div class="main_right">
+                <div class="main_right_up">
+                    <div class="main_right_up_shuru" id="serialNum"></div>
+                    <div class="main_right_up_btn" id="serialOK">确认</div>
+                </div>
+                <div class="main_right_anjian">
+                    <div id="keyboard">
+                        <div class="main_right_anjian_button" data-value="1">1</div>
+                        <div class="main_right_anjian_button" data-value="2">2</div>
+                        <div class="main_right_anjian_button" data-value="3">3</div>
+                        <div class="main_right_anjian_button" data-value="X">X</div>
+                        <div class="main_right_anjian_button" data-value="4">4</div>
+                        <div class="main_right_anjian_button" data-value="5">5</div>
+                        <div class="main_right_anjian_button" data-value="6">6</div>
+                        <div class="main_right_anjian_button" data-value="0">0</div>
+                        <div class="main_right_anjian_button" data-value="7">7</div>
+                        <div class="main_right_anjian_button" data-value="8">8</div>
+                        <div class="main_right_anjian_button" data-value="9">9</div>
+                        <div class="main_right_anjian_button" data-value="del">删除</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="bottom"></div>
+    </div>
+    <div id="bg">
+    </div>
+    <div id="divConfirm" class="tanchu-continer">
+        <div id="divInfo" style="display: none;">
+            <div class="tanchu-liebiao2">
+                您是第
+            </div>
+            <div class="tanchu-liebiao3" id="divQueueNum">
+            </div>
+            <div class="tanchu-liebiao4">
+                号患者
+            </div>
+            <div class="tanchu-liebiao6">
+                <span class="tanchu-liebiao6-1"></span><span class="tanchu-liebiao6-2">
+                    所属科室：<span id="spanQueue"></span>
+                </span>
+            </div>
+            <div class="tanchu-liebiao6">
+                <span class="tanchu-liebiao6-1"></span><span class="tanchu-liebiao6-2">
+                    等候人数：<span id="spanWait">0</span>人
+                </span>
+            </div>
+        </div>
+        <div id="divAlter" style="display: none;">
+            <div class="tanchu-liebiao1">
+            </div>
+            <div class="tanchu-liebiao2">
+            </div>
+            <div class="tanchu-liebiao7">
+                <span class="tanchu-liebiao6-1"></span><span id="content" class="tanchu-liebiao6-2"></span><span class="tanchu-liebiao6-1"></span>
+            </div>
+            <div id="divPrintTest" class="tanchu-liebiao6" style="text-align: right; display: none;">
+            </div>
+        </div>
+    </div>
+    <div id="divPrint">
+        <div class="continer-top">
+        </div>
+        <div class="continer-left"></div>
+        <div class="continer-middle">
+            <div class="table-top">
+            </div>
+            <div class="table-blank">
+            </div>
+            <div id="divPrintList" class="table">
+            </div>
+            <div class="table-tiao3-btn" style="position: absolute; left: 46%; top: 70%; z-index: 200; font-size: 36px;" ontouchstart="showBackColor(this);">返 回</div>
+        </div>
+        <div class="continer-buttom">
+        </div>
+    </div>
+    <div id="divBack" style="position: absolute; left: 70%; top: 80%; display: none; z-index: 1200;">
+        <!-- <div class="table-tiao3-btn" ontouchstart="showBackColor(this);" style="font-size: 36px;">
+            返 回
+        </div>-->
+    </div>
+    <div id="divTimer" class="timeback" style="display: none;">
+        <span id="spanSec" style="color: Red; margin: 0px 5px 0px 5px;">30</span>秒后返回
+    </div>
+</body>
+</html>

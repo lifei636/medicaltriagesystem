@@ -1,0 +1,202 @@
+body {
+	margin: 0px;
+	padding: 0px;
+	font-family: FZLTHK;
+}
+
+/*整体*/
+@font-face {
+	font-family: FZLTHK;
+	src: url("FZLTHK.TTF"); /*方正兰亭黑_GBK*/
+}
+
+@font-face {
+	font-family: FZLTZCHK;
+	src: url("FZLTZCHK.TTF"); /*方正兰亭中粗黑_GBK*/
+}
+
+@font-face {
+	font-family: FZLTXCHK;
+	src: url("FZLTXCHK.TTF"); /*方正兰亭细黑_GBK*/
+}
+
+.container {
+	width: 100%;
+	height: 100%;
+	float: left;
+	background: url(images/main_back_white.jpg) no-repeat;
+}
+
+/*上部*/
+.top {
+	width: 1875px;
+	height: 170px;
+	float: left;
+	border-bottom-left-radius: 10px;
+	border-bottom-right-radius: 10px;
+	background: #FFF;
+	margin: 0 20px;
+}
+
+.top .logo {
+	width: 380px;
+	height: 140px;
+	float: left;
+	margin: 15px 30px;
+}
+
+.top .name {
+	width: 730px;
+	height: 140px;
+	float: left;
+	color: #fd8a00;
+	font-size: 76px;
+	text-align: center;
+	line-height: 140px;
+	margin-top: 15px;
+	font-family: FZLTZCHK;
+	letter-spacing: 1px;
+}
+
+.top .date {
+	width: 370px;
+	height: 90px;
+	float: left;
+	color: #9f8b97;
+	font-size: 28px;
+	text-align: right;
+	line-height: 45px;
+	margin-top: 43px;
+	font-family: FZLTHK;
+	letter-spacing: 1px;
+}
+
+.top .time {
+	width: 290px;
+	height: 90px;
+	float: left;
+	font-size: 90px;
+	color: #4e3f49;
+	text-align: right;
+	line-height: 90px;
+	margin-top: 43px;
+	font-family: FZLTXCHK;
+	letter-spacing: 3px;
+}
+
+.paibanweek {
+	width: 1875px;
+	height: 724px;
+	float: left;
+	background: left center url(images/paibang.png) no-repeat;
+	margin: 10px 0 0 20px;
+	font-family: FZLTZCHK;
+	padding-top: 93px;
+}
+
+.paibanweek .weeklist {
+	width: 1175px;
+	height: 80px;
+	line-height: 80px;
+	font-size: 40px;
+	color: #4e3f49;
+	margin-left: 699px;
+	overflow: hidden;
+	float: left;
+}
+
+.paibanweek .weeklist .wlist {
+	width: 585px;
+	float: left;
+}
+
+.paibanweek .weeklist .wlist .wd {
+	width: 50px;
+	height: 80px;
+	margin-left: 30px;
+	float: left;
+	text-align: center;
+}
+
+.paibanweek .weeklist .nlist {
+	width: 590px;
+	float: left;
+}
+
+.paibanweek .weeklist .nlist .nd {
+	width: 50px;
+	height: 80px;
+	margin-left: 31px;
+	float: left;
+	text-align: center;
+}
+
+.paibanweek .rows {
+	width: 100%;
+	height: 160px;
+	line-height: 160px;
+	float: left;
+	font-size: 55px;
+	color: #4e3f49;
+	overflow: hidden;
+}
+
+.paibanweek .rows .span1 {
+	width: 233px;
+	float: left;
+	overflow: hidden;
+	text-align: center;
+}
+
+.paibanweek .rows .span2 {
+	width: 585px;
+	float: left;
+}
+
+.paibanweek .rows .span2 .pb {
+	width: 50px;
+	height: 120px;
+	border-radius: 5px;
+	float: left;
+	margin-left: 30px;
+	margin-top: 20px;
+	background-color: #fd8a00;
+	color: #fff;
+	line-height: 60px;
+	font-size: 40px;
+	text-align: center;
+}
+
+.paibanweek .rows .span2 .pb_green {
+	background-color: #55cab1 !important;
+}
+
+.paibanweek .rows .span3 {
+	width: 590px;
+	float: left;
+}
+
+.paibanweek .rows .span3 .nmb {
+	width: 50px;
+	height: 160px;
+	float: left;
+	margin-left: 31px;
+	margin-top: 20px;
+	line-height: 120px;
+	font-size: 30px;
+	text-align: center;
+}
+
+.paibanweek .rows .span3 .nmb_yellow {
+	color: #fe8a00 !important;
+}
+/*底部*/
+.bottom {
+	width: 1920px;
+	height: 82px;
+	float: left;
+	font-size: 42px;
+	color: #fe8a00;
+	text-align: center;
+	line-height: 82px;
+}

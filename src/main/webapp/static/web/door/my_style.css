@@ -1,0 +1,283 @@
+﻿body{ margin:0px; padding:0px;font-family:"微软雅黑"}
+
+/*整体*/
+
+.container{
+	width:1080px;
+	height:1920px;
+	margin:0px auto;
+	float:left;
+}
+
+/*上部*/
+.top{
+	width: 1080px;
+	height: 146px;
+	float: left;
+	background: url(my_images/top_back.jpg);
+}
+.top-logo{
+	width: 620px;
+	height: 96px;
+	float: left;
+}
+.top-date{
+	width: 320px;
+	height: 96px;
+	float: left;
+	color: #fff;
+	font-size: 22px;
+	text-align: center;
+	line-height: 96px;
+}
+.top-time{
+	width: 130px;
+	height: 96px;
+	float: left;
+	font-size: 28px;
+	color: #fff;
+	font-weight: bold;
+	text-align: center;
+	line-height: 96px;
+}
+	
+/*中间*/
+
+.main{
+	width: 1080px;
+	height: 1690px;
+	float: left;
+	background: url(my_images/main_back.jpg) no-repeat;
+}
+.main_left_blank{
+	width: 30px;
+	height: 1690px;
+	float: left;
+}
+
+/*上半部分*/
+
+.main_1{
+	width: 1020px;
+	height: 162px;
+	float: left;
+	margin-top: 12px;
+	line-height: 162px;
+	font-size: 90px;
+	color: #6c0604;
+	text-align: center;
+	font-weight: bold;
+}
+/*中间部分*/
+.main_2_left{
+	width: 502px;
+	height: 982px;
+	float: left;
+	margin-top: 12px;
+}
+.main_2_left_pic{
+	width: 458px;
+	height: 598px;
+	float: left;
+	padding: 22px;
+}
+.main_2_left_line{
+	width: 502px;
+	height: 160px;
+	float: left;
+	margin-top: 10px;
+}
+.main_2_left_line_1{
+	width: 178px;
+	height: 160px;
+	float: left;
+	font-size: 50px;
+	color: #6c0604;
+	text-align: center;
+	line-height: 160px;
+}
+.main_2_left_line_2{
+	width: 324px;
+	height: 160px;
+	float: left;
+	font-size: 35px;
+	color: #6c0604;
+	text-align: center;
+	line-height: 160px;
+	font-weight: bold;
+}
+.main_2_left_line_3{
+	width: 324px;
+	height: 160px;
+	float: left;
+	font-size: 70px;
+	color: #6c0604;
+	text-align: center;
+	line-height: 160px;
+	font-weight: bold;
+}
+
+
+/*简介部分*/
+
+.main_2_right{
+	width: 504px;
+	height: 982px;
+	float: left;
+	margin-top: 12px;
+	margin-left: 14px;
+}
+.main_2_right_up{
+	width: 504px;
+	height: 140px;
+	float: left;
+	font-size: 50px;
+	color: #6c0604;
+	text-align: center;
+	line-height: 140px;
+	font-weight: bold;
+}
+.main_2_right_down{
+	width: 464px;
+	height: 802px;
+	float: left;
+	font-size: 30px;
+	color: #6c0604;
+	line-height: 50px;
+	text-align: justify;
+	padding: 20px;
+}
+
+/*下部分*/
+.main_3{
+	width: 1020px;
+	height: 478px;
+	float: left;
+	color: #fff;
+	text-align: center;
+	margin-top: 10px;
+}
+.main_3_1{
+	width: 1020px;
+	height: 160px;
+	float: left;
+}
+.main_3_1_left{
+	width: 400px;
+	height: 160px;
+	float: left;
+	font-size: 50px;
+	color: #6c0604;
+	text-align: center;
+	line-height: 160px;
+}
+.main_3_1_right{
+	width: 620px;
+	height: 160px;
+	float: left;
+	font-size: 80px;
+	color: #f90601;
+	text-align: center;
+	line-height: 160px;
+	font-weight: bold;
+}
+.main_3_2{
+	width: 1020px;
+	height: 306px;
+	float: left;
+	margin-top: 12px;
+}
+.main_3_2_title{
+	width: 1020px;
+	height: 140px;
+	float: left;
+	font-size: 50px;
+	color: #6c0604;
+	text-align: center;
+	line-height: 140px;
+}
+.main_3_2_name{
+	width: 1020px;
+	height: 166px;
+	float: left;
+}
+.main_3_2_name_cell{
+	width: 340px;
+	height: 166px;
+	float: left;
+	font-size: 60px;
+	color: #15f404;
+	text-align: center;
+	font-weight: bold;
+	line-height: 166px;
+}
+
+
+/*底部*/
+.bottom{
+	width: 1080px;
+	height: 72px;
+	float: left;
+	background: url(my_images/bottom_back.jpg) no-repeat;
+	font-size: 26px;
+	color: #fff;
+	text-align: center;
+	line-height: 72px;
+	letter-spacing: 2px;
+	padding-top: 12px;
+}
+
+
+.main1 {
+    width: 1022px;
+    height: 1644px;
+    float: left;
+    top:158px;
+    left:30px;
+    background-color:#fff;
+    position:absolute;
+}
+
+    /*诊室部分*/
+    .main1 .zhenshi {
+        width: 1054px;
+        height: 600px;
+        float: left;
+        font-size: 150px;
+        color: #6c0604;
+        font-family: "FZLTZCHK";
+        text-align: center;
+        padding-top: 400px;
+        letter-spacing: 5px;
+        margin-top: 40px;
+    }
+
+    /*提示部分*/
+    .main1 .tishi {
+        width: 1054px;
+        height: 585px;
+        float: left;
+    }
+
+        .main1 .tishi .line-1 {
+            width: 1054px;
+            height: 200px;
+            float: left;
+            font-size: 56px;
+            color: #6c0604;
+            line-height: 100px;
+            font-family: "FZLTZCHK";
+            text-align: center;
+            margin-top: 80px;
+        }
+
+        .main1 .tishi .line-2 {
+            width: 1054px;
+            height: 180px;
+            float: left;
+            font-size: 48px;
+            color: #15f404;
+            line-height: 90px;
+            text-align: center;
+            margin-top: 50px;
+        }

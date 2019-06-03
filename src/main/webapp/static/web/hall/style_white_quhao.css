@@ -1,0 +1,608 @@
+body {
+	margin: 0px;
+	padding: 0px;
+	font-family: FZLTHK;
+}
+ul {
+    margin: 0px;
+    padding: 0px;
+}
+
+a {
+    color: #000;
+    text-decoration: none;
+}
+
+li {
+    padding: 0px;
+    margin: 0px;
+    list-style: none;
+}
+
+/*整体*/
+@font-face {
+	font-family: FZLTHK;
+	src: url("FZLTHK.TTF"); /*方正兰亭黑_GBK*/
+}
+
+@font-face {
+	font-family: FZLTZCHK;
+	src: url("FZLTZCHK.TTF"); /*方正兰亭中粗黑_GBK*/
+}
+
+@font-face {
+	font-family: FZLTXCHK;
+	src: url("FZLTXCHK.TTF"); /*方正兰亭细黑_GBK*/
+}
+
+.container {
+	width: 1920px;
+	height: 1080px;
+	margin: 0px auto;
+	float: left;
+	background: url(images/main_back_white.jpg) no-repeat;
+}
+
+/*上部*/
+.top {
+	width: 1880px;
+	height: 170px;
+	float: left;
+	border-bottom-left-radius: 10px;
+	border-bottom-right-radius: 10px;
+	background: #FFF;
+	margin: 0 20px;
+}
+
+.top .logo {
+	width: 380px;
+	height: 140px;
+	float: left;
+	margin: 15px 30px;
+}
+
+.top .name {
+	width: 730px;
+	height: 140px;
+	float: left;
+	color: #fd8a00;
+	font-size: 76px;
+	text-align: center;
+	line-height: 140px;
+	margin-top: 15px;
+	font-family: FZLTZCHK;
+	letter-spacing: 1px;
+}
+
+.top .date {
+	width: 370px;
+	height: 90px;
+	float: left;
+	color: #9f8b97;
+	font-size: 28px;
+	text-align: right;
+	line-height: 45px;
+	margin-top: 43px;
+	font-family: FZLTHK;
+	letter-spacing: 1px;
+}
+
+.top .time {
+	width: 290px;
+	height: 90px;
+	float: left;
+	font-size: 90px;
+	color: #4e3f49;
+	text-align: right;
+	line-height: 90px;
+	margin-top: 43px;
+	font-family: FZLTXCHK;
+	letter-spacing: 3px;
+}
+
+/*中间*/
+.main {
+	width: 1880px;
+	height: 816px;
+	float: left;
+	margin: 10px 0 0 20px;
+}
+
+/*列表部分*/
+.main .table-1 {
+	width: 660px;
+	height: 816px;
+	float: left;
+	background: #fff;
+}
+
+.table-1 .title {
+	width: 528px;
+	height: 106px;
+	float: left;
+	color: #FFFFFF;
+	line-height: 106px;
+	text-align: center;
+	font-size: 55px;
+	margin: 31px 0 43px 66px;
+	font-family: FZLTZCHK;
+}
+
+.table-1 .down {
+	width: 600px;
+	height: 560px;
+	float: left;
+	margin-top: 40px;
+	overflow: hidden;
+    font-size:40px;
+    line-height:80px;
+    padding-left:30px;
+    padding-right:30px;
+    font-family:FZLTHK;
+    color:#4e3f49;
+}
+
+.table-1 .down .deng-list {
+	width: 660px;
+	height: auto;
+	float: left;
+	overflow-y: hidden;
+	overflow: hidden;
+}
+
+.table-1 .down .deng-list .dhlist {
+	width: 100%;
+	height: auto;
+	overflow-y: hidden;
+	overflow: hidden;
+}
+
+.down .cell-1 {
+	width: 460px;
+	height: 110px;
+	float: left;
+	margin: 0 100px;
+}
+
+.cell-1 .cell-1-n-3 {
+	width: 300px;
+	height: 110px;
+	float: left;
+	font-size: 72px;
+	color: #4e3f49;
+	line-height: 110px;
+	font-family: FZLTZCHK;
+	text-align: left;
+}
+
+.cell-1 .cell-1-num {
+	width: 140px;
+	height: 58px;
+	float: left;
+	font-size: 44px;
+	color: #fff;
+	line-height: 62px;
+	font-family: FZLTZCHK;
+	text-align: center;
+	border-radius: 12px;
+	background: #4e3f49;
+	margin-top: 24px;
+}
+
+/*叫号部分*/
+.main .table-2 {
+    width: 1210px;
+    height: 816px;
+    float: left;
+    background: url(images/back-quhao.png) no-repeat;
+    margin-left: 10px;
+}
+
+.table-2 .chuangk {
+	width: 1068px;
+	height: 106px;
+	float: left;
+	color: #FFFFFF;
+	line-height: 106px;
+	text-align: center;
+	font-size: 55px;
+	margin: 31px 0 67px 71px;
+	font-family: FZLTZCHK;
+}
+
+.table-2 .jiaohao {
+	width: 770px;
+	height: 570px;
+	float: left;
+    margin-left:210px;
+}
+.jiaohao .input_txt {
+    width: 770px;
+    height: 120px;
+    border-radius: 5px;
+    background-color: #eee;
+    color: #4e3f49;
+    font-size: 48px;
+    font-family: FZLTHK;
+    border: 0px;
+    line-height: 120px;
+    overflow:hidden;
+ 
+}
+
+.jiaohao .keyborde {
+    width: 770px;
+    height:450px;
+    overflow:hidden;
+}
+.keyborde .nmbkey {
+    width: 200px;
+    height: 100px;
+    font-size: 48px;
+    text-align: center;
+    line-height: 100px;
+    background-color: #eee;
+    color: #4e3f49;
+    margin-top:10px;
+    margin-right:10px;
+    float:left;
+    border-radius:5px;
+}
+.keyborde .enterkey {
+    width: 135px;
+    height: 320px;
+    font-size: 48px;
+    text-align: center;
+    line-height: 80px;
+    background-color: #fe8a00;
+    color: #fff;
+    margin-top: 10px;
+    float: right;
+    border-radius: 5px;
+}
+.keyborde .delkey {
+    width: 200px;
+    height: 100px;
+    font-size: 48px;
+    text-align: center;
+    line-height: 100px;
+    background-color: #55cab3;
+    color: #fff;
+    margin-top: 10px;
+    margin-right: 10px;
+    float: left;
+    border-radius: 5px;
+}
+.keyborde .resetkey {
+    width: 345px;
+    height: 100px;
+    font-size: 48px;
+    text-align: center;
+    line-height: 100px;
+    background-color: #eee;
+    color: #4e3f49;
+    margin-top: 10px;
+    float: left;
+    border-radius: 5px;
+}
+.yy{
+    width: 200px;
+    height: 80px;
+    overflow: hidden;
+    position: absolute;
+    bottom: 90px;
+    right: 50px;
+    z-index: 1002;
+    font-size: 50px;
+    line-height: 80px;
+    text-align: center;
+    background-color: #55cab3;
+    border-radius: 10px;
+    color:#fff;
+}
+.bd{
+    width: 200px;
+    height: 80px;
+    overflow: hidden;
+    position: absolute;
+    bottom: 90px;
+    left: 50px;
+    z-index: 1002;
+    font-size: 50px;
+    line-height: 80px;
+    text-align: center;
+    background-color: #55cab3;
+    border-radius: 10px;
+    color:#fff;
+}
+/*底部*/
+.bottom {
+    width: 1920px;
+    height: 82px;
+    float: left;
+    background: url(images/bottom_back.jpg) no-repeat;
+    font-size: 42px;
+    color: #fe8a00;
+    text-align: center;
+    line-height: 82px;
+}
+#bg {
+    display: none;
+    width: 1866px;
+    height: 818px;
+    background-color: #000;
+    overflow: hidden;
+    position: absolute;
+    top: 180px;
+    left: 20px;
+    z-index: 1001;
+    -moz-opacity: 0.7;
+    opacity: .70;
+    filter: alpha(opacity = 70);
+    border-radius: 10px;
+}
+#bg2{
+    display: none;
+    width: 1866px;
+    height: 818px;
+    background-color: #fff;
+    overflow: hidden;
+    position: absolute;
+    top: 180px;
+    left: 20px;
+    z-index: 1001;
+    border-radius: 10px;
+}
+
+#showmsg {
+    width: 700px;
+    height: auto;
+    color: #414d3d;
+    z-index: 1005;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    display: none;
+    transform: translate(-50%, -50%);
+    border-radius: 5px;
+    padding-bottom: 20px;
+    background-color: #ebebeb;
+}
+
+    #showmsg .title {
+        text-align: center;
+        width: 100%;
+        height: 100px;
+        padding-top: 20px;
+        font-size: 50px;
+        background-color: #55cabd;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+        color: #fff;
+    }
+
+    #showmsg .btnlist {
+        text-align: center;
+        width: 100%;
+        min-height: 200px;
+        font-size: 60px;
+        height: auto;
+        line-height: 200px;
+        overflow: hidden;
+        
+    }
+
+    #showmsg .btnlist2 {
+        text-align: center;
+        width: 100%;
+        min-height: 200px;
+        line-height:80px;
+        font-size: 40px;
+        height: auto;
+        overflow: hidden;
+    }
+
+    #showmsg .btnlist .rows {
+        width: 100%;
+        height: 100px;
+        float: left;
+        font-size:50px;
+    }
+        #showmsg .btnlist .rows .btn {
+            width: 100px;
+            height: 50px;
+            margin-top: 25px;
+            border: 0px;
+            border-radius: 5px;
+            background-color: #fe8a00;
+            font-size:40px;
+            color:#fff;
+        }
+    #showmsg .w20 {
+        width: 20%;
+        height: 100px;
+        line-height:100px!important;
+        text-align: center;
+        float: left;
+        overflow: hidden;
+        
+    }
+    #showmsg .w25 {
+        width: 25%;
+        height: 100px;
+        line-height: 100px !important;
+        text-align: center;
+        float: left;
+        overflow: hidden;
+    }
+
+    #showmsg .bottom {
+        width: 100%;
+        text-align: center;
+    }
+
+    #showmsg .back_btn {
+        text-align: center;
+        width: 200px;
+        height: 78px;
+        border-radius: 5px;
+        border: 0px;
+        font-size: 30px;
+        background-color: #fe8a00;
+        color: #fff;
+        margin-left: 20px;
+        display: inline-block;
+        line-height: 78px;
+        
+    }
+
+    #showmsg .back_btn2 {
+        text-align: center;
+        width: 150px;
+        height: 60px;
+        border-radius: 10px;
+        border: 0px;
+        font-size: 30px;
+        background-color: #55cabd;
+        color: #fff;
+        margin-top: 20px;
+        display: inline-block;
+        line-height: 60px;
+        
+    }
+    #showmsg .btn_time{
+        width: 330px;
+        height: 100px;
+        margin-left: 40px;
+        background-color: #fe8a00;
+        text-align: center;
+        color: #fff;
+        line-height: 100px;
+        border-radius: 5px;
+        border: 0px;
+        font-size: 36px;
+        overflow: hidden;
+        display: inline-block;
+        margin-top: 40px;
+    }
+
+#divAlter {
+    width: 1240px;
+    background-color: #ebebeb;
+    display: none;
+    color: #fff;
+    z-index: 1002;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 20px;
+    padding-bottom: 20px;
+    
+}
+
+    #divAlter .title {
+        text-align: center;
+        width: 100%;
+        height: 100px;
+        padding-top: 20px;
+        font-size: 50px;
+        background-color: #fe8a00;
+        border-top-left-radius: 20px;
+        border-top-right-radius: 20px;
+    }
+
+    #divAlter .btnlist {
+        text-align: center;
+        width: 100%;
+        font-size: 40px;
+        height:300px;
+        overflow: hidden;
+    }
+
+    #divAlter .btn_server {
+        width: 500px;
+        height: 200px;
+        margin-left: 40px;
+        background-color: #55cabd;
+        text-align: center;
+        color: #fff;
+        line-height: 200px;
+        border-radius: 5px;
+        border: 0px;
+        font-size: 72px;
+        overflow: hidden;
+        display: inline-block;
+        margin-top:40px;
+    }
+    #divAlter .btn_server3 {
+        width: 330px;
+        height: 200px;
+        margin-left: 40px;
+        background-color: #55cabd;
+        text-align: center;
+        color: #fff;
+        line-height: 200px;
+        border-radius: 5px;
+        border: 0px;
+        font-size: 72px;
+        overflow: hidden;
+        display: inline-block;
+        margin-top: 40px;
+    }
+    #divAlter .btn_server4 {
+        width: 250px;
+        height: 150px;
+        margin-left: 40px;
+        background-color: #55cabd;
+        text-align: center;
+        color: #fff;
+        line-height: 150px;
+        border-radius: 5px;
+        border: 0px;
+        font-size: 48px;
+        overflow: hidden;
+        display: inline-block;
+        
+        margin-top: 80px;
+    }
+    #divAlter .btn_server5 {
+        width: 250px;
+        height: 100px;
+        margin-left: 40px;
+        background-color: #55cabd;
+        text-align: center;
+        color: #fff;
+        line-height: 100px;
+        border-radius: 5px;
+        border: 0px;
+        font-size: 36px;
+        overflow: hidden;
+        display: inline-block;
+        float: left;
+        margin-top: 40px;
+    }
+
+    #divAlter .back_btn {
+        text-align: center;
+        width: 380px;
+        height: 90px;
+        border-radius: 45px;
+        border: 0px;
+        font-size: 45px;
+        margin-left: 430px;
+        background-color: #fff;
+        color: #414d3d;
+        
+    }
+
+.timeback {
+    position: absolute;
+    left: 55%;
+    top: 70px;
+    display: none;
+    font-family: "微软雅黑";
+    font-size: 32px;
+    text-align: center;
+    color: red;
+}

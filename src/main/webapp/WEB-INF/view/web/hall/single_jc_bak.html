@@ -1,0 +1,201 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>大厅等候</title>
+<link href="/static/web/hall/css.css" rel="stylesheet" />
+<script src="/static/web/hall/jquery.min.js"></script>
+</head>
+<body>
+	<div class="main">
+		<div class="single">
+			<div class="title">正在检查</div>
+			<div class="title2" id="jz_name"></div>
+			<div class="title3">等候检查</div>
+			<div id="desc" class="title4">
+				<div id="dh_list" class="ul">
+					<ul id="dh_list1"></ul>
+					<ul id="dh_list2"></ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</body>
+</html>
+<script type="text/javascript">
+
+    function checkgf(str, id, name) {
+
+        if (str == 54)
+            return name + "(<b style='color:red'>过</b>)";
+        else if (str == 2)
+            return name + "(<b style='color:red'>复</b>)";
+        else
+            return "(" + id + ")" + name;
+    }
+
+
+    function GetList() {
+        var count = 0;
+        var h_l = "";
+        try {
+            $.ajax({
+                type: "GET",
+                url: "/call_patient/list_patient_pager?status=wait&type=page&t=" + new Date().getTime(),
+                contentType: "application/text;charset=utf-8",
+                dataType: "json",
+                cache: false,
+                async: false,
+                success: function (data) {
+                    count = data.count;
+                    if (data.count > 0) {
+                        $.each(data.list, function (i, item) {
+                            //if (i <= 4) {
+                            h_l = h_l + "<li>" + checkgf(item.state_patient, item.register_id, item.patient_name) + "</li>";
+                            //}
+                        });
+                    }
+                    else {
+                        h_l = "";
+                    }
+                },
+                error: function () {
+                    h_l = "";
+                    count = 0;
+                }
+            });
+        }
+        catch (err) { }
+        return { "count": count, "h_l": h_l };
+    }
+    function PagerCall() {
+        //try {
+        var k = 0;
+        $.ajax({
+            type: "GET",
+            url: "/clientPatientQueue/list_roomdoor_jz_pager?t=" + new Date().getTime(),
+            contentType: "application/text;charset=utf-8",
+            dataType: "json",
+            cache: false,
+            async: false,
+            success: function (data) {
+                if (data.return_code == "success") {
+                    $.each(data.list, function (i, item) {
+                        var content = "请 " + item.register_id + "号" + item.patient_name + " 到" + item.zsmc + "检查";
+                            var t = content.length * 800;
+                            setTimeout("showtips(" + t + ", '" + content + "','" + item.register_id + "','" + item.patient_name + "')", k);
+                            k = k + t;
+                    }); 
+                }
+                
+            },
+            error: function () {
+
+            }
+
+        });
+        //}
+        //catch (err)
+        //{ }
+        if (k == 0) {
+            k = k + 2000;
+            $.ajax({
+                type: "GET",
+                url: "/clientPatientQueue/list_roomdoor_jz_pager_show?t=" + new Date().getTime(),
+                contentType: "application/text;charset=utf-8",
+                dataType: "json",
+                cache: false,
+                async: false,
+                success: function (data) {
+                    if (data.return_code == "success") {
+                        $("#jz_name").html("(" + data.dqjz.register_id + ")" + data.dqjz.patient_name);
+                    }
+                    else {
+                        $("#jz_name").html("");
+                    }
+                },
+                error: function () {
+
+                }
+
+            });
+        }
+        setTimeout(PagerCall, k);
+    }
+    function showtips(t, content, id,name) {
+        try {
+            /* $("#hz_name").html(name);
+            $("#hz_id").html(id);
+            $("#tips_zsmc").html(jhqmc);
+            $("#tips").show(0).delay(t).hide(0) */
+            $("#jz_name").html("(" + id + ")" + name);
+            var callText = "<?xml version=\"1.0\" encoding=\"GB18030\"?>"
+                + "<Contents><Content>"
+                + "<Voice Num=\"2\" Speed=\"500\" digitMode=\"1\">"
+                + content
+                + "</Voice>"
+                + "</Content></Contents>";
+            window.Callobject.playVoice(callText);
+        }
+        catch (err) { }
+    }
+    
+    PagerCall();
+    //window.setInterval(GetIps, 2000);
+    //window.setInterval(GetList, 2000);
+    //window.setInterval(PagerCall, 2000);
+    
+    var ul1 = $("#dh_list1");
+    var ul2 = $("#dh_list2");
+    var div = $("#dh_list");
+    var move = 0;
+    var now = 0;
+    var h1 = 0;
+    var h2 = 0;
+    var json = GetList();
+    
+    ul1.html(json.h_l);
+    h1 = ul1.height();
+    setTimeout(Scoll, 5000);
+    function Scoll() {
+        if (h1 > 500) {
+            var m = h1 + now;
+            if (m > 500) {
+                now -= 1;
+                div.css("marginTop", now);
+                setTimeout(Scoll, 10);
+            }
+            else {
+                if (move == 0) {
+                    json = GetList();
+                    ul2.html(json.h_l);
+                    move = 1;
+                }
+                if (m> 0) {
+                    now -= 1;
+                    div.css("marginTop", now);
+                    setTimeout(Scoll, 10);
+                }
+                else if(m == 0)
+                {
+                    now = 0;
+                    ul1.html(json.h_l);
+                    h1 = ul1.height();
+                    move = 0;
+                    div.css("marginTop", now);
+                    setTimeout(Scoll, 5000);
+                }
+
+            }
+        }
+        else {
+            json = GetList();
+            ul1.html(json.h_l);
+            h1 = ul1.height();
+            setTimeout(Scoll, 5000)
+        }
+    }
+    
+
+</script>

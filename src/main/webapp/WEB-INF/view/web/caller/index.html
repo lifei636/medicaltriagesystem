@@ -1,0 +1,438 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>叫号器</title>
+<link type="text/css" rel="stylesheet"
+	href="/static/web/caller/blue.css" />
+<script type="text/javascript" src="/static/web/caller/jquery.js"></script>
+</head>
+<body>
+	<div class="index" id="index">
+		<div id="infos" class="info" title="">测试信息</div>
+
+		<div id="show_list" class="show_list">
+			<div class="tab">
+				<div id="wait" class="tab1" onclick="changetab('wait')">
+					等候(<span id="wait_count">0</span>)
+				</div>
+				<div id="pass" class="tab2" onclick="changetab('pass')">
+					过号(<span id="pass_count">0</span>)
+				</div>
+				<div id="over" class="tab2" onclick="changetab('over')">
+					诊结(<span id="over_count">0</span>)
+				</div>
+				<!--<div id="setting" class="tab2" onclick="changetab('setting')">队列</div>-->
+			</div>
+			<div id="list_wait" class="list" style="display: block">
+				<!--<div class="wait_title"><div class="span1">姓名</div><div class="span2">诊呼</div><div class="span2">过呼</div></div>-->
+				<div class="wait_list">
+					<ul id="li_wait_list"></ul>
+				</div>
+			</div>
+			<div id="list_pass" class="list">
+				<!--<div class="wait_title"><div class="span1">姓名</div><div class="span2">诊呼</div><div class="span2">过呼</div></div>-->
+				<div class="wait_list">
+					<ul id="li_was_list"></ul>
+				</div>
+			</div>
+			<div id="list_over" class="list">
+				<!--<div class="wait_title"><div class="span1">姓名</div><div class="span2">诊呼</div><div class="span2">过呼</div></div>-->
+				<div class="wait_list">
+					<ul id="li_over_list"></ul>
+				</div>
+			</div>
+			<div id="list_setting" class="list">
+				<!--<div class="wait_title"><div class="span1">姓名</div><div class="span2">诊呼</div><div class="span2">过呼</div></div>-->
+				<div class="wait_list">
+					<ul id="li_setting_list"></ul>
+				</div>
+			</div>
+			<div class="h_chage" id="h_c">&nbsp;</div>
+		</div>
+		<div class="btnlist">
+			<div class="div">
+				<input type="button" class="btn" id="btn" onclick="caller()"
+					style="display: block; color: #f00" title="呼叫" value="呼叫" /> <input
+					type="button" class="btn" id="btn_agin"
+					style="display: none; color: #f00" onclick="caller_agin()"
+					title="重呼" value="重呼" />
+			</div>
+
+			<div class="div">
+				<input type="button" class="btn" onclick="caller_status(0,0)"
+					title="过号患者" value="过号" />
+			</div>
+			<div class="div">
+				<input type="button" class="btn" onclick="caller_status(0,1)"
+					title="结诊患者" value="诊结" />
+			</div>
+			<div class="div">
+				<input type="button" class="btn" onclick="back_login()" title="退出登录"
+					value="退出" />
+			</div>
+		</div>
+	</div>
+</body>
+</html>
+<script>
+        var calling = false;
+        var wait = 0;
+        var h = document.documentElement.clientHeight;
+        var config_json = JSON.parse(SSMSObject.GetConfig());
+        var ip = config_json.ip;
+        var queue_type_id = config_json.queue_type_id;
+        var doctor_id = config_json.doctor_id;
+        var f_time = config_json.f_time;
+        $(".wait_list").height(h - 380);
+        $.ajax({
+            type: "get",
+            async: false,
+            url: "http://" + ip + "/call_patient/list_patient_pager?status=visting",
+            contentType: "application/text;charset=utf-8",
+            dataType: "json",
+
+            //data: { "login_id": doctor_id },
+            success: function (data) {
+                if (data.return_code == "success" && data.count>0) {
+                    $("#btn").hide();
+                    $("#btn_agin").show();
+                    show_info(data.list[0].patient_name, data.return_msg);
+                    calling = true;
+                }
+                else
+                {
+                    get_patient_wait();
+                }
+            },
+            error: function (err) {
+                show_info("系统出错", "系统发生严重错误，请联系管理员！")
+            }
+        });
+        
+       
+        function checkgf(str) {
+            if (str == 54)
+                return "(<span style='color:red'>过</span>)";
+            else if (str == 2)
+                return "(<span style='color:red'>复</span>)";
+            else
+                return "";
+        }
+        function get_patient_wait() {
+            $.ajax({
+                type: "get",
+                url: "http://" + ip + "/call_patient/list_patient_pager?status=wait",
+                contentType: "application/text;charset=utf-8",
+                dataType: "json",
+                //data: { "queue_type_id": queue_type_id },
+                success: function (data) {
+                    var list = "";
+                    wait = data.count;
+                    $("#wait_count").html(wait);
+                    if (data.count > 0) {
+                        $.each(data.list, function (i, item) {
+
+                            var s = checkgf(item.state_patient);
+
+                            list += "<li><div class='span1'>" + item.patient_name + s + "</div><div class='span2'><a  onclick='caller_status(\"" + item.patient_source_code + "\",1)' >诊呼</a></div><div class='span2'><a herf='#' onclick='caller_status(\"" + item.patient_source_code + "\",0)' >过呼</a></div></li>";
+                        });
+                    }
+                   else
+                        list = "<li>当前无患者</li>";
+                    if (!calling) {
+                        if (wait > 0) {
+                            show_info("请呼叫", "呼叫下一个");
+                        }
+                        else {
+                            show_info("无新患者", "当前没有患者");
+                        }
+                    }
+                    $("#li_wait_list").html(list);
+                },
+                error: function (err) {
+                    show_info("系统出错", "系统发生严重错误，请联系管理员！")
+                }
+            });
+        }
+        function get_patient_was() {
+            $.ajax({
+                type: "get",
+                url: "http://" + ip + "/call_patient/list_patient_pager?status=pass",
+                contentType: "application/text;charset=utf-8",
+                dataType: "json",
+                //data: { "queue_type_id": queue_type_id },
+                success: function (data) {
+                    var list = "";
+                    $("#pass_count").html(data.count);
+                    if (data.return_code == "success") {
+                        if (data.count > 0) {
+                            $.each(data.list, function (i, item) {
+                                list += "<li><div class='span1'>" + item.patient_name + "</div><div class='span2'><a  onclick='caller_status(\"" + item.patient_source_code + "\",1)' >诊呼</a></div><div class='span2'><a herf='#' onclick='caller_status(\"" + item.patient_source_code + "\",0)' >过呼</a></div></li>";
+                            });
+                        }
+                        else {
+                            list = "<li>当前无患者</li>";
+                        }
+                    }
+                    else if (data.return_code == "loginout")
+                        back_login();
+                    else
+                        list = "<li>当前无患者</li>";
+                    $("#li_was_list").html(list);
+                },
+                error: function (err) {
+                    show_info("系统出错", "系统发生严重错误，请联系管理员！")
+                }
+            });
+        }
+        function get_patient_over() {
+            $.ajax({
+                type: "get",
+                url: "http://" + ip + "/call_patient/list_patient_pager?status=over",
+                contentType: "application/text;charset=utf-8",
+                dataType: "json",
+                data: { "queue_type_id": queue_type_id },
+                success: function (data) {
+                    var list = "";
+                    $("#over_count").html(data.count);
+                    if (data.return_code == "success") {
+                        if (data.count > 0) {
+                            $.each(data.list, function (i, item) {
+                                list += "<li><div class='span1'>" + item.patient_name + "</div><div class='span2'><a  onclick='caller_status(\"" + item.patient_source_code + "\",1)' >诊呼</a></div><div class='span2'><a herf='#' onclick='caller_status(\"" + item.patient_source_code + "\",0)' >过呼</a></div></li></li>";
+                            });
+                        }
+                        else {
+                            list = "<li>当前无患者</li>";
+                        }
+                    }
+                    else if (data.return_code == "loginout")
+                        back_login();
+                    else
+                        list = "<li>刷新失败</li>";
+                    $("#li_over_list").html(list);
+                },
+                error: function (err) {
+                    show_info("系统出错", "系统发生严重错误，请联系管理员！")
+                }
+            });
+        }
+        
+        function get_patient_setting() {
+            $.ajax({
+                type: "get",
+                url: "http://" + ip + "/callqueueType/list_doctor_queuetype",
+                contentType: "application/text;charset=utf-8",
+                dataType: "json",
+                data: { "login_id": doctor_id },
+                success: function (data) {
+                    var list = "";
+                    //$("#over_count").html(data.count);
+                    if (data.return_code == "success") {
+                        if (data.count > 0) {
+                            $.each(data.list, function (i, item) {
+                                list += "<li><div class='span1'>" + item.name + "</div><div class='span2'><a herf='#' onclick='select_queue_type_id(" + item.queue_type_id + ",1)' >选择</a></div></li>";
+                            });
+                        }
+                        else {
+                            list = "<li>当前无队列</li>";
+                        }
+
+                    }
+                    else if (data.return_code == "loginout")
+                        back_login();
+                    else
+                        list = "<li>刷新失败</li>";
+                    $("#li_setting_list").html(list);
+                },
+                error: function (err) {
+                    show_info("系统出错", "系统发生严重错误，请联系管理员！")
+                }
+            });
+        }
+        var c_a_t = 0;
+        function select_queue_type_id(id)
+        {
+            queue_type_id = id;
+            fresh_list();
+            changetab("wait");
+        }
+        function show_hide(f) {
+            if (f != 0)
+                if (s_h)
+                    s_h = false;
+                else
+                    s_h = true;
+            if (s_h) {
+                $(".rectangle").css("display", "block");
+                $("#a_show_hide").html("&lt;");
+                w = z * 250;
+                if ((window.screen.availWidth - win.x) < w)
+                    win.x = window.screen.availWidth - w;
+
+            }
+            else {
+                $(".rectangle").css("display", "none");
+                $("#a_show_hide").html("&gt;");
+                w = z * 80;
+                if ((window.screen.availWidth - win.x) == z * 250)
+                    win.x = window.screen.availWidth - w;
+                s_l = false;
+                show_list();
+            }
+        }
+        function caller() {
+           
+            $.ajax({
+                type: "get",
+                url: "http://" + ip + "/call_patient/call_next_pager",
+                contentType: "application/text;charset=utf-8",
+                dataType: "json",
+                //data: { "login_id": doctor_id, "queue_type_id": queue_type_id },
+                success: function (data) {
+                    if (data.return_code == "success") {
+                        $("#btn").hide();
+                        $("#btn_agin").show();
+                        c_a_t = 0;
+                        $("#btn_agin").val("重呼(" + c_a_t + ")");
+                        show_info(data.list.patient_name, "当前患者");
+                        calling = true;
+                        fresh_list();
+                    }
+                    else if (data.return_code == "loginout")
+                        back_login();
+                    else {
+                        calling = false;
+                        fresh_list();
+                    }
+                },
+                error: function (err) {
+                    show_info("系统出错", "系统发生严重错误，请联系管理员！")
+                }
+                
+            });
+
+        }
+        function caller_agin() {
+            $.ajax({
+                type: "get",
+                url: "http://" + ip + "/call_patient/CallPatient_pager",
+                contentType: "application/text;charset=utf-8",
+                dataType: "json",
+                data: { "login_id": doctor_id,"queue_type_id": queue_type_id  },
+                success: function (data) {
+                    if (data.return_code == "success") {
+                        c_a_t += 1;
+                        if (c_a_t > 9)
+                            c_a_t = 0;
+                        $("#btn_agin").val("重呼(" + c_a_t + ")");
+                        fresh_list();
+                    }
+                    else if (data.return_code == "loginout") {
+                        back_login();
+                    }
+                    else
+                        show_info("系统错误", data.return_msg);
+                },
+                error: function (err) {
+                    show_info("系统出错", "系统发生严重错误，请联系管理员！")
+                }
+            });
+        }
+        function caller_status(code,type) {
+            $.get("http://" + ip + "/call_patient/AutoSetPatientDisplay?t=" + new Date().getTime(), function (data, status) { });
+            $.ajax({
+                type: "get",
+                url: "http://" + ip + "/call_patient/SetPatientState_pager",
+                contentType: "application/text;charset=utf-8",
+                dataType: "json",
+                data: { "status": type},
+                success: function (data) {
+                    if (data.return_code == "success") {
+                        $("#btn").show();
+                        $("#btn_agin").hide();
+                        show_info("请呼叫", "呼叫下一个");
+                        //calling = true;
+                        
+                    }
+                    else if (data.return_code == "loginout")
+                        back_login();
+                    if (code != 0) {
+
+                        $.ajax({
+                            type: "get",
+                            url: "http://" + ip + "/call_patient/call_select_pager",
+                            contentType: "application/text;charset=utf-8",
+                            dataType: "json",
+                            data: { "code": code},
+                            success: function (data) {
+                                if (data.return_code == "success") {
+                                    c_a_t = 0;
+                                    $("#btn").hide();
+                                    $("#btn_agin").show();
+                                    $("#btn_agin").val("重呼(" + c_a_t + ")");
+                                    show_info(data.patient_name, "当前患者");
+                                    calling = true;
+                                    fresh_list();
+                                }
+                            }
+                        });
+                    }
+                    else {
+                        calling = false;
+                        fresh_list();
+                    }
+                },
+                error: function (err) {
+                    show_info("系统出错", "系统发生严重错误，请联系管理员！")
+                }
+            });
+            
+        }
+
+        function changetab(obj) {
+            $(".tab").children("div").removeClass("tab1");
+            $(".tab").children("div").removeClass("tab2");
+            $(".tab").children("div").addClass("tab1");
+            $("#" + obj).removeClass("tab1")
+            $("#" + obj).addClass("tab2");
+            $(".list").css("display", "none");
+            $("#list_"+obj).css("display", "block");
+            //if (obj == "wait") {
+            //    $("#wait").removeClass("tab2");
+            //    $("#wait").addClass("tab1");
+            //    $("#over").addClass("tab1");
+            //    $("#pass").removeClass("tab1");
+            //    $("#pass").addClass("tab2");
+            //    $("#list_wait").css("display", "block");
+            //    $("#list_pass").css("display", "none");
+            //}
+            //else {
+            //    $("#wait").removeClass("tab1");
+            //    $("#wait").addClass("tab2");
+            //    $("#pass").removeClass("tab2");
+            //    $("#pass").addClass("tab1");
+            //    $("#list_wait").css("display", "none");
+            //    $("#list_pass").css("display", "block");
+            //}
+        }
+        function fresh_list() {
+            get_patient_wait();
+            get_patient_was();
+            get_patient_over();
+            //get_patient_setting();
+        }
+        fresh_list();
+        setInterval("fresh_list()", f_time);
+        function show_info(msg,tips)
+        {
+            $("#infos").html(msg);
+            $("#infos").attr("title", tips);
+        }
+        function back_login()
+        {
+        	window.location.href = "login.html";
+        }
+    </script>
+</body>
+</html>

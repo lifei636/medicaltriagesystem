@@ -1,0 +1,237 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>诊室门口</title>
+<link href="/static/web/door/css.css" rel="stylesheet" />
+<script src="/static/web/door/jquery.min.js"></script>
+</head>
+<script>
+    function DrawImage(ImgD, iwidth, iheight) {
+        //参数(图片,允许的宽度,允许的高度)
+        var image = new Image();
+        image.src = ImgD.src;
+        if (image.width > 0 && image.height > 0) {
+            if (image.width / image.height >= iwidth / iheight) {
+                if (image.width > iwidth) {
+                    ImgD.width = iwidth;
+                    ImgD.height = (image.height * iwidth) / image.width;
+                } else {
+                    ImgD.width = image.width;
+                    ImgD.height = image.height;
+                }
+            } else {
+                if (image.height > iheight) {
+                    ImgD.height = iheight;
+                    ImgD.width = (image.width * iheight) / image.height;
+                } else {
+                    ImgD.width = image.width;
+                    ImgD.height = image.height;
+                }
+            }
+        }
+    }
+</script>
+
+<body style="zoom: 1">
+
+	<div class="main">
+		<div class="title">
+			<div class="left" id="hsptl_name">石棉县人民医院</div>
+			<!--<div class="span" id="triage_name"></div>-->
+			<div class="right">
+				<span id="now_time"></span><br /> <span id="now_date"></span>
+			</div>
+		</div>
+		<div class="info">
+			<div class="zs_name">
+				<span id="room_name"></span>
+			</div>
+			<div class="doctor">
+				<div class="left">
+					<div class="img">
+						<img src="" onload="javascript:DrawImage(this,282,380)"
+							id="doc_img" />
+					</div>
+				</div>
+				<div class="right">
+					<div class="name" id="doc_name"></div>
+					<div class="title" id="doc_title"></div>
+					<div class="d_title">医生简介</div>
+					<!--<marquee class="d_desc" id="doc_desc" direction="up" hspace="10" vspace="10"></marquee>-->
+					<div id="desc" class="d_desc">
+						<div id="doc_desc"></div>
+					</div>
+				</div>
+			</div>
+			<div class="jz">
+				<div class="left">正在就诊</div>
+				<div class="right" id="jz_name"></div>
+			</div>
+			<div class="dh">
+				<div class="left">等候就诊</div>
+				<div class="right" id="dh_list"></div>
+			</div>
+		</div>
+
+
+
+		<div class="bottom">温馨提示：请保管好您的随身物品,耐心等候！！！</div>
+	</div>
+
+	<div class="tips_back" id="tips">
+		<div class="tips">
+			<span id="tips_zsmc"></span><br /> 请耐心等候
+		</div>
+	</div>
+</body>
+</html>
+<script type="text/javascript">
+    
+
+
+    function ShowTime() {
+        try {
+            var datetime = window.Callobject.getDateTime();
+            var year = datetime.split(' ')[0].split('-')[0].toString() + '年' + datetime.split(' ')[0].split('-')[1].toString() + '月' + datetime.split(' ')
+
+            [0].split('-')[2].toString() + '日';
+            var week = "　星期" + "日一二三四五六".charAt(datetime.split(' ')[2].toString().trim().replace('7', '0'));
+            var time = datetime.split(' ')[1].toString();
+            $("#now_date").html(year + week);
+            $("#now_time").html(time.split(':')[0] + ':' + time.split(':')[1]);
+        }
+        catch (ex) { }
+    }
+    ShowTime();
+    window.setInterval(ShowTime, 1000);
+    function getQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return unescape(r[2]); return null;
+    }
+    function getUrlParam(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return unescape(r[2]); return null;
+    }
+    var loginouttime = parseInt(getUrlParam("out"))*60*1000;
+    var zsmc = "未知诊室";
+    var call;
+    function GetInfo() {
+        try {
+            $.ajax({
+                type: "GET",
+                async: false,
+                url: "/showcall/showlogin?t=" + new Date().getTime(),
+                contentType: "application/text;charset=utf-8",
+                dataType: "json",
+                cache: false,
+                success: function (data) {
+                    if (data.return_code == "success") {
+                        var now_time = new Date().getTime();
+                        var login_time = now_time - new Date(data.doctorinfo.show_login_time);
+                        var call_time = now_time - new Date(data.doctorinfo.show_call_time);
+                        if (login_time < loginouttime || call_time < loginouttime) {
+                            var name = data.doctorinfo.name;
+                            if (name.length == 2)
+                                name = name.substr(0, 1) + "&nbsp;&nbsp;&nbsp;&nbsp;" + name.substr(1, 1);
+                            $("#doc_name").html(name);
+                            $("#doc_title").html(data.doctorinfo.title);
+                            $("#doc_desc").html(data.doctorinfo.description);
+                            $("#doc_img").attr("src", "/static/web/image/" + data.doctorinfo.login_id + ".jpg");
+                            zsmc = data.doctorinfo.terminal_display_name;
+                            $("#tips").hide();
+                            if (call == null) {
+                                PagerCall();
+                                call = window.setInterval(PagerCall, 2000);
+                            }
+                        }
+                        else {
+                            $("#tips_zsmc").html(data.doctorinfo.terminal_display_name);
+                            $("#tips").show();
+                            call = null;
+                        }
+                    }
+                    else {
+                        $("#tips_zsmc").html(data.displayname);
+                        $("#tips").show();
+                        call = null;
+                    }
+                },
+                error: function () {
+
+                }
+            });
+        }
+        catch (err) { }
+    }
+    function PagerCall() {
+        try {
+            $.ajax({
+                type: "GET",
+                url: "/showcall/showcall_door?t=" + new Date().getTime(),
+                contentType: "application/text;charset=utf-8",
+                dataType: "json",
+                cache: false,
+                success: function (data) {
+                    if (data.return_code == "success") {
+                        $("#jz_name").html("(" + data.list.show_visiting_nmb + ")" + data.list.show_visiting);
+                        var h_l = "";
+                        $("#dh_list").html("");
+                        var wait = data.list.show_wait.split(',');
+                        for (var i = 0; i < wait.length; i++) {
+                            
+                            if (i >= 6)
+                                break;
+                            else {
+                                h_l += "<span>" + wait[i] + "</span>";
+                            }
+                        }
+                        $("#dh_list").html(h_l);
+                        if (data.list.show_call1 == 2) {
+                            var callText = "<?xml version=\"1.0\" encoding=\"GB18030\"?>"
+                                + "<Contents><Content>"
+                                + "<Voice Num=\"1\" Speed=\"1000\" digitMode=\"1\">"
+                                + "请 " + data.list.show_visiting_nmb + "号" + data.list.show_visiting + "到" + data.list.terminal_display_name + "就诊。"
+                                + "</Voice>"
+                                + "</Content></Contents>";
+                            window.Callobject.playVoice(callText)
+                        }
+                    }
+                    else {
+                        $("#jz_name").html("");
+                    }
+                },
+                error: function () {
+
+                }
+            });
+        }
+        catch (err) { }
+    }
+    GetInfo();
+    window.setInterval(GetInfo, 10000);
+  //var rows = parseInt((window.screen.availHeight - 380) / 110);
+	var div = $("#doc_desc");
+    //按页滚动
+    var px = 140, time = 10000;
+    //按行滚动
+    //var px = 35, time = 2000;
+    var count = Math.ceil(div.height() / px);
+    var page = 0;
+    if (count > 1)
+    {
+        window.setInterval(Scoll, time);
+    }
+    function Scoll()
+    {
+        if (page == count)
+            page = 0;
+        if(page>0)
+            div.animate({ marginTop: -(page * px) }, 1000);
+        else
+            div.animate({ marginTop: -(page * px) }, 0);
+        page += 1;
+    }
+</script>

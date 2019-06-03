@@ -1,0 +1,82 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>大厅等候</title>
+<link href="/static/web/hall/css.css" rel="stylesheet" />
+<script src="/static/web/hall/jquery.min.js"></script>
+</head>
+<body>
+	<div class="main">
+		<div class="title">
+			<div class="left" id="hsptl_name">安康医院</div>
+			<div class="middle">
+				<span id="triage_name">正在读取信息，请稍后...</span>
+			</div>
+			<div class="right">
+				<span id="now_time"></span><br /> <span id="now_date"></span>
+			</div>
+		</div>
+	</div>
+
+</body>
+</html>
+<script type="text/javascript">
+    var page = 1;
+    var data;
+    function ShowTime() {
+        try {
+            var datetime = window.Callobject.getDateTime();
+            var year = datetime.split(' ')[0].split('-')[0].toString() + '年' + datetime.split(' ')[0].split('-')[1].toString() + '月' + datetime.split(' ')
+
+            [0].split('-')[2].toString() + '日';
+            var week = "　星期" + "日一二三四五六".charAt(datetime.split(' ')[2].toString().trim().replace('7', '0'));
+            var time = datetime.split(' ')[1].toString();
+            $("#now_date").html(year + week);
+            $("#now_time").html(time.split(':')[0] + ':' + time.split(':')[1]);
+        }
+        catch (ex) { }
+    }
+    function getQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return unescape(r[2]); return null;
+    }
+    function getUrlParam(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return unescape(r[2]); return null;
+    }
+    var ip = getUrlParam("ip");
+    //var wait = getUrlParam("wait");
+    var fztname="";
+    function GetList() {
+        try {
+            $.ajax({
+                type: "GET",
+                async: false,
+                url: "/call_patient/getfztname?t=" + new Date().getTime(),
+                contentType: "application/text;charset=utf-8",
+                dataType: "json",
+                cache: false,
+                success: function (pdata) {
+                	$("#triage_name").html(pdata.fztname);
+                },
+                error: function () {
+                	$("#triage_name").html("未知");
+                }
+            });
+        }
+        catch (err) { }
+    }
+
+    
+    GetList();
+   
+    ShowTime();
+
+    
+    window.setInterval(GetList, 500000);
+    window.setInterval(ShowTime, 5000);
+    
+</script>

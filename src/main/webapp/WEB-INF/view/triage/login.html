@@ -1,0 +1,174 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>导医前台管理-登录页</title>
+<link rel="shortcut icon"
+	href="${basePath}/static/style/images/favicon.ico" type="image/x-icon" />
+<meta name="description" content="User login page" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+<!-- bootstrap & fontawesome -->
+<link rel="stylesheet"
+	href="${basePath}/static/assets/css/bootstrap.css" />
+<link rel="stylesheet"
+	href="${basePath}/static/assets/css/font-awesome.css" />
+<script src='${basePath}/static/assets/js/jquery.js'></script>
+<script type="text/javascript">
+			$(function(){
+				if(self != top){
+					var url = window.location.href;
+					parent.window.location.href=url;
+				}
+			});
+		</script>
+<!-- text fonts -->
+<link rel="stylesheet"
+	href="${basePath}/static/assets/css/ace-fonts.css" />
+
+<!-- ace styles -->
+<link rel="stylesheet" href="${basePath}/static/assets/css/ace.css" />
+<link rel="stylesheet" href="${basePath}/static/assets/css/ace-rtl.css" />
+<script src="${basePath}/static/layer/layer.js"></script>
+<script src="${basePath}/static/blade/js/blade-ajax.js"
+	type="text/javascript"></script>
+</head>
+
+<body class="login-layout light-login">
+	<div class="main-container">
+		<div class="main-content">
+			<div class="row">
+				<div class="col-sm-10 col-sm-offset-1">
+					<div class="login-container">
+						<div class="center">
+							<h1>
+								<span class="blue">导医前台管理系统</span>
+							</h1>
+						</div>
+						<br>
+						<div class="space-6"></div>
+
+						<div class="position-relative">
+							<div id="login-box"
+								class="login-box visible widget-box no-border">
+								<div class="widget-body">
+									<div class="widget-main">
+										<h4 class="header blue lighter bigger">
+											<i class="ace-icon fa fa-coffee blue"></i> 请登录
+										</h4>
+
+										<div class="space-6"></div>
+
+										<form method="post" id="loginform">
+											<div class="input-group input-group-sx">
+												<span class="input-group-addon"> <i
+													class="fa fa-user" style="width: 15px;"></i>
+												</span> <input type="text" name="account" id="account"
+													class="form-control" placeholder="请输入工号">
+											</div>
+											<br>
+											<div class="input-group input-group-sx">
+												<span class="input-group-addon"> <i
+													class="fa fa-unlock-alt" style="width: 15px;"></i>
+												</span> <input type="password" name="password" id="pswd"
+													class="form-control" placeholder="分诊台密码">
+											</div>
+											<br>
+
+											<div class="clearfix">
+												<button type="reset"
+													class="width-30 pull-left btn btn-sm btn-info">
+													<i class="ace-icon fa fa-refresh"></i> <span
+														class="bigger-110">重置</span>
+												</button>
+
+												<button type="button" class="width-65 pull-right btn btn-sm btn-primary" onclick="login()">
+													<span class="bigger-110">登录</span> <i
+														class="ace-icon fa fa-arrow-right icon-on-right"></i>
+												</button>
+											</div>
+										</form>
+
+									</div>
+									<!-- /.widget-main -->
+
+									<div class="toolbar clearfix"
+										style="text-align: center; margin: 0 auto;">
+										<div
+											style="float: none; text-align: center; font-size: 16px; color: white;">
+                                            <a target="_blank" href="#"
+                                               style="color: white; text-decoration: none;">&copy;2017 四川视翰科技</a>
+										</div>
+									</div>
+								</div>
+								<!-- /.widget-body -->
+							</div>
+							<!-- /.login-box -->
+						</div>
+						<!-- /.position-relative -->
+					</div>
+				</div>
+				<!-- /.col -->
+			</div>
+			<!-- /.row -->
+		</div>
+		<!-- /.main-content -->
+	</div>
+	<!-- /.main-container -->
+
+	<!-- basic scripts -->
+
+	<!--[if !IE]> -->
+	<script type="text/javascript">
+			window.jQuery || document.write("<script src='${basePath}/static/assets/js/jquery.js'>"+"<"+"/script>");
+		</script>
+
+	<!-- <![endif]-->
+
+	<!--[if IE]>
+		<script type="text/javascript">
+		 window.jQuery || document.write("<script src='${basePath}/static/assets/js/jquery1x.js'>"+"<"+"/script>");
+		</script>
+		<![endif]-->
+	<script type="text/javascript">
+			if('ontouchstart' in document.documentElement) document.write("<script src='${basePath}/static/assets/js/jquery.mobile.custom.js'>"+"<"+"/script>");
+		</script>
+
+	<!-- inline scripts related to this page -->
+	<script type="text/javascript">
+
+	function login() {
+		var account=$("#account").val();
+		var pswd = $("#pswd").val();
+		$.ajax({
+            type: "GET",
+            async: true,
+            url: "/client/doLogin",
+            dataType: "json",
+            data: {"password": pswd,"account":account},
+            success: function (data) {
+                if (data.code ===1) {
+                    layer.msg(data.message, { shift: 1, time: 2000 });
+                    return;
+                } else if(data.code ===0)
+                    layer.msg(data.message, { shift: 1, time: 2000 });
+                	window.location.href="/client/index";
+            }
+        });
+
+		}
+				$(function () {
+                document.onkeydown = function (e) {
+                    var ev = document.all ? window.event : e;
+                    if (ev.keyCode == 13) {
+                        login();
+     				}
+                }
+            });
+				
+		</script>
+</body>
+</html>
+
+
+

@@ -1,0 +1,319 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>今日排班</title>
+    <link href="/static/web/hall/style-pb-blue-v-day.css" rel="stylesheet" />
+    <script src="/static/web/hall/jquery.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!--上部-->
+        <div class="top">
+            <div class="logo">
+                <img src="/static/web/image/logo.png">
+            </div>
+            <div class="name">今日出诊专家</div>
+        </div>
+
+        <!--中部-->
+        <div class="main">
+
+            <ul id="list">
+                <!--<li>
+                    <div class="img"><img style="width:100%; height:100%;" /></div>
+                    <div class="info">
+                        <div class="title"><span>儿科</span> <div class="name">测试</div>&nbsp;&nbsp;&nbsp; 主任工程师</div>
+                    <div class="desc"></div>
+                        <div class="title"></div>
+                    </div>
+                </li>-->
+            </ul>
+        </div>
+        <div class="bottom">温馨提示：请保管好您的随身物品,耐心等候！！！</div>
+    </div>
+
+</body>
+</html>
+<script type="text/javascript">
+    var page = 1;
+    var data;
+    function ShowTime() {
+        try {
+            var datetime = window.Callobject.getDateTime();
+            var year = datetime.split(' ')[0].split('-')[0].toString() + '年' + datetime.split(' ')[0].split('-')[1].toString() + '月' + datetime.split(' ')
+
+            [0].split('-')[2].toString() + '日';
+            var week = "　星期" + "日一二三四五六".charAt(datetime.split(' ')[2].toString().trim().replace('7', '0'));
+            var time = datetime.split(' ')[1].toString();
+            $("#now_date").html(year + week);
+            $("#now_time").html(time.split(':')[0] + ':' + time.split(':')[1]);
+        }
+        catch (ex) { }
+    }
+
+    function getUrlParam(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return unescape(r[2]); return null;
+    }
+    var ip = getUrlParam("ip");
+    //var wait = getUrlParam("wait");
+    var rows =7;
+    function PagerShow() {
+        $("#list").html("");
+        var c = parseInt(data.list.length);
+        if (c > 0) {
+            var i = 0, j = rows;
+            var html = "";
+            if (c <= rows) {
+                j = c;
+                setTimeout(GetList, 5000);
+            }
+            else {
+                if (c > rows * page) {
+                    i = (rows * (page - 1));
+                    j = rows * page;
+                    page = page + 1;
+                }
+                else {
+                    i = (rows * (page - 1));
+                    j = c;
+                    page = 1;
+                    GetList();
+                }
+            }
+            for (var n = i; n < j; n++) {
+                var time = "";
+                //switch (data.list[n].onduty2) {
+                //    case "1":
+                //        time = "全天";
+                //        break;
+                //    case "2":
+                //        time = "上午";
+                //        break;
+                //    case "3":
+                //        time = "下午";
+                //        break;
+                //    default:
+                //}
+
+                var onduty = data.list[n].onduty.split("");
+                var onduty_1 = "", onduty_2 = "", onduty_3 = "";
+                var weeklist = ["周一", "周二", "周三", "周四", "周五", "周六", "周日"];
+                for (var l = 0; l < onduty.length; l++) {
+                    try {
+                        switch (onduty[l]) {
+                            case "1":
+                                onduty_1 += weeklist[l] + "、";
+                                break;
+                            case "2":
+                                onduty_2 += weeklist[l] + "、";
+                                break;
+                            case "3":
+                                onduty_3 += weeklist[l] + "、";
+                                break;
+                            default:
+                        }
+                    } catch (e) {
+
+                    }
+
+                }
+                if (onduty_1 != "") {
+                    if (onduty_1.length > 20)
+                        onduty_1 = "周一至周日全天";
+                    else
+                        onduty_1 = (onduty_1.substr(0, onduty_1.length - 1) + "全天");
+                }
+                if (onduty_2 != "") {
+                    if (onduty_2.length > 20)
+                        onduty_2 = "周一至周日上午";
+                    else
+                        onduty_2 = (onduty_2.substr(0, onduty_2.length - 1) + "上午");
+                    //if (time != "")
+                    //    time += "，" + onduty_2;
+                    //else
+                    //    time = onduty_2;
+                }
+                if (onduty_3 != "") {
+                    if (onduty_3.length > 20)
+                        onduty_3 = "周一至周日下午";
+                    else
+                        onduty_3 = (onduty_3.substr(0, onduty_3.length - 1) + "下午");
+                    //if (time != "")
+                    //    time += "，" + onduty_3;
+                    //else
+                    //    time = onduty_3;
+                }
+                var timelist = [onduty_1, onduty_2, onduty_3].sort();
+                if (timelist[0] != "")
+                    time = timelist[0];
+                if (timelist[1] != "") {
+                    if (time != "")
+                        time += "，" + timelist[1];
+                    else
+                        time = timelist[1];
+                }
+                if (timelist[2] != "") {
+                    if (time != "")
+                        time += "，" + timelist[2];
+                    else
+                        time = timelist[2];
+                }
+                var name = data.list[n].name;
+                if (name.length == 2)
+                    name = name.substr(0, 1) + "&nbsp;&nbsp;&nbsp;&nbsp;" + name.substr(1, 1);
+                html += "<li>"
+                        + "<div class=\"img\"><img style=\"width:100%; height:100%;\" src=\"/static/web/image/" + data.list[n].login_id + ".jpg\" /></div>"
+                        + "<div class=\"info\">"
+                            + "<div class=\"title\"><span>" + data.list[n].department + "</span> <div class=\"name\">" + name + "</div>&nbsp;&nbsp;&nbsp; " + data.list[n].title + "</div>"
+                                + "<div class=\"desc\">" + (data.list[n].description!=null ? data.list[n].description: "") + "</div>"
+                            + "<div class=\"title\">" + (time.length > 0 ? ("出诊时间：" + time) : "") + "</div>"
+                            + "</div>"
+                            + "</li>";
+                //html += "<li><div class=\"ks_name\">" + data.list[n].department + "</div><div class=\"img\"><img src=\"/static/web/image/" + data.list[n].login_id + ".jpg\" /></div><div class=\"zs_name\">" +name + "</div><div class=\"d_name\">" +data.list[n].title + "<br /><br /><span>" + time + "</span></div></li>"
+
+            }
+        }
+        else
+        {
+            setTimeout(GetList,5000);
+        }
+
+
+        $("#list").html(html);
+    }
+    function sortObjectArray(objArr, keyArr, type) {
+        for (var x = 0; x < objArr.length; x++) {
+            objArr[x].oldIndex = x;
+        }
+        if (type != undefined && type != 'asc' && type != 'desc') {
+            return 'error';
+        }
+        var order = 1;
+        if (type != undefined && type == 'desc') {
+            order = -1;
+        }
+        var key = keyArr[0];
+        objArr.sort(function (objA, objB) {
+            if (objA[key] > objB[key]) {
+                return order;
+            } else if (objA[key] < objB[key]) {
+                return 0 - order;
+            } else {
+                if (objA.oldIndex > objB.oldIndex) {
+                    return order;
+                } else if (objA.oldIndex < objB.oldIndex) {
+                    return 0 - order;
+                } else {
+
+                    return 0;
+                }
+            }
+        })
+
+        for (var i = 1; i < keyArr.length; i++) {
+            var key = keyArr[i];
+            for (var y= 0; y < objArr.length; y++) {
+                objArr[y].oldIndex = y;
+            }
+            objArr.sort(function (objA, objB) {
+                for (var j = 0; j < i; j++) {
+                    if (objA[keyArr[j]] != objB[keyArr[j]]) {
+                        if (objA.oldIndex > objB.oldIndex) {
+                            return order;
+                        } else if (objA.oldIndex < objB.oldIndex){
+                            return 0 - order;
+                        } else {
+                            return 0;
+                        }
+                    }
+                }
+                if (objA[key] > objB[key]) {
+                    return order;
+                } else if (objA[key] < objB[key]){
+                    return 0 - order;
+                } else {
+                    if (objA.oldIndex > objB.oldIndex) {
+                        return order;
+                    } else if (objA.oldIndex < objB.oldIndex){
+                        return 0 - order;
+                    } else {
+                        return 0;
+                    }
+                }
+            })
+        }
+        return objArr;
+    }
+    function setsort(pdata)
+    {
+        if (pdata.count > 0) {
+            //按部门排序使用“,”分隔，同一序列内使用“|”分隔，不能超过100个部门
+            var deptArray = ["普外", "五官", "心血管", "呼吸", "神经", "消化", "肾病|内分泌科", "肝病", "感染", "胃肠|小儿", "肝胆甲乳", "泌尿烧伤", "神经", "骨一科", "骨二科", "妇科", "产科", "儿科", "儿保", "康复", "口腔", "皮肤", "中医", "疼痛", "护理"];
+            var titleArray = ["主任医师", "副主任医师", "主治医师", "医师", "护师", "护士"];
+
+            for (var i = 0; i < pdata.count; i++) {
+                var item = pdata.list[i];
+                item.departmentsort = 100;
+                item.titlesort = 10;
+                for (var j = 0; j < deptArray.length; j++) {
+                    var deptlist = deptArray[j].split("|");
+                    if (deptlist.length > 1) {
+                        for (j1 = 0; j1 < deptlist.length; j1++)
+                        {
+                            if (item.department.indexOf(deptlist[j1]) >= 0)
+                            {
+                                item.departmentsort = j;
+                                break;
+                            }
+                        }
+                    }
+                    else {
+                        if (item.department.indexOf(deptArray[j]) >= 0) {
+                            item.departmentsort = j;
+                            break;
+                        }
+                    }
+                }
+                for (var k = 0; k < titleArray.length; k++)
+                {
+                    if (item.title==titleArray[k])
+                    {
+                        item.titlesort = k;
+                        break;
+                    }
+                }
+            }
+        }
+        pdata.list = sortObjectArray(pdata.list, ['departmentsort', 'titlesort', 'login_id']);
+        var newpdata=pdata.list;
+        for (var i = 0; i <newpdata.length;i++) {
+            if (newpdata[i].departmentsort >= 100)
+                pdata.list.splice(i,1);
+        }
+
+        return pdata;
+    }
+    function GetList() {
+
+        $.ajax({
+            type: "GET",
+            async: false,
+            url: "/client/commSelect",
+            contentType: "application/text;charset=utf-8",
+            dataType: "json",
+            data: { "sql": "SELECT * FROM doctor a LEFT JOIN rlt_doctor2queue_type b ON a.doctor_id=b.doctor_id where a.paibanpaixu<>'' ORDER BY a.paibanpaixu asc " },
+            cache: false,
+            success: function (pdata) {
+                data = pdata;
+            }
+        });
+    }
+    GetList();
+    ShowTime();
+    PagerShow();
+    window.setInterval(ShowTime, 5000);
+    window.setInterval(PagerShow, 8000);
+</script>

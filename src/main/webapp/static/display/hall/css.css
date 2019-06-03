@@ -1,0 +1,139 @@
+﻿body {
+	margin: 0 auto;
+	width: 100%;
+	font-family: "微软雅黑", "宋体", Verdana, Arial, Helvetica, sans-serif;
+	font-size: 16px;
+	background-color: #fff;
+}
+
+ul {
+	margin: 0px;
+	padding: 0px;
+}
+
+a {
+	color: #000;
+	text-decoration: none;
+}
+
+li {
+	padding: 0px;
+	margin: 0px;
+	list-style: none;
+}
+
+.main {
+	width: 100%;
+	float: left;
+}
+
+.main .title {
+	width: 100%;
+	float: left;
+	height: 160px;
+	background-color: #509acc;
+	color: #fff;
+}
+
+.main .title .left {
+	width: 25%;
+	line-height: 160px;
+	padding-left: 5%;
+	text-align: left;
+	font-size: 3rem;
+	float: left;
+	overflow: hidden;
+}
+
+.main .title .middle {
+	width: 40%;
+	height: 115px;
+	overflow: hidden;
+	float: left;
+	text-align: center;
+	padding-top: 45px;
+}
+
+.main .title .middle span {
+	font-size: 3.75rem;
+	border: 5px solid #fff;
+	padding: 0px 20px;
+}
+
+.main .title .right {
+	width: 27%;
+	font-size: 2.25rem;
+	text-align: right;
+	line-height: 60px;
+	float: right;
+	padding-right: 3%;
+	padding-top: 20px;
+}
+
+.main .qmj {
+	float: left;
+	width: 100%;
+	height: 840px;
+}
+
+.main .qmj .left {
+	width: 65%;
+	height: 840px;
+	float: left;
+}
+
+.main .qmj .right {
+	width: 35%;
+	float: right;
+	height: 840px;
+	/*border-top: 2px solid #509acc;*/
+}
+
+.main .qmj .right .list {
+	width: 100%;
+	height: 640px;
+	overflow: hidden;
+}
+
+.main .qmj .right .list .zs_list {
+	width: 50%;
+	float: left;
+}
+
+.main .qmj .right .list .zs_list li {
+	width: 100%;
+	height: 78px;
+	border-bottom: 2px solid #509acc;
+	color: #509acc;
+	line-height: 78px;
+	font-size: 3rem;
+	text-align: center;
+	overflow: hidden;
+}
+
+.main .qmj .right .list .zs_list .bg {
+	background: right top url(../image/bg.jpg) no-repeat;
+}
+
+.main .qmj .right .call {
+	width: 100%;
+	text-align: center;
+	color: #f00;
+	height: 150px;
+	line-height: 150px;
+	clear: both;
+	font-size: 3rem;
+}
+
+.main .bottom {
+	width: 100%;
+	height: 80px;
+	color: #fff;
+	text-align: center;
+	font-size: 2.25rem;
+	position: absolute;
+	left: 0px;
+	bottom: 0px;
+	background-color: #509acc;
+	line-height: 80px;
+}

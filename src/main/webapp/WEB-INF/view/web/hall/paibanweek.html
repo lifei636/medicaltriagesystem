@@ -1,0 +1,153 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>大厅等候</title>
+<link href="/static/web/hall/style-paiban.css" rel="stylesheet" />
+<script src="/static/web/hall/jquery.min.js"></script>
+</head>
+<body>
+	<div class="container">
+		<div class="top">
+			<div class="logo">
+				<img src="/static/web/hall/images/logo.png">
+			</div>
+			<div class="name" id="tiage_name">专家一周出诊信息</div>
+			<div class="date" id="now_date"></div>
+			<div class="time" id="now_time"></div>
+		</div>
+		<div class="paibanweek" id="paiban">
+			<div class="weeklist">
+				<div class="wlist" id="wd">
+					<!--<div class="wd">一</div><div class="wd">一</div><div class="wd">一</div><div class="wd">一</div><div class="wd">一</div><div class="wd">一</div><div class="wd">一</div>-->
+				</div>
+				<div class="nlist" id="nd">
+					<!--<div class="nd">一</div><div class="nd">一</div><div class="nd">一</div><div class="nd">一</div><div class="nd">一</div><div class="nd">一</div><div class="nd">一</div>-->
+				</div>
+			</div>
+			<div id="list"></div>
+			<!--<div class="rows">
+                <div class="span1">测试</div>
+                <div class="span1">主任医师</div>
+                <div class="span1">内科</div>
+                <div class="span2"><div class="pb">上午</div><div class="pb">上午</div><div class="pb">上午</div><div class="pb">上午</div><div class="pb">上午</div><div class="pb">上午</div><div class="pb pb_green">休息</div></div>
+                <div class="span3"><div class="nmb">50</div><div class="nmb nmb_yellow">50</div><div class="nmb">50</div><div class="nmb nmb_yellow">50</div><div class="nmb">50</div><div class="nmb nmb_yellow">50</div><div class="nmb">0</div></div>
+            </div>-->
+
+		</div>
+
+		<div class="bottom">温馨提示：请保管好您的随身物品,耐心等候！！！</div>
+	</div>
+
+</body>
+</html>
+<script type="text/javascript">
+    //$("#tiage_name").html(window.screen.availWidth+"-"+ document.body.clientWidth);
+    var is_yinsi = true;
+    var page = 1;
+    var rows = 4;
+    var data;
+    function ShowTime() {
+        try {
+            var datetime = window.Callobject.getDateTime();
+            var year = datetime.split(' ')[0].split('-')[0].toString() + '年' + datetime.split(' ')[0].split('-')[1].toString() + '月' + datetime.split(' ')[0].split('-')[2].toString() + '日';
+            var week = "　星期" + "日一二三四五六".charAt(datetime.split(' ')[2].toString().trim().replace('7', '0'));
+            var time = datetime.split(' ')[1].toString();
+            $("#now_date").html(year + week);
+            $("#now_time").html(time.split(':')[0] + ':' + time.split(':')[1]);
+            html_wd = "";
+            html_nd = "";
+            for (var i = 0; i < 7; i++) {
+                datetime = (datetime.split(' ')[0] + " " + datetime.split(' ')[1]).replace(/-/g, "/");
+                var date = new Date(datetime);
+                date.setDate(date.getDate() + i);
+                //var date2 = dateFtt("yyyy-MM-dd hh:mm:ss", date);
+                var week2 = ['日', '一', '二', '三', '四', '五', '六'][date.getDay()];
+                html_wd += "<div class=\"wd\">" + week2 + "</div>";
+                html_nd += "<div class=\"nd\">" + week2 + "</div>";
+            }
+            $("#wd").html(html_wd);
+            $("#nd").html(html_nd);
+        }
+        catch (ex) {
+        }
+    }
+    ShowTime();
+    window.setInterval(ShowTime, 5000);
+
+    function dateFtt(fmt, date) { //author: meizz   
+        var o = {
+            "M+": date.getMonth() + 1,                 //月份   
+            "d+": date.getDate(),                    //日   
+            "h+": date.getHours(),                   //小时   
+            "m+": date.getMinutes(),                 //分   
+            "s+": date.getSeconds(),                 //秒   
+            "q+": Math.floor((date.getMonth() + 3) / 3), //季度   
+            "S": date.getMilliseconds()             //毫秒   
+        };
+        if (/(y+)/.test(fmt))
+            fmt = fmt.replace(RegExp.$1, (date.getFullYear() + "").substr(4 - RegExp.$1.length));
+        for (var k in o)
+            if (new RegExp("(" + k + ")").test(fmt))
+                fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+        return fmt;
+    } 
+    function PagerShow() {
+        try {
+            html = "";
+            $("#list").html("");
+            var c = Math.floor(parseInt(data.count)/rows);
+            if (c > 0) {
+                if (page > c)
+                    page = 1;
+                GetList();
+                $.each(data.list, function (i, item) {
+                    html += "<div class=\"rows\"><div class=\"span1\">" + item.name + "</div><div class=\"span1\">" + item.title + "</div><div class=\"span1\">" + item.department + "</div><div class=\"span2\">" + wt(item.wt0) + wt(item.wt1) + wt(item.wt2) + wt(item.wt3) + wt(item.wt4) + wt(item.wt5) + wt(item.wt6) + "</div><div class=\"span3\"><div class=\"nmb\">" + item.wn0 + "</div><div class=\"nmb nmb_yellow\">" + item.wn1 + "</div><div class=\"nmb\">" + item.wn2 + "</div><div class=\"nmb nmb_yellow\">" + item.wn3 + "</div><div class=\"nmb\">" + item.wn4 + "</div><div class=\"nmb nmb_yellow\">" + item.wn5 + "</div><div class=\"nmb\">" + item.wn6 + "</div></div></div>"
+                });
+                
+                page++;
+            }
+            else {
+                setTimeout(GetList, 5000);
+            }
+            
+            $("#list").html(html);
+        }
+        catch (err) { }
+    }
+    function wt(str) {
+        var time_trival = "";
+        if (str == "0")
+            time_trival = "<div class=\"pb pb_green\">休息</div>";
+        else if (str == "1")
+            time_trival = "<div class=\"pb\">上午</div>";
+        else if (str == "2")
+            time_trival = "<div class=\"pb\">下午</div>";
+        else
+            time_trival = "<div class=\"pb\">全天</div>";
+        return time_trival;
+    }
+    function GetList() {
+        try {
+            $.ajax({
+                type: "GET",
+                async: false,
+                url: "/paiban/doctorPaibanWeek",
+                contentType: "application/text;charset=utf-8",
+                data: {"page":page,"size":rows},
+                dataType: "json",
+                cache: false,
+                success: function (pdata) {
+                    data = pdata;
+                },
+                error: function () {
+                    data = { "count": 0, "fztname": "未知" };
+                }
+            });
+        }
+        catch (err) { }
+    }
+    GetList();
+    PagerShow();
+    window.setInterval(PagerShow, 10000);
+</script>

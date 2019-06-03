@@ -1,0 +1,256 @@
+﻿body {
+	margin: 0 auto;
+	width: 100%;
+	font-family: "微软雅黑", "宋体", Verdana, Arial, Helvetica, sans-serif;
+	font-size: 16px;
+	background-color: #fff;
+	height: 100%;
+}
+
+ul {
+	margin: 0px;
+	padding: 0px;
+}
+
+a {
+	color: #000;
+	text-decoration: none;
+}
+
+li {
+	padding: 0px;
+	margin: 0px;
+	list-style: none;
+}
+
+.main {
+	width: 100%;
+	float: left;
+}
+
+.main .title {
+	width: 100%;
+	float: left;
+	height: 175px;
+	background-color: #509acc;
+	color: #fff;
+}
+
+.main .title .left {
+	line-height: 175px;
+	padding-left: 3%;
+	text-align: left;
+	font-size: 2.5rem;
+	float: left;
+	overflow: hidden;
+	padding-left: 160px;
+	/*background:left center url(../image/logo.png) no-repeat;*/
+}
+
+.main .title .right {
+	width: 32%;
+	font-size: 2.2rem;
+	text-align: right;
+	line-height: 60px;
+	float: right;
+	padding-right: 3%;
+	padding-top: 55px;
+}
+
+.main .info {
+	width: 100%;
+	height: 1000px;
+	float: left;
+	background-color: #e5e5e5;
+	color: #616161;
+}
+
+.main .info .zs_name {
+	width: 100%;
+	height: 180px;
+	text-align: center;
+	color: #509acc;
+	font-size: 5rem;
+	line-height: 180px;
+	overflow: hidden;
+	background-color: #e5e5e5;
+	font-weight: bold;
+}
+
+.main .info .doctor {
+	width: 100%;
+	height: 465px;
+	text-align: center;
+	color: #509acc;
+	background-color: #d2d2d2;
+	overflow: hidden;
+}
+
+.main .info .doctor .left {
+	width: 282px;
+	height: 380px;
+	margin-top: 35px;
+	margin-left: 10px;
+	border: 8px solid #e4e4e4;
+	float: left;
+}
+
+.main .info .doctor .right {
+	width: 385px;
+	height: 396px;
+	margin-top: 35px;
+	margin-left: 10px;
+	float: left;
+}
+
+.main .info .doctor .right .name {
+	text-align: center;
+	color: #509acc;
+	background-color: #e5e5e5;
+	font-size: 3rem;
+	line-height: 120px;
+	width: 100%;
+	height: 100px;
+	overflow: hidden;
+	font-weight: bold;
+}
+
+.main .info .doctor .right .title {
+	text-align: center;
+	color: #5a5a5a;
+	background-color: #e5e5e5;
+	font-size: 2rem;
+	line-height: 40px;
+	width: 100%;
+	height: 60px;
+	overflow: hidden;
+}
+
+.main .info .doctor .right .d_title {
+	text-align: center;
+	font-size: 2.25rem;
+	color: #509acc;
+	width: 100%;
+	height: 100px;
+	line-height: 100px;
+	clear: both;
+}
+
+.main .info .doctor .right .d_desc {
+	text-align: left;
+	width: 100%;
+	height: 140px;
+	text-indent: 2em;
+	font-size: 1.5rem;
+	line-height: 35px;
+	color: #424242;
+	clear: both;
+	overflow: hidden;
+}
+
+.main .info .jz {
+	margin-top: 10px;
+	width: 100%;
+	height: 120px;
+	float: left;
+	overflow: hidden;
+}
+
+.main .info .jz .left {
+	width: 40%;
+	height: 120px;
+	line-height: 120px;
+	font-size: 2.25rem;
+	background-color: #f0ad41;
+	color: #fff;
+	text-align: center;
+	float: left;
+}
+
+.main .info .jz .right {
+	width: 60%;
+	height: 120px;
+	line-height: 120px;
+	font-size: 2.25rem;
+	background-color: #dcdcdc;
+	color: #595959;
+	text-align: center;
+	float: right;
+}
+
+.main .info .dh {
+	margin-top: 10px;
+	width: 100%;
+	height: 200px;
+	float: left;
+	overflow: hidden;
+}
+
+.main .info .dh .left {
+	width: 40%;
+	height: 200px;
+	line-height: 200px;
+	font-size: 2.25rem;
+	background-color: #79d185;
+	color: #fff;
+	text-align: center;
+	float: left;
+}
+
+.main .info .dh .rightdh {
+	width: 60%;
+	height: 200px;
+	background-color: #dcdcdc;
+	color: #595959;
+	float: right;
+	overflow: hidden;
+}
+
+.main .info .dh .rightdh .spandh {
+	width: 50%;
+	line-height: 100px;
+	text-align: center;
+	font-size: 2.25rem;
+	float: left;
+	overflow: hidden;
+	height: 100px;
+}
+
+.main .bottom {
+	width: 100%;
+	height: 100px;
+	color: #fff;
+	text-align: center;
+	font-size: 2rem;
+	position: absolute;
+	left: 0px;
+	bottom: 0px;
+	background-color: #509acc;
+	line-height: 100px;
+}
+
+.tips_back {
+	width: 100%;
+	/*background-color: #000;*/
+	background-color: rgba(0, 0, 0, 0.7);
+	height: 100%;
+	display: none;
+	z-index: 99;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+}
+
+.tips {
+	width: 50%;
+	height: 50%;
+	position: absolute;
+	top: 25%;
+	left: 25%;
+	opacity: 1;
+	color: #414d3d;
+	background-color: #fff;
+	font-size: 300%;
+	line-height: 500%;
+	text-align: center;
+}

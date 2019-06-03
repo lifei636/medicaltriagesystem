@@ -1,0 +1,19 @@
+@layout("/common/_curd/_container.html"){
+
+	<form class="form-horizontal" role="form">
+		<!-- 表单 -->
+		@ var _col=[
+			
+@			  {name:"", index:"id", type:"text",newline:true,length:8},
+		@			  {name:"", index:"triage_id", type:"text",newline:true,length:8},
+		@			  {name:"", index:"name", type:"text",newline:true,length:8},
+		@			  {name:"", index:"display_name", type:"text",newline:true,length:8},
+		@			  {name:"", index:"ip", type:"text",newline:true,length:8}		
+		@		   ];
+		@ include("/common/_curd/_view.html", {"col":_col}){}
+		
+		<!-- 按钮 -->
+		@ include("/common/_curd/_btn.html", {btn_close:"关闭"}) {}
+	</form>
+
+@}

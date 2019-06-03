@@ -1,0 +1,154 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>大厅等候</title>
+<link href="/static/web/hall/css.css" rel="stylesheet" />
+<script src="/static/web/hall/jquery.min.js"></script>
+<script src="/static/web/hall/pinyin.js"></script>
+</head>
+<body style='zoom: 0.56'>
+	<div class="main">
+		<div class="title">
+			<div class="left" id="hsptl_name">安康医院</div>
+			<div class="middle">
+				<span id="triage_name">正在读取信息，请稍后...</span>
+			</div>
+			<div class="right">
+				<span id="now_time"></span><br /> <span id="now_date"></span>
+			</div>
+		</div>
+		<div class="tab_title2">
+			<div class="w10">姓名</div>
+			<div class="w20">就诊科室</div>
+			<div class="w20">就诊号</div>
+			<div class="w20">等候人数</div>
+			<div class="w30">就诊位置</div>
+		</div>
+		<ul id="localtion">
+
+		</ul>
+
+	</div>
+
+</body>
+</html>
+<script type="text/javascript">
+    var page = 1;
+    var data;
+    function ShowTime() {
+        try {
+            var datetime = window.Callobject.getDateTime();
+            var year = datetime.split(' ')[0].split('-')[0].toString() + '年' + datetime.split(' ')[0].split('-')[1].toString() + '月' + datetime.split(' ')
+
+            [0].split('-')[2].toString() + '日';
+            var week = "　星期" + "日一二三四五六".charAt(datetime.split(' ')[2].toString().trim().replace('7', '0'));
+            var time = datetime.split(' ')[1].toString();
+            $("#now_date").html(year + week);
+            $("#now_time").html(time.split(':')[0] + ':' + time.split(':')[1]);
+        }
+        catch (ex) { }
+    }
+    function getQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return unescape(r[2]); return null;
+    }
+    function getUrlParam(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return unescape(r[2]); return null;
+    }
+    var ip = getUrlParam("ip");
+    var reg = new RegExp( '-' , "gm" );
+    var ips=ip.replace(reg,"'");
+    //var wait = getUrlParam("wait");
+    $("#tips").height(window.screen.availHeight);
+    var rows = parseInt((window.screen.availHeight - 380) / 110);
+    function PagerShow() {
+        try {
+            $("#localtion").html("");
+            var c = parseInt(data.count);
+            if (c > 0) {
+                var i = 0, j = rows;
+                var html = "";
+                if (c <= rows) {
+                    j = c;
+                    setTimeout(GetList, 5000);
+                }
+                else {
+                    if (c > rows * page) {
+                        i = (rows * (page - 1));
+                        j = rows * page;
+                        page = page + 1;
+                    }
+                    else {
+                        i = (rows * (page - 1));
+                        j = c;
+                        page = 1;
+                        GetList();
+                    }
+                }
+                for (var n = i; n < j; n++) {
+                	var s=data.list[n].patient_name.substr(1,1);
+                	var s2=data.list[n].patient_name.replace(s,CC2PY(s).substr(0,1));
+                    html += " <li><div class='w10'>"+data.list[n].patient_name+"</div><div class='w20'>"+data.list[n].name+"</div><div class='w20'>"+data.list[n].register_id+"</div><div class='w20'>"+data.list[n].counts+"</div><div class='w30'>"+data.list[n].floor+"</div></li>";
+                }
+            }
+            else {
+                setTimeout(GetList, 5000);
+            }
+            $("#localtion").html(html);
+        }
+        catch (err) { }
+    }
+    function GetList() {
+        try {
+            $.ajax({
+                type: "GET",
+                async: false,
+                url: "/call_patient/vistinglocaltion?t=" + new Date().getTime(),
+                contentType: "application/text;charset=utf-8",
+                data:{"ip":ips},
+                dataType: "json",
+                cache: false,
+                success: function (pdata) {
+                    data = pdata;
+                },
+                error: function () {
+                    data = { "count": 0, "fztname": "未知" };
+                }
+            });
+        }
+        catch (err) { }
+    }
+
+    function AuotBD() {
+        var ip = ips.split(',');
+        for (var i = 0; i < ip.length;i++)
+        {
+            $.get("/call_patient/AutoSetPatientDisplay?ip=" + ip[i] + "&t=" + new Date().getTime(), function (data, status) { });
+        }
+            //$.ajax({
+            //    type: "GET",
+            //    url: "/call_patient/AutoSetPatientDisplay?t=" + new Date().getTime(),
+            //    contentType: "application/text;charset=utf-8",
+            //    dataType: "json",
+            //    cache: false,
+            //    success: function (data) {
+            //    }
+            //});
+    }
+    GetList();
+    PagerShow();
+    ShowTime();
+    $("#triage_name").html(data.fztname);
+    window.setInterval(PagerShow, 10000);
+    //window.setInterval(PagerCall, 5000);
+    window.setInterval(ShowTime, 5000);
+    if(getUrlParam("bd")=="auto")
+    {
+    	AuotBD();
+    	window.setInterval(AuotBD, 5000);
+    }
+</script>

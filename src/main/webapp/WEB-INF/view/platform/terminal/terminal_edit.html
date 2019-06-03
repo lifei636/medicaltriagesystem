@@ -1,0 +1,32 @@
+@layout("/common/_curd/_container.html"){
+
+	<form data-url="${basePath}/${code}/update" method="post" class="form-horizontal" role="form">
+		<!-- 表单 -->
+		<br/>
+		<div class="form-group">
+		<label class="col-sm-2 control-label no-padding-right" >分诊台列表</label>
+		<div class="col-sm-3">
+			<select id="editable-select" name="terminal.triage_id" style="width: 510px;height: 35px;">
+				@for(x in list_triageName){
+					@if(x.triage_id==triage_id){
+	                <option value="${x.triage_id!}" selected>${x.name!}</option>
+	                @}else{
+	                <option value="${x.triage_id!}">${x.name!}</option>
+				@}}
+			</select>
+		</div>
+		</div>
+		@ var _table="terminal";
+		@ var _key="id";
+		@ var _col=[
+		@			  {name:"名称", index:"name", type:"text",newline:true,length:8,required:"required"},
+		@			  {name:"别名", index:"display_name", type:"text",newline:true,length:8,required:"required"},
+		@			  {name:"IP地址", index:"ip", type:"text",newline:true,length:8,required:"required"}		
+		@		   ];
+		@ include("/common/_curd/_edit.html", {"col":_col, "table":_table, "key":_key}){}
+		
+		<!-- 按钮 -->
+		@ include("/common/_curd/_btn.html", {btn_save:"修改", btn_close:"关闭"}) {}
+	</form>
+
+@}

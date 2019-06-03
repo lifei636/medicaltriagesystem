@@ -1,0 +1,166 @@
+﻿@charset "utf-8";
+/* CSS Document */
+
+body{ margin:0; padding:0; font-family:"微软雅黑";}
+/*公用部分*/
+.container{ width:1920px; height:1080px;}
+
+/*头部*/
+.top{
+	width: 1920px;
+	height: 156px;
+	background: url(myyf_images/top_back.jpg) no-repeat;
+	float: left;
+}
+.top-logo{
+	width: 635px;
+	height: 96px;
+	float: left;
+}
+.top_name{
+	width: 388px;
+	height: 96px;
+	line-height: 96px;
+	font-size: 40px;
+	color: #FFF;
+	font-weight: bold;
+	text-align: center;
+	float: left;
+	letter-spacing: 5px;
+}
+.top_date{
+	width: 600px;
+	height: 96px;
+	text-align: right;
+	line-height: 96px;
+	color: #FFFFFF;
+	font-size: 32px;
+	float: left;
+}
+.top_time{
+	width: 233px;
+	height: 96px;
+	text-align: center;
+	line-height: 96px;
+	color: #FFF;
+	font-weight: bold;
+	font-size: 40px;
+	float: left;
+}
+
+/*中部*/
+.main{
+	width: 1920px;
+	height: 831px;
+	background: url(myyf_images/main_back.jpg) no-repeat;
+	float: left;
+}
+.main .table{
+	width: 1866px;
+	height: 790px;
+	float: left;
+	margin: 12px 0 0 27px;
+}
+
+/*左边*/
+.table .left{
+	width: 920px;
+	height: 790px;
+	float: left;
+	text-align: center;
+}
+
+/*左边上部分*/
+.left .left-up{
+	width:925px;
+	height:418px;
+	float: left;
+	text-align:center;
+}
+.left .left-title{
+	width: 920px;
+	height: 135px;
+	float: left;
+	line-height: 135px;
+	font-size: 48px;
+	text-align: center;
+	letter-spacing: 5px;
+	margin-bottom: 18px;
+	font-weight: bold;
+	color: #6c0604;
+}
+.left .left-line{
+	width: 920px;
+	height: 126px;
+	float: left;
+	line-height: 126px;
+	font-size: 45px;
+	text-align: center;
+	color: #FFF;
+	font-weight: bold;
+}
+.left-line .left-line-1{
+	width: 280px;
+	height: 126px;
+	float: left;
+	color: #6c0604;
+	margin-left: 120px;
+	text-align: left;
+}
+.left-line .left-line-2{
+	width: 300px;
+	height: 126px;
+	float: left;
+	color: #6c0604;
+	text-align: right;
+}
+.left-line .left-line-jt{
+	width: 100px;
+	height: 81px;
+	float: left;
+	padding-top: 45px;
+}
+
+
+/*右边*/
+.table .right{
+	width: 920px;
+	height: 790px;
+	float: left;
+	text-align: center;
+	margin-left: 26px;
+	font-weight: bold;
+}
+.right .right-up{
+	width: 920px;
+	height: 278px;
+	float: left;
+	line-height: 278px;
+	font-size: 100px;
+	color: #6c0604;
+}
+.right .right-down{
+	width: 930px;
+	height: 490px;
+	float: left;
+	line-height: 490px;
+	font-size: 200px;
+	color: #6c0604;
+	margin-top: 18px;
+}
+
+
+/*底部*/
+.bottom{
+	width: 1920px;
+	height: 83px;
+	float: left;
+	background: url(myyf_images/bottom_back.jpg) no-repeat;
+	font-family: "微软雅黑";
+	font-size: 32px;
+	text-align: center;
+	color: #fff;
+	line-height: 83px;
+	letter-spacing: 3px;
+	padding-top: 10px;
+}
