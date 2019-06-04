@@ -119,12 +119,13 @@
         }
         catch (ex) { }
     }
-
+    //获取队列名称
     function getQueryString(name) {
         var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
         var r = window.location.search.substr(1).match(reg);
         if (r != null) return unescape(r[2]); return null;
     }
+    //获取请求参数
     function getUrlParam(name) {
         var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
         var r = window.location.search.substr(1).match(reg);
@@ -132,6 +133,7 @@
     }
     var ip = getUrlParam("ip");
     var bgcolor = getUrlParam("bg");
+    //播放声音
     var play = getUrlParam("play");
     if (bgcolor != null && bgcolor != undefined) {
         //document.documentElement.style.setProperty('--bg-color', "#" + bgcolor);
@@ -161,6 +163,7 @@
             $("#divList").html("");
             var c = parseInt(data.count);
             if (c > 0) {
+                //i起始数据，j最后一条数据
                 var i = 0, j = rows;
                 var html = "";
                 if (c <= rows) {
@@ -213,7 +216,7 @@
         catch (err) { }
     }
 
-
+    //脱敏显示
     function hideword(str) {
         if (is_yinsi) {
             if (str.length > 3)
@@ -224,6 +227,13 @@
         else
             return str;
     }
+    /**
+     * 功能描述:  病人名字拼接
+     * @param id:排列序号，state:状态
+     * @return : 病人名字
+     * @author : li.fei
+     * @date : 2019/6/3
+     **/
     function checknmb(id, state) {
         var name = "";
         if (id != "" && id != undefined) {
@@ -247,6 +257,7 @@
         }
         return name;
     }
+    //排序？？？？
     function addPreZero(num){
         var t = (num+'').length,
          s = '';
@@ -257,6 +268,8 @@
   
         return s+num;
     }
+
+    //动画
     function animation(id, str, state) {
         str = hideword(str);
         var name = "";
@@ -286,7 +299,7 @@
         //else
         return name_display;
     }
-
+    //获取数据列表
     function GetList() {
         try {
             $.ajax({
@@ -306,6 +319,7 @@
         }
         catch (err) { }
     }
+
     if (play == "true") {
         var tone = false;
         var timeout = null;

@@ -1983,7 +1983,12 @@ public class CallingPatientQueueController extends BaseController {
 			renderJson(json);
 		}
 	}
-
+	/**
+	 * 功能描述: 获取等候列表
+	 * @param
+	 * @author : li.fei
+	 * @date : 2019/6/3
+	 **/
 	public void list_patient_wait() {
 		Map<String, Object> map = new HashMap<String, Object>();
 		String ip = shared.getIpAddr(getRequest());
