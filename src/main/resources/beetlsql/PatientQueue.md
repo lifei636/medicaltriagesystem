@@ -39,6 +39,70 @@ a.register_id + '' ASC,
 a.opr_time,
 a.fre_date 
 
+LISTQUERYTYPE_ALL
+===
+SELECT qt.queue_type_id FROM triage t INNER join
+queue_type qt on t.triage_id=qt.triage_id 
+where t.triage_id = #{triage_id}
+
+UPDATE_PATIENT_QUEUE_UNLOCK
+===
+UPDATE patient_queue SET late_lock=0,opr_time=#{newTime} WHERE patient_id = #{patient_id}
+
+UPDATE_PATIENT_QUEUE_LOCK
+===
+UPDATE patient_queue SET late_lock=1 ,opr_time=#{newTime} WHERE patient_id = #{patient_id}
+
+FIND_WARIT_PARITE_ALL
+===
+select * from (SELECT
+	a.id,
+	a.patient_id,
+	a.patient_name,
+	a.queue_type_id,
+	a.late_lock,
+	a.state_patient2
+FROM
+	patient_queue a
+LEFT JOIN queue_type b ON a.queue_type_id = b.queue_type_id
+LEFT JOIN triage c ON b.triage_id = c.triage_id
+LEFT JOIN doctor d ON a.doctor_id = d.doctor_id
+WHERE
+	a.state_patient = 5
+AND b.queue_type_id = #{queueTypeId}
+AND a.is_display = 2
+and a.is_deleted=0
+ORDER BY
+	a.time_interval,
+	a.register_id + '' ASC,
+	a.opr_time,
+	a.fre_date) t
+union all 
+select * from (
+SELECT
+	a.id,
+	a.patient_id,
+	a.patient_name,
+	a.queue_type_id,
+	a.late_lock,
+	a.state_patient2
+FROM
+	patient_queue a
+LEFT JOIN queue_type b ON a.queue_type_id = b.queue_type_id
+LEFT JOIN triage c ON b.triage_id = c.triage_id
+LEFT JOIN doctor d ON a.doctor_id = d.doctor_id
+WHERE
+a.state_patient in (0,3,4,6,7,50)
+AND b.queue_type_id = #{queueTypeId}
+AND a.is_display = 2
+and a.is_deleted=0
+and a.late_lock=0
+ORDER BY
+a.time_interval,
+a.register_id + '' ASC,
+a.opr_time,
+a.fre_date)b
+	
 
 LISTPATIENT_LOCK
 ===
@@ -104,6 +168,7 @@ WHERE
 AND b.queue_type_id = #{queueTypeId}
 AND a.is_display = 2
 and a.is_deleted=0
+and a.late_lock = 0
 ORDER BY
 	a.time_interval,
 	a.register_id + '' ASC,
@@ -2768,6 +2833,7 @@ WHERE
 AND FIND_IN_SET(a.state_patient,#{status})
 AND a.is_display = '2'
 AND a.is_deleted = 0
+and a.late_lock = 0
 GROUP BY
 	c.ip,
 	a.patient_source_code

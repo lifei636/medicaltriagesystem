@@ -1,6 +1,7 @@
 package com.shine.model;
 
 import java.util.Date;
+import java.util.Objects;
 
 import org.beetl.sql.core.annotatoin.AutoID;
 import org.beetl.sql.core.annotatoin.Table;
@@ -171,5 +172,39 @@ public class Triage extends BaseModel {
 
 	public void setLate_show(Integer late_show) {
 		this.late_show = late_show;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o){
+			return true;
+		}
+		if (o == null || getClass() != o.getClass()){
+			return false;
+		}
+		Triage triage = (Triage) o;
+		return Objects.equals(triage_id, triage.triage_id) &&
+				Objects.equals(call_buffer, triage.call_buffer) &&
+				Objects.equals(pager_type, triage.pager_type) &&
+				Objects.equals(reorder_type, triage.reorder_type) &&
+				Objects.equals(return_flag_step, triage.return_flag_step) &&
+				Objects.equals(late_flag_step, triage.late_flag_step) &&
+				Objects.equals(triage_type, triage.triage_type) &&
+				Objects.equals(description, triage.description) &&
+				Objects.equals(ip, triage.ip) &&
+				Objects.equals(name, triage.name) &&
+				Objects.equals(triage_pwd, triage.triage_pwd) &&
+				Objects.equals(create_time, triage.create_time) &&
+				Objects.equals(print_type, triage.print_type) &&
+				Objects.equals(pass_time, triage.pass_time) &&
+				Objects.equals(first_flag_step, triage.first_flag_step) &&
+				Objects.equals(late_type, triage.late_type) &&
+				Objects.equals(late_time, triage.late_time) &&
+				Objects.equals(late_show, triage.late_show);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(triage_id, call_buffer, pager_type, reorder_type, return_flag_step, late_flag_step, triage_type, description, ip, name, triage_pwd, create_time, print_type, pass_time, first_flag_step, late_type, late_time, late_show);
 	}
 }

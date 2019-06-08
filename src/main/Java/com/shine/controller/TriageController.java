@@ -1,10 +1,15 @@
 package com.shine.controller;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import com.core.dao.Blade;
+import com.core.dao.Db;
 import com.core.jfinal.ext.kit.JsonKit;
+import com.core.toolbox.Record;
 import com.core.toolbox.kit.ShardKit;
+import com.ibm.icu.text.SimpleDateFormat;
 import com.shine.model.Triage;
 import com.shine.service.TriageService;
 import com.shine.service.impl.TriageServiceImpl;
@@ -105,6 +110,36 @@ public class TriageController extends UrlPermissController {
 		}
 		boolean temp = service.update(triage);
 		if (temp) {
+			//查询分诊台绑定的队列id
+			String triageSql = Blade.dao().getScript("PatientQueue.LISTQUERYTYPE_ALL").getSql();
+			List<Record> queueTypeIds = Db.init().selectList(triageSql, Record.create().set("triage_id", triage.getTriage_id()));
+			String patientSql = Blade.dao().getScript("PatientQueue.LISTPATIENT_LOCK").getSql();
+			for (Record record : queueTypeIds){
+				List<Record> patient_locks = Db.init().selectList(patientSql, Record.create().set("queueTypeId", record.getInt("queue_type_id")));
+				if (patient_locks != null && !patient_locks.isEmpty()){
+					String updateSql = null;
+					//实际锁定数超过限定数就修改超过的
+					List<String> updateList = new ArrayList<>();
+					SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS");
+					String format = null;
+					if (patient_locks.size() > triage.getFirst_flag_step()){
+						updateSql = Blade.dao().getScript("PatientQueue.UPDATE_PATIENT_QUEUE_UNLOCK").getSql();
+						for (int i=patient_locks.size()-1 ;i >= triage.getFirst_flag_step(); i--){
+							format = simpleDateFormat.format(System.currentTimeMillis());
+							Db.init().update(updateSql, Record.create().set("patient_id", patient_locks.get(i).getStr("patient_id")).set("newTime",format));
+						}
+
+					}else if (patient_locks.size() < triage.getFirst_flag_step()){
+						updateSql = Blade.dao().getScript("PatientQueue.UPDATE_PATIENT_QUEUE_LOCK").getSql();
+						String waitSql = Blade.dao().getScript("PatientQueue.FIND_WARIT_PARITE_ALL").getSql();
+						List<Record> waitUnlocks = Db.init().selectList(waitSql, Record.create().set("queueTypeId", record.getInt("queue_type_id")));
+						for (int i=0 ;i < triage.getFirst_flag_step()-patient_locks.size(); i++ ){
+							format = simpleDateFormat.format(System.currentTimeMillis());
+							Db.init().update(updateSql, Record.create().set("patient_id", waitUnlocks.get(i).getStr("patient_id")).set("newTime",format));
+						}
+					}
+				}
+			}
 			renderJson(success(UPDATE_SUCCESS_MSG));
 		} else {
 			renderJson(error(UPDATE_FAIL_MSG));

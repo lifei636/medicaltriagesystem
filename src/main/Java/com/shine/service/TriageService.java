@@ -27,4 +27,6 @@ public interface TriageService extends IService<Triage> {
 	public Record findbytriageip(String triageIp);
 	
 	public Record  findtriageBytemIP(String temIp) ;
+
+
 }

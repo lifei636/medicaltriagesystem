@@ -70,4 +70,5 @@ public class TriageServiceImpl extends BaseService<Triage> implements TriageServ
 		String sql = Blade.dao().getScript("Triage.findtriageBytemIP").getSql();//
 		return Db.init().selectOne(sql, Record.create().set("temIp", temIp));
 	}
+
 }

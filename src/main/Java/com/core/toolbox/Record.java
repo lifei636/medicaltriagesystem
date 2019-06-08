@@ -4,10 +4,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.sql.Time;
 import java.sql.Timestamp;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
+import java.util.*;
 
 import com.core.toolbox.kit.BeanKit;
 
@@ -22,6 +19,27 @@ public class Record extends HashMap<String, Object> {
 
 	private String tableName;
 	private String pkName;
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (o == null || getClass() != o.getClass()) {
+			return false;
+		}
+		if (!super.equals(o)) {
+			return false;
+		}
+		Record record = (Record) o;
+		return Objects.equals(tableName, record.tableName) &&
+				Objects.equals(pkName, record.pkName);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(super.hashCode(), tableName, pkName);
+	}
 
 	public String getTableName() {
 		return tableName;

@@ -1,14 +1,7 @@
 package com.triage;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.beetl.sql.core.kit.StringKit;
 
@@ -88,15 +81,41 @@ public class ClientPatientQueueController extends BaseController {
 		void setL_r(List<Record> l_r) {
 			this.l_r = l_r;
 		}
+
+		@Override
+		public boolean equals(Object o) {
+			if (this == o) {
+				return true;
+			}
+			if (o == null || getClass() != o.getClass()) {
+				return false;
+			}
+			orderArylist that = (orderArylist) o;
+			return Objects.equals(T, that.T) &&
+					Objects.equals(Q, that.Q) &&
+					Objects.equals(F, that.F) &&
+					Objects.equals(id, that.id) &&
+					Objects.equals(name, that.name) &&
+					Objects.equals(l_r, that.l_r);
+		}
+
+		@Override
+		public int hashCode() {
+			return Objects.hash(T, Q, F, id, name, l_r);
+		}
 	}
 	class MyComprator implements Comparator {
 		public int compare(Object arg0, Object arg1) {
 			orderArylist t1=(orderArylist)arg0;
 			orderArylist t2=(orderArylist)arg1;
 			if(t1.F != t2.F)
+			{
 				return t1.F<t2.F? 1:-1;
+			}
 			else
+			{
 				return t1.id>t2.id? 1:-1;
+			}
 		}
 	}
 
@@ -468,17 +487,27 @@ public class ClientPatientQueueController extends BaseController {
 			renderJson(error(NOT_NULL_MSG));
 			return;
 		}
+		//分诊台
 		Triage rip=triage.queryTriageIp(ip);
-
+		//正常排队的队列，优先的除外
 		List<Record> result = new ArrayList<Record>();
+		//页面展示的序列
 		List<Record> final_result= new ArrayList<Record>();
+		//叫号器
 		Record rule = null;
+		//
 		List<Record> list_wait = null;
+		//查询等候队列状态码为(0初诊 1过号 2复诊 3部分待检 4诊室等候 5优先 6插队 7延迟 50挂起)的患者
 		List<Record> list_wait2 = null;
+		//优先队列集合
 		List<Record> list_first=null;
+		//复诊队列
 		List<Record> list_agin = null;
+		//未到过号的人
 		List<Record> list_was = null;
+		//状态码为8的队列
 		List<Record> list_late=null;
+		//锁定等候的人
 		List<Record> list_wait_lockedList = null;
 		if (rip.getReorder_type() == 1) {
 			rule=servicepatientqueue.selectTQrule3(QueueNumber,rip.getTriage_type().toString());
@@ -513,7 +542,7 @@ public class ClientPatientQueueController extends BaseController {
 		int Flate = rule.getInt("call_late_first_flag");
 		int Ffirst=rule.getInt("call_first_first_flag");
 
-
+		//没有锁定的队列
 		List<Record> list_unlock_wait = new ArrayList<>();
 		ArrayList<orderArylist> list = new ArrayList<>();
 		if (rip.getLate_show()==1) {
@@ -542,6 +571,7 @@ public class ClientPatientQueueController extends BaseController {
 			} else
 			{
 				for (int i = 0; i < list_wait2.size(); i++) {
+					//判断病人是否被等候锁定
 					if (list_wait2.get(i).getInt("late_lock") == 0)
 						list_unlock_wait.add(list_wait2.get(i));
 				}
@@ -600,9 +630,10 @@ public class ClientPatientQueueController extends BaseController {
 			oaWas.l_r = list_was_unlocked;
 			list.add(oaWas);
 		}
-		Collections.sort(list, new MyComprator());
+
 
 		if (list.size() > 0) {
+			Collections.sort(list, new MyComprator());
 			for (int i = 0; i < list_wait.size(); i++) {
 				for (int j = 0; j < list.size(); j++) {
 					orderArylist ary = list.get(j);
@@ -623,13 +654,16 @@ public class ClientPatientQueueController extends BaseController {
 					result.addAll(ary.getL_r());
 				}
 			}
-		} else
+		} else {
 			result = list_wait;
+		}
 		final_result.addAll(list_wait_lockedList);
+		//优先锁定的队列
 		List<Record> list_first_unlocked=new ArrayList<Record>();
 		for (int i = 0; i < list_first.size(); i++) {
-			if (list_first.get(i).getInt("late_lock") == 0)
+			if (list_first.get(i).getInt("late_lock") == 0) {
 				list_first_unlocked.add(list_first.get(i));
+			}
 		}
 		final_result.addAll(list_first_unlocked);
 		final_result.addAll(result);
@@ -811,7 +845,9 @@ public class ClientPatientQueueController extends BaseController {
 		String ip = getPara("ip");
 		try {
 			if(ip.isEmpty()||ip.equals("")) 
+			{
 				ip=shardkit.getIpAddr(getRequest());
+			}
 		}
 		catch (Exception e) {
 			ip=shardkit.getIpAddr(getRequest());
@@ -821,19 +857,26 @@ public class ClientPatientQueueController extends BaseController {
 		boolean bool =false;
 		if(tri.getReorder_type()==1)
 		{
+			//叫号器类型
 			Record record=service.getPagerIsLogin(ids);
 			if(record!=null)
 			{
+				//根据队列id获取优先队列数量
 				int v1=service.getFirstByQueutTypeID(Integer.parseInt(QueueNumber)).size();
+				//优先等待数
 				int v2=tri.getFirst_flag_step();
 				if(v1<v2&&v1>0)
 				{
 					int id=record.getInt("id");
 					int v3=record.getInt("call_first_first_flag");
-					if(v3-v1>0||v2-v1>0)
-						service.updateFirstCallStatus( v3-v1,v2-v1, id);
+					if(v3-v1>0||v2-v1>0) {
+						//病人状态码改为5（优先队列最后一个）
+						service.updateFirstCallStatus(v3 - v1, v2 - v1, id);
+					}
 				}
 			}
+
+			//病人状态码改为5（优先）
 			bool =service.patientFirst(ids);
 		}
 		else 
@@ -875,8 +918,10 @@ public class ClientPatientQueueController extends BaseController {
 		}
 		String ip = getPara("ip");
 		try {
-			if(ip.isEmpty()||ip.equals("")) 
+			if(ip.isEmpty()||ip.equals(""))
+			{
 				ip=shardkit.getIpAddr(getRequest());
+			}
 		}
 		catch (Exception e) {
 			ip=shardkit.getIpAddr(getRequest());

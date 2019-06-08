@@ -1241,9 +1241,13 @@ public class PatientQueueServiceImpl extends BaseService<PatientQueue> implement
 	public List<Record> selectIsBegin(String type, String id) {
 		String sql = "";
 		if (type.equals("1"))
+		{
 			sql = Blade.dao().getScript("PatientQueue.selectIsBegin_queue").getSql();
+		}
 		else
+		{
 			sql = Blade.dao().getScript("PatientQueue.selectIsBegin_pager").getSql();
+		}
 		return Db.init().selectList(sql, Record.create().set("id", id));
 	}
 
