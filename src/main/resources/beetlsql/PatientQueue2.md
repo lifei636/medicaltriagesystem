@@ -83,7 +83,7 @@ SELECT
 	a.register_id,
 	a.patient_name,
 	a.time_interval,
-	a.fre_date,
+	date_format(a.fre_date,'%Y-%m-%d %H:%I:%s') fre_date,
 	a.call_time,
 	d. NAME AS doctorName,
 	a.state_patient,

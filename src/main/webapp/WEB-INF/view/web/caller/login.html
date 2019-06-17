@@ -1,143 +1,182 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-<meta charset="utf-8" />
-<title>叫号器</title>
-<link type="text/css" rel="stylesheet"
-	href="/static/web/caller/blue.css" />
-<script type="text/javascript" src="/static/web/caller/jquery.js"></script>
+    <meta charset="utf-8" />
+    <title>叫号器</title>
+    <link type="text/css" rel="stylesheet" href="blue.css" />
+    <script type="text/javascript" src="jquery.js"></script>
 </head>
 <body>
-	<div id="main" class="main">
-		<div class="login">
-			<div class="left">用户名/工号：</div>
-			<div class="right">
-				<input id="txt_name" class="txt" type="text" maxlength="10"
-					onkeypress="getKey();" /><span id="infos" class="err_info"></span>
-			</div>
-			<div class="left">&nbsp;</div>
-			<div class="right">
-				<input id="btn_login" type="button" class="btn" value="登录"
-					onclick="login()" /><input id="btn_setting" type="button"
-					class="btn" value="设置" onclick="setting()" />
-			</div>
-		</div>
-	</div>
-	<div class="tips_back" id="tips">
-		<div class="main">
-			<div class="login">
-				<div class="left">IP地址：</div>
-				<div class="right">
-					<input id="txt_ip" class="txt" type="text" /><span id="infos2"
-						class="err_info"></span>
-				</div>
-				<div class="left">&nbsp;</div>
-				<div class="right">
-					<input id="btn_ip_save" type="button" class="btn" value="保存"
-						onclick="save_ip()" /><input id="btn_bak" type="button"
-						class="btn" value="返回" onclick="back()" />
-				</div>
-			</div>
-		</div>
-	</div>
-</body>
-</html>
-<script>
-    var str_json = SSMSObject.GetConfig();
-    var config_json = $.parseJSON(str_json);
-    var ip = config_json.ip;
-    var doctor_id = config_json.doctor_id;
-    var f_time = config_json.f_time;
-    $("#txt_name") = doctor_id;
-    $("#txt_ip") = ip;
-    function getKey() {
-        if (event.keyCode == 13) {
+    <div id="main" class="main">
+        <div class="rows">
+            <div class="left">
+                用户名/工号：
+            </div><div class="right"><input id="txt_name" class="txt" type="text" onblur="chk_val('txt_name')" maxlength="10" onkeypress="getKey();" /></div>
+        </div>
+        <!--<div class="rows">
+            <div class="left">
+                密码：
+            </div><div class="right"><input id="txt_pswd" class="txt" type="password" onblur="chk_val(this)" /></div>
+        </div>-->
+        <!--<div class="rows rows2">
+            <div class="left">
+             &nbsp;
+            </div><div class="right"><input id="check_rmb" type="checkbox" checked="checked" />记住用户名和密码</div>
+        </div>-->
+        <div id="infos" class="err_info"></div>
+        <div class="rows">
+            <div class="right">
+                <div class="left">
+                   &nbsp;
+                </div> <input id="btn_login" type="button" class="btn" value="登录" onclick="login()" /></div>
+            </div>
+        <!--<div class="popup" id="popup"><ul id="list_user"></ul></div>
+        <a class="config" onclick="javascript:document.getElementById('div_ip').style.display = 'block';">配置</a>
+        <div class="ip" id="div_ip">服务器IP地址：<input id="txt_ip" class="txt" type="text" onblur="chk_val_ip(this)" maxlength="15" /><br /><input id="btn_ip" type="button" class="btn" value="提交" onclick="save_ip()" /><a class="close" onclick="javascript:document.getElementById('div_ip').style.display = 'none';">关闭</a></div>-->
+    </div>
+    <script>
+        var gui = require('nw.gui');
+        var win = gui.Window.get();
+        var rf = require("fs");
+        var path = require('path');
+        var filepath = path.dirname(process.execPath);
+        var data = rf.readFileSync(filepath + "/config.json", "utf-8");
+        var config_json = JSON.parse($.trim(data));
+        var css = config_json.skin;
+        var ip = config_json.ip;
+        var doctor_id = config_json.doctor_id;
+        var login_id = config_json.login_id;
+        $("#txt_name").val(doctor_id);
+        if (login_id != "") {
             login();
         }
-    }
-    function login() {
-        var id = $("#txt_name");
-        if (id.val()) {
-            $.ajax({
-                type: "get",
-                url: "http://" + ip + "/call_login/call_login",
-                contentType: 'application/x-www-form-urlencoded;charset=UTF-8',
-                crossDomain: true,
-                cache: false,
-                dataType: "json",
-                data: { "login_id": id.val() },
-                beforeSend: function () {
-                    $("#infos").html("正在登录中，请稍后...");
-                },
-                success: function (data) {
-                    if (data.return_code == "success") {
-                        var q_id = 0
-                        if (data.list.queue_type_id)
-                            q_id = data.list.queue_type_id;
-                        SSMSObject.SetConfig(ip, f_time, id.val(), q_id);
-                        $("#infos").html(data.return_msg);
+        //win.on("move", function () {
+            
+        //}
+        //);
+        //function choose(id, pswd)
+        //{
+            
+        //    document.getElementById("txt_name").value = id;
+        //    document.getElementById("txt_pswd").value = pswd;
+        //    document.getElementById('popup').style.display = 'none';
+        //}
+
+        function  getKey() {
+                if (event.keyCode == 13) {
+                    login();
+                }
+        } 
+        function login() {
+            var id = $("#txt_name");
+            if (chk_val('txt_name')) {
+                $.ajax({
+                    type: "get",
+                    url: "http://" + ip + "/call_login/call_login",
+                    contentType: "application/text;charset=utf-8",
+                    dataType: "json",
+                    data: { "login_id": id.val() },
+                    beforeSend: function () {
+                        $("#infos").html("正在登录中，请稍后...");
+                    },
+                    success: function (data) {
+                        if (data.return_code == "success") {
+                            var win2 = gui.Window.open('index.html', {
+                                position: 'center',
+                                frame: false,
+                                resizable: false,
+                                always_on_top: true,
+                                transparent: true,
+                                //show_in_taskbar: false,
+                                focus: true
+                            });
+                            config_json.doctor_id = id.val();
+                            config_json.login_id = "";
+                            config_json.queue_type_id = data.list[0].queue_type_id;
+                            rf.writeFileSync(filepath + "/config.json", JSON.stringify(config_json));
+                            win.close();
+                        }
+                        else {
+                            $("#infos").html(data.return_msg);
+                            id.attr('class', 'txt2');
+                        }
+                    },
+                    error: function (err) {
+                        $("#infos").html("系统发生错误，请联系管理员");
                         id.attr('class', 'txt2');
-                        window.location.href = "index.html";
                     }
-                    else {
-                        $("#infos").html(data.return_msg);
-                        id.attr('class', 'txt2');
-                    }
-                },
-                error: function (err) {
-                    $("#infos").html("系统发生错误，请联系管理员");
-                    id.attr('class', 'txt2');
-                }
-            });
-        }
-        else
-            $("#infos").html("请输入用户名或工号");
-    }
-   
-    function setting() {
-        $("#tips").show();
-    }
-    function back() {
-        $("#tips").hide();
-    }
-    function save_ip() {
-        var nip = $("#txt_ip");
-        if (nip.val()) {
-            if (chk_val_ip(nip)) {
-                SSMSObject.SetConfig(nip.val(), f_time, "", 0);
-                ip = nip.val();
-                $("#tips").hide();
+                });
+
+                
             }
-            else
-                $("#infos2").html("IP地址格式不正确");
         }
-        else
-            $("#infos2").html("请输入IP地址");
-    }
-    function chk_val_ip(obj) {
-        var ip = obj.val().replace(/(^\s*)|(\s*$)/g, "");
-        if (ip == "") {
-            obj.setAttribute('class', 'txt2');
-            obj.removeClass("txt");
-            obj.addClass("txt2");
-            obj.focus();
-            return false;
-        }
-        else {
-            var reg = /^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5]):\d{0,5}$/;
-            if (reg.test(ip)) {
-                obj.removeClass("txt2");
-                obj.addClass("txt");
-                obj.focus();
-                return true;
-            }
-            else {
-                obj.removeClass("txt");
-                obj.addClass("txt2");
+       
+        function chk_val(id) {
+            var obj=$("#"+id);
+            //setTimeout(document.getElementById('popup').style.display = 'none',100);
+            if ($.trim(obj.val()) == "") {
+                $("#infos").html("请输入用户名或工号");
+                obj.attr('class', 'txt2');
                 obj.focus();
                 return false;
             }
+            else {
+                obj.attr('class', 'txt');
+                $("#infos").html("");
+                return true;
+            }
         }
-    }
-
-</script>
+        //function save_ip() {
+        //    var txt_ip = document.getElementById("txt_ip");
+        //    if (chk_val_ip(txt_ip)) {
+        //        config_json.ip = txt_ip.value;
+        //        ip = txt_ip.value;
+        //        rf.writeFileSync(filepath + "/config.json", JSON.stringify(config_json));
+        //        document.getElementById('div_ip').style.display = 'none';
+        //    }
+        //}
+        //function chk_val_ip(obj) {
+        //    var ip = obj.value.replace(/(^\s*)|(\s*$)/g,"");
+        //    if (ip == "") {
+        //        obj.setAttribute('class', 'txt2');
+        //        obj.focus;
+        //        return false;
+        //    }
+        //    else {
+        //        var reg = /^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/;
+        //        if (reg.test(ip)) {
+        //            obj.setAttribute('class', 'txt');
+        //            return true;
+        //        }
+        //        else {
+        //            obj.setAttribute('class', 'txt2');
+        //            return false;
+        //        }
+        //    }
+        //}
+        //function save_info(id, pswd, save) {
+        //    var new_user = true;
+        //    var new_json = "";
+        //    var j = 0;
+        //    if (user_json != null)
+        //        j = user_json.length;
+        //    if (j >= 9)
+        //        j = 9;
+        //    for (var i = 0; i < j; i++) {
+        //        if (user_json[i].id == id) {
+        //            new_user = false;
+        //            if (save) {
+        //                new_json = "{\"id\":\"" + id + "\",\"pswd\":\"" + pswd + "\"}," + new_json;
+        //            }
+        //        }
+        //        else
+        //            new_json += "{\"id\":\"" + user_json[i].id + "\",\"pswd\":\"" + user_json[i].pswd + "\"},"
+        //    }
+        //    if (new_user)
+        //        new_json = "{\"id\":\"" + id + "\",\"pswd\":\"" + pswd + "\"}," + new_json;
+        //    new_json = "[" + new_json.substring(0, new_json.length - 1) + "]";
+        //    rf.writeFileSync(filepath + "/user.json", new_json);
+        //}
+    </script>
+</body>
+</html>

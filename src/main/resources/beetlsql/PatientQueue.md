@@ -11,7 +11,7 @@ SELECT
 	a.register_id,
 	a.patient_name,
 	a.time_interval,
-	a.fre_date,
+	date_format(a.fre_date,'%Y-%m-%d %H:%I:%s') fre_date,
 	a.call_time,
 	d. NAME AS doctorName,
 	a.state_patient,
@@ -106,14 +106,13 @@ a.fre_date)b
 
 LISTPATIENT_LOCK
 ===
-
 SELECT
 	a.id,
 	a.patient_id,
 	a.register_id,
 	a.patient_name,
 	a.time_interval,
-	a.fre_date,
+	date_format(a.fre_date,'%Y-%m-%d %H:%I:%s') fre_date,
 	a.call_time,
 	d. NAME AS doctorName,
 	a.state_patient,
@@ -146,7 +145,7 @@ SELECT
 	a.register_id,
 	a.patient_name,
 	a.time_interval,
-	a.fre_date,
+	date_format(a.fre_date,'%Y-%m-%d %H:%I:%s') fre_date,
 	a.call_time,
 	d. NAME AS doctorName,
 	a.state_patient,
@@ -183,7 +182,7 @@ SELECT
 	a.register_id,
 	a.patient_name,
 	a.time_interval,
-	a.fre_date,
+	date_format(a.fre_date,'%Y-%m-%d %H:%I:%s') fre_date,
 	a.call_time,
 	d. NAME AS doctorName,
 	a.state_patient,
@@ -220,7 +219,7 @@ SELECT
 	a.register_id,
 	a.patient_name,
 	a.time_interval,
-	a.fre_date,
+	date_format(a.fre_date,'%Y-%m-%d %H:%I:%s') fre_date,
 	a.call_time,
 	d. NAME AS doctorName,
 	a.state_patient,
@@ -256,7 +255,7 @@ SELECT
 	a.register_id,
 	a.patient_name,
 	a.time_interval,
-	a.fre_date,
+	date_format(a.fre_date,'%Y-%m-%d %H:%I:%s') fre_date,
 	a.call_time,
 	d. NAME AS doctorName,
 	a.state_patient,
@@ -292,7 +291,7 @@ SELECT
 	a.register_id,
 	a.patient_name,
 	a.time_interval,
-	a.fre_date,
+	date_format(a.fre_date,'%Y-%m-%d %H:%I:%s') fre_date,
 	a.call_time,
 	d. NAME AS doctorName,
 	a.state_patient,
@@ -329,7 +328,7 @@ SELECT
 	a.register_id,
 	a.patient_name,
 	a.time_interval,
-	a.fre_date,
+	date_format(a.fre_date,'%Y-%m-%d %H:%I:%s') fre_date,
 	a.call_time,
 	d. NAME AS doctorName,
 	a.state_patient,
@@ -340,7 +339,9 @@ SELECT
 	a.queue_type_id,
 	a.late_lock,
 	a.register_id2,
-	a.state_patient2
+	a.state_patient2,
+	date_format(a.begin_time,'%Y-%m-%d %H:%I:%s')begin_time,
+	date_format(a.last_time,'%Y-%m-%d %H:%I:%s')last_time
 FROM
 	patient_queue a
 LEFT JOIN queue_type b ON a.queue_type_id = b.queue_type_id
@@ -356,6 +357,15 @@ ORDER BY
 	a.opr_time,
 	a.fre_date
 
+
+
+INSERT_PATIENT_SINGNTIME
+===
+insert  into t_signin (patient_source_code,patient_name,call_time,signin_time)
+  select patient_source_code,patient_name,call_time,now() signin_time from patient_queue 
+  where patient_source_code=#{source_code} order by id desc LIMIT 0,1
+
+
 LISTPATIENT_AGIN
 ===
 SELECT
@@ -364,7 +374,7 @@ SELECT
 	a.register_id,
 	a.patient_name,
 	a.time_interval,
-	a.fre_date,
+	date_format(a.fre_date,'%Y-%m-%d %H:%I:%s') fre_date,
 	a.call_time,
 	a.opr_time,
 	d. NAME AS doctorName,
@@ -592,15 +602,15 @@ WHERE
 
 updatedisplaybyscanreorder
 ===
-UPDATE patient_queue SET register_id=#{register_id} ,is_display=2,opr_time=#{opr_time} where id=#{id}
+UPDATE patient_queue SET register_id=#{register_id} ,is_display=2,opr_time=#{opr_time}  where id=#{id}
 
 updatedisplaybyscan
 ===
-UPDATE patient_queue SET is_display=2,opr_time=#{opr_time} where id=#{id}
+UPDATE patient_queue SET is_display=2,opr_time=#{opr_time}  where id=#{id}
 
 updatedisplaybyscan2
 ===
-UPDATE patient_queue SET state_patient=8,is_display=2,opr_time=#{opr_time} where id=#{id}
+UPDATE patient_queue SET state_patient=8,is_display=2,opr_time=#{opr_time}  where id=#{id}
 
 updateFZbyscan
 ===
@@ -884,7 +894,6 @@ ORDER BY
 					
 list_call_patient_queuetype2
 ===
-
 select 
 	a.id,
 	a.patient_id,
@@ -2417,7 +2426,7 @@ AND a.queue_type_id = #{queue_type_id}
 
 deletepatient
 ===
-delete from patient_queue where datediff(CURRENT_DATE(),begin_time) >= 7;
+delete from patient_queue 
 
 
 setidentity
@@ -2814,7 +2823,7 @@ SELECT
 	a.state_patient,
 	a.patient_source_code,
 	a.caller,
-	a.fre_date,
+	date_format(a.fre_date,'%Y-%m-%d %H:%I:%s') fre_date,
 	a.call_time,
 	a.time_interval,
 	a.state_custom,
@@ -2852,7 +2861,7 @@ SELECT
 	a.state_patient,
 	a.patient_source_code,
 	a.caller,
-	a.fre_date,
+	date_format(a.fre_date,'%Y-%m-%d %H:%I:%s') fre_date,
 	a.call_time,
 	a.time_interval,
 	a.state_custom,
@@ -3561,7 +3570,8 @@ update 	patient_queue a
 INNER JOIN rlt_pager2queue_type b ON a.queue_type_id = b.queue_type_id
 INNER JOIN pager c ON b.pager_id = c.id
 LEFT JOIN doctor d ON a.doctor_id = d.doctor_id
-SET a.state_patient=#{state},a.opr_time=#{opr_time},a.call_count=0,a.register_id2=#{register_id2},	a.state_patient2=#{state_patient2}
+SET a.state_patient=#{state},a.opr_time=#{opr_time},a.call_count=0,a.register_id2=#{register_id2},
+a.state_patient2=#{state_patient2} 
 WHERE
 	c.id = #{id}
 AND LOCATE(#{code},a.patient_source_code)>0

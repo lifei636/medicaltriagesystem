@@ -1,6 +1,7 @@
 package com.shine.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.core.base.service.IService;
 import com.core.toolbox.Record;
@@ -285,4 +286,6 @@ public interface PatientQueueService extends IService<PatientQueue> {
 	public boolean InsertReserve(String queue_type_id,String patient_id,String patient_name,String patient_source_code,String reserve_id,String reserve_time,String begin_time,String end_time);
 	
 	public int copyReservePatient();
+
+	public int insertPatient(Record map);
 }

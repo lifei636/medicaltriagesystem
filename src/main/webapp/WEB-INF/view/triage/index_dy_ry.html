@@ -1,0 +1,456 @@
+﻿<!--德阳人医分诊台-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>智能排队系统客户端管理软件</title>
+    <link rel="shortcut icon" href="${basePath}/static/style/images/favicon.ico" type="image/x-icon" />
+    <link href="${basePath}/static/assets/css/css.css" type="text/css" rel="stylesheet" />
+    <link href="${basePath}/static/assets/css/select2.css" type="text/css" rel="stylesheet" />
+    <link href="${basePath}/static/assets/layui/css/layui.css" type="text/css" rel="stylesheet" />
+    <script src="${basePath}/static/assets/js/jquery-3.3.1.js"></script> 
+    <!-- <script src="${basePath}/static/assets/js/jquery.min.js"></script> -->
+    <script src="${basePath}/static/assets/js/horwheel.js"></script>
+    <script src="${basePath}/static/assets/js/pinyin.js"></script>
+    <script src="${basePath}/static/assets/layui/layui.js"></script>
+    <script src="${basePath}/static/layer/layer.js"></script>
+</head>
+<body>
+    <div id="main">
+        
+        <div id="head">
+            <label class="layui-lable" id="lbl_countdown"></label>
+            <button id="btnRefresh" class="layui-btn layui-btn-normal" onclick="ManualCountDown()">
+                刷新<i class="layui-icon layui-anim layui-anim-rotate layui-anim-loop">&#x1002;</i>
+            </button><!--onclick="btninput()"  -->
+            <button id="btninput" class="layui-btn layui-btn-normal" onclick="Manual_show()">
+                录入<i class="layui-icon">&#xe61f;</i>
+            </button>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <input type="text"
+                   placeholder="扫描报道" id="searchvalue" autocomplete="off"
+                   style="height: 25px; width: 250px;" />
+            <button class="layui-btn layui-btn-normal" id="btnsearch" onclick="search_show()">
+                <i class="layui-icon">&#xe615;</i>
+            </button>
+            <span id="span_TriageName" class=""></span>
+        </div>
+        <div id="fzt_list">
+            <!-- 队列 -->
+            <ul id="li_listqueue"></ul>
+        </div>
+        <div id="list" class="layui-tab" style="margin-top: 0px; color:#fff;">
+            <ul class="layui-tab-title"
+                style="background-color: #438eb9; margin-left: 10px;">
+                <li class="layui-this">患者就诊信息</li>
+                <li>医生排班</li>
+                <!--<li>预约</li>-->
+            </ul>
+            <div class="layui-tab-content">
+                <!-- 患者就诊信息 -->
+                <div class="layui-tab-item layui-show">
+                    <div class="table">
+                        <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                            <tr>
+                                <td align="left" style="background-color: #438eb9;" id="btns">
+                                    <button class="layui-btn layui-btn-normal" id="btnfirst" name="btn_wait" onclick="patientQueue('patientFirst')">
+                                        <i class="layui-icon">&#xe62f;</i>优先
+                                    </button>
+                                    <button class="layui-btn layui-btn-normal" id="btntriage" name="btn_wait" onclick="examination_show()">
+                                        <i class="layui-icon">&#xe612;</i>分诊
+                                    </button>
+                                    <button class="layui-btn layui-btn-normal" id="btnnotriage" name="btn_wait" onclick="examination_cannel()">
+                                        <i class="layui-icon">&#xe612;</i>取消分诊
+                                    </button>
+                                    <button class="layui-btn layui-btn-normal" id="btnreferral" name="btn_wait" onclick="patientQueue_referralQueueType_show()">
+                                        <i class="layui-icon">&#xe64d;</i>转诊
+                                    </button>
+                                    <button class="layui-btn layui-btn-normal" id="btnhang" name="btn_wait" onclick="patientQueue('Hang')">
+                                        <i class="layui-icon">&#xe64f;</i>挂起
+                                    </button>
+                                    <!--<button class="layui-btn layui-btn-normal" id="btndelay" name="btn_wait" onclick="patientQueue_delay_show()">
+                                        <i class="layui-icon">&#xe628;</i>延迟
+                                    </button>-->
+                                    <button class="layui-btn layui-btn-normal" id="btngreenchannel" name="btn_wait" onclick="patientQueue('GreenChannel')">
+                                        <i class="layui-icon">&#xe623;</i>绿色通道
+                                    </button>
+                                    <button class="layui-btn layui-btn-normal" id="btnvisit" name="btn_wait" onclick="patientQueue('visit')">
+                                        <i class="layui-icon">&#xe613;</i>复诊
+                                    </button>
+                                    <button class="layui-btn layui-btn-normal" id="btnno" name="btn_wait" onclick="patientQueue('passed')">
+                                        <i class="layui-icon">&#x1006;</i>过号
+                                    </button>
+                                    <button class="layui-btn layui-btn-normal" id="btndiagnosed" name="btn_wait" onclick="patientQueue('newlyDiagnosed')">
+                                        <i class="layui-icon">&#xe618;</i>初诊
+                                    </button>
+                                    <button  class="layui-btn layui-btn-normal" style="display:none" id="btnreport" onclick="baodaoselect()">
+                                        <i class="layui-icon">&#xe60a;</i>批量报道
+                                    </button>
+                                </td>
+                            </tr>
+                            <!--<tr>
+                                <td align="left" style="background-color: #438eb9;">
+                                    <button class="layui-btn layui-btn-normal" id="btnstation" name="btn_wait">
+                                        <i class="layui-icon">&#xe645;</i>叫号
+                                    </button>
+                                    <button class="layui-btn layui-btn-normal" id="btnbydoctor" name="btn_wait">
+                                        <i class="layui-icon">&#xe612;</i>按医生分组
+                                    </button>
+                                    <button class="layui-btn layui-btn-normal" id="btnbystate" name="btn_wait">
+                                        <i class="layui-icon">&#xe612;</i>按状态分组
+                                    </button>
+                                    <button class="layui-btn layui-btn-normal" id="btnpatientstate" name="btn_wait">
+                                        <i class="layui-icon">&#xe64d;</i>患者状态
+                                    </button>
+                                    <button class="layui-btn layui-btn-normal" id="btndisplay" name="btn_wait">
+                                        <i class="layui-icon">&#xe63f;</i>显示
+                                    </button>
+                                    <button style="float: right;" class="layui-btn layui-btn-normal" id="btnreport">
+                                        <i class="layui-icon">&#xe60a;</i>批量报道
+                                    </button>
+                                </td>
+                            </tr>-->
+                        </table>
+                        <div class="layui-table" lay-skin="row" width="100%" style="margin:0px; padding:0px; overflow:auto;">
+                            <div class="layui-tab layui-tab-card" lay-filter="list">
+                                <ul class="layui-tab-title">
+                                    <li lay-id="wait" class="layui-this">等候患者</li>
+                                    <li lay-id="pass">未到过号患者</li>
+                                    <li lay-id="already">已就诊患者</li>
+                                    <li lay-id="passno">过号患者</li>
+                                    <li lay-id="nodisplay">未报到患者</li>
+                                </ul>
+                                <div class="layui-tab-content" style="height: 500px;">
+                                    <div class="layui-tab-item layui-show">
+                                        <div class="t_head">
+                                            <span class="w10">
+                                                <input type="checkbox" id="ck_wait" title="全选/全不选" onclick="check_all('ck_wait')" />序号
+                                            </span>
+                                            <span class="w15">姓名</span>
+                                            <span class="w15">医生</span>
+                                            <span class="w10">状态</span>
+                                            <span class="w10">患者状态</span>
+                                            <span class="w10">午别</span>
+                                            <span class="w15">挂号时间</span>
+                                            <span class="w15">叫号时间</span>
+                                        </div>
+                                        <div id="list_wait" class="t_list">
+
+                                        </div>
+                                    </div>
+                                    <div class="layui-tab-item">
+                                        <div class="t_head">
+                                            <span class="w10">
+                                                <input type="checkbox" id="ck_pass" title="全选/全不选" onclick="check_all('ck_pass')" />序号
+                                            </span>
+                                            <span class="w15">姓名</span>
+                                            <span class="w15">医生</span>
+                                            <span class="w10">状态</span>
+                                            <span class="w10">患者状态</span>
+                                            <span class="w10">午别</span>
+                                            <span class="w15">挂号时间</span>
+                                            <span class="w15">叫号时间</span>
+                                        </div>
+                                        <div id="list_pass" class="t_list">
+
+                                        </div>
+                                    </div>
+                                    <div class="layui-tab-item">
+                                        <div class="t_head">
+                                            <span class="w10">
+                                                <input type="checkbox" id="ck_already" title="全选/全不选" onclick="check_all('ck_already')" />序号
+                                            </span>
+                                            <span class="w15">姓名</span>
+                                            <span class="w15">医生</span>
+                                            <span class="w10">状态</span>
+                                            <span class="w10">患者状态</span>
+                                            <span class="w10">午别</span>
+                                            <span class="w15">挂号时间</span>
+                                            <span class="w15">叫号时间</span>
+                                        </div>
+                                        <div id="list_already" class="t_list">
+
+                                        </div>
+                                    </div>
+                                    <div class="layui-tab-item">
+                                        <div class="t_head">
+                                            <span class="w10">
+                                                <input type="checkbox" id="ck_passno" title="全选/全不选" onclick="check_all('ck_passno')" />序号
+                                            </span>
+                                            <span class="w15">姓名</span>
+                                            <span class="w15">医生</span>
+                                            <span class="w10">状态</span>
+                                            <span class="w10">患者状态</span>
+                                            <span class="w10">午别</span>
+                                            <span class="w15">挂号时间</span>
+                                            <span class="w15">叫号时间</span>
+                                        </div>
+                                        <div id="list_passno" class="t_list">
+
+                                        </div>
+                                    </div>
+                                    <div class="layui-tab-item">
+                                        <div class="t_head">
+                                            <span class="w10">
+                                                <input type="checkbox" id="ck_nodisplay" title="全选/全不选" onclick="check_all('ck_nodisplay')" />序号
+                                            </span>
+                                            <span class="w15">姓名</span>
+                                            <span class="w15">医生</span>
+                                            <span class="w10">状态</span>
+                                            <span class="w10">患者状态</span>
+                                            <span class="w10">午别</span>
+                                            <span class="w15">就诊开始时间</span>
+                                            <span class="w15">就诊结束时间</span>
+                                        </div>
+                                        <div id="list_nodisplay" class="t_list">
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 医生排班 -->
+                <div class="layui-tab-item">
+
+                    <div class="table">
+                        <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                            <tr>
+                                <td align="left" style="background-color: #438eb9;" id="btns">
+                                    <button class="layui-btn layui-btn-normal" id="btnfirst" onclick="doc_add()">
+                                        <i class="layui-icon">&#xe61f;</i>添加
+                                    </button>
+                                    <button class="layui-btn layui-btn-normal" id="btnnotriage" onclick="doc_edit('','','ids','批量修改')">
+                                        <i class="layui-icon">&#xe642;</i>修改
+                                    </button>
+                                    <button class="layui-btn layui-btn-normal" id="btntriage" onclick="doc_del('')">
+                                        <i class="layui-icon">&#xe640;</i>删除
+                                    </button>
+                                    <input type="text"
+                                        placeholder="医生排班搜索" id="searchdoctor" autocomplete="off"
+                                        style="height: 25px; width: 250px;" />
+                                    <button class="layui-btn layui-btn-normal" id="btnsearch" onclick="search_doctor()">
+                                        <i class="layui-icon">&#xe615;</i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </table>
+                        <div class="layui-table" lay-skin="row" width="100%" style="margin:0px; padding:0px; overflow:auto; height:500px">
+                            <div class="t_head">
+                                <span class="w5">
+                                    <input type="checkbox" id="ck_doctor" title="全选/全不选" onclick="check_all('ck_doctor')" />序号
+                                </span>
+                                <span class="w10">科室</span>
+                                <span class="w10">医生</span>
+                                <span class="w10">周一</span>
+                                <span class="w10">周二</span>
+                                <span class="w10">周三</span>
+                                <span class="w10">周四</span>
+                                <span class="w10">周五</span>
+                                <span class="w10">周六</span>
+                                <span class="w10">周日</span>
+                                <span class="w5">操作</span>
+                            </div>
+                            <div id="list_rltdoc" class="t_list">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 预约 -->
+                <!-- <div class="layui-tab-item">这是预约的模块</div> -->
+            </div>
+        </div>
+    </div>
+   <!--  <div class="call_list">
+        <div class="title">医生已叫患者(<b id="call_doc_count">0</b>)<a href="javascript:call_doc_close()" class="close" id="call_doc_count_btn">&or;</a></div>
+        
+        <div class="list" id="call_list">
+            
+            
+        </div>
+    </div>
+    <div class="show_tips" id="show_tips">
+        <div class="title">医生正在呼叫</div>
+        <div class="list" id="doc_call_rows"></div>
+    </div> -->
+</body>
+</html>
+<script src="${basePath}/static/assets/js/config.js" type="text/javascript"></script>
+<script src="${basePath}/static/assets/js/select2.js"></script>
+<script src="${basePath}/static/assets/js/pinyin2.js"></script>
+<script src="${basePath}/static/assets/js/function.js" type="text/javascript"></script>
+<script type="text/javascript">
+    //倒计时
+    var s = 60;
+    //当前队列列表id
+    var ListNum;
+    //选择的患者ids
+    var ids = "", d_ids = "", s_id = "";
+    //初始患者队列列表获取地址
+    var patientQueue_url = "/clientPatientQueue/listPatient_wait";
+    //当前显示列表名称
+    var list = "wait";
+
+    //队列集合
+    var patientList = {};
+    function CountDown() {
+        s -= 1;
+        $("#lbl_countdown").text(s + "秒");
+        if (s % 60 == 0) {
+            s = 60;
+            ListQueueType();
+        }
+    }
+    function ManualCountDown() {
+        s = 60;
+        ListQueueType();
+        getRltDoctor();
+    }
+    window.setInterval(CountDown, 1000);
+    //获取分诊台名称
+    TriageName();
+    ListQueueType();
+    $("#searchvalue").focus();
+    //获取排班信息
+    getRltDoctor();
+    //getDocCaller();
+    //window.setInterval(getDocCaller, 5000);
+    //当前回车按钮
+    var func = "search_show()";
+
+    function ListPatient(id) {
+        id=id.replace("dl","");
+        $(".queue_type_id").removeClass("libg");
+        ListNum ="dl"+ id;
+        ids = "";
+        $("#" + ListNum).addClass("libg");
+        var div = $("#list_" + list);
+        $("#ck_" + list).prop("checked", false);
+        $("#ck_" + list)[0].indeterminate = false;
+        $.ajax({
+            type: "POST",
+            async: true,
+            url: patientQueue_url,
+            dataType: "json",
+            data: { "ip":ip,"queue_number": id },
+            beforeSend: function () {
+                div.html("<li style='color:red'>数据读取中，请稍后...</li>")
+            },
+            success: function (data) {
+                div.html("");
+                var status = data.return_code;
+                if (status == "success") {
+                    var count = data.count;
+                    if (count > 0) {
+                        var html = "";
+                        var l_c;
+                        $.each(data.list, function (i, li) {
+                            var s = "未知";
+                            switch (li.state_patient) {
+                                case 0:
+                                    s = "初诊";
+                                    break;
+                                case 1:
+                                    s = "过号";
+                                    break;
+                                case 2:
+                                    s = "复诊";
+                                    break;
+                                case 3:
+                                    s = "部分待检";
+                                    break;
+                                case 4:
+                                    s = "诊室等候";
+                                    break;
+                                case 5:
+                                    s = "优先";
+                                    break;
+                                case 6:
+                                    s = "插队";
+                                    break;
+                                case 7:
+                                    s = "延迟";
+                                    break;
+                                case 8:
+                                    s = "迟到";
+                                    break;
+                                case 50:
+                                    s = "挂起";
+                                    break;
+                                case 51:
+                                    s = "已叫号";
+                                    break;
+                                case 52:
+                                    s = "绿色通道";
+                                    break;
+                                case 53:
+                                    s = "已就诊";
+                                    break;
+                                case 54:
+                                    s = "未到过号";
+                                    break;
+                                default:
+                            }
+                            var t = "全天";
+                            switch (li.time_interval) {
+                                case 0:
+                                    t= '全天';
+                                    break;
+                                case 1:
+                                    t= '上午';
+                                    break;
+                                case 2:
+                                    t = '下午';
+                                    break;
+                                default:
+                            }
+                            if(list == 'nodisplay'){
+                                html += "<div class=\"rows\"><span class=\"w10\"><input onclick=\"check_status('ck_" + list + "')\" type=\"checkbox\" id=\"" + li.id + "\" value=\"" + li.id + "\" title=\"" + li.id + "\" name=\"ck_" + list + "\" />" + li.register_id + "</span>" +
+                                    "<span onclick=\"clickcheck(" + li.id + ")\" class=\"w15\">" + li.patient_name + "</span>" +
+                                    "<span onclick=\"clickcheck(" + li.id + ")\" class=\"w15\">" + li.doctorName + "</span>" +
+                                    "<span onclick=\"clickcheck(" + li.id + ")\" class=\"w10\">" + s + "</span><span onclick=\"clickcheck(" + li.id + ")\" class=\"w10\">" + li.state_custom + "</span>" +
+                                    "<span onclick=\"clickcheck(" + li.id + ")\" class=\"w10\">" + t + "</span><span onclick=\"clickcheck(" + li.id + ")\" class=\"w15\">" + (showtime=="false"?"":li.begin_time) + "</span>" +
+                                    "<span onclick=\"clickcheck(" + li.id + ")\" class=\"w15 span_last\">" +  (showtime=="false"?"":li.last_time) + "</span>" +
+                                    "</div><input type=\"hidden\" value=\""+li.patient_source_code+"\" id=\"code"+li.id+"\" />";
+
+                            }else{
+                                html += "<div class=\"rows\"><span class=\"w10\"><input onclick=\"check_status('ck_" + list + "')\" type=\"checkbox\" id=\"" + li.id + "\" value=\"" + li.id + "\" title=\"" + li.id + "\" name=\"ck_" + list + "\" />" + li.register_id + "</span>" +
+                                    "<span onclick=\"clickcheck(" + li.id + ")\" class=\"w15\">" + li.patient_name + "</span>" +
+                                    "<span onclick=\"clickcheck(" + li.id + ")\" class=\"w15\">" + li.doctorName + "</span>" +
+                                    "<span onclick=\"clickcheck(" + li.id + ")\" class=\"w10\">" + s + "</span><span onclick=\"clickcheck(" + li.id + ")\" class=\"w10\">" + li.state_custom + "</span>" +
+                                    "<span onclick=\"clickcheck(" + li.id + ")\" class=\"w10\">" + t + "</span><span onclick=\"clickcheck(" + li.id + ")\" class=\"w15\">" + (showtime=="false"?"":li.fre_date) + "</span>" +
+                                    "<span onclick=\"clickcheck(" + li.id + ")\" class=\"w15 span_last\">" +  (showtime=="false"?"":li.opr_time) + "</span>" +
+                                    "</div><input type=\"hidden\" value=\""+li.patient_source_code+"\" id=\"code"+li.id+"\" />";
+
+                            }
+
+
+                            if (s_id != "") {
+                                if (li.id == s_id)
+                                    l_c = i;
+                            }
+                        });
+                        div.html(html);
+                        if (s_id != "") {
+                            clickcheck(s_id);
+                            s_id = "";
+                            if (l_c > 10)
+                                div.animate({ 'scrollTop': ''+(l_c - 10) * 40+ 'px' });
+                        }
+                    }
+                    else
+                        div.html("<li style='color:red'>没有患者</li>");
+                }
+                else {
+                    div.html("<li style='color:red'>" + data.return_msg + "</li>");
+                }
+            },
+            error: function () {
+                div.html("<li style='color:red'>数据加载失败，请联系管理员！</li>");
+            }
+        });
+
+    }
+</script>

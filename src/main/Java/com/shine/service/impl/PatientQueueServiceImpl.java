@@ -3,6 +3,7 @@ package com.shine.service.impl;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.beetl.core.statement.VarAssignExpression;
 import org.beetl.sql.core.kit.StringKit;
@@ -1292,5 +1293,11 @@ public class PatientQueueServiceImpl extends BaseService<PatientQueue> implement
 	{
 		String sql = Blade.dao().getScript("PatientQueue.copyReservePatient").getSql();
 		return Db.init().insert(sql,null);
+	}
+
+	@Override
+	public int insertPatient(Record map) {
+		String sql = Blade.dao().getScript("PatientQueue.INSERT_PATIENT_SINGNTIME").getSql();
+		return Db.init().insert(sql,map);
 	}
 }

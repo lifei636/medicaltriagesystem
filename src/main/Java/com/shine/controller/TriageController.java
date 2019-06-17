@@ -111,7 +111,7 @@ public class TriageController extends UrlPermissController {
 		boolean temp = service.update(triage);
 		if (temp) {
 			//查询分诊台绑定的队列id
-			String triageSql = Blade.dao().getScript("PatientQueue.LISTQUERYTYPE_ALL").getSql();
+			/*String triageSql = Blade.dao().getScript("PatientQueue.LISTQUERYTYPE_ALL").getSql();
 			List<Record> queueTypeIds = Db.init().selectList(triageSql, Record.create().set("triage_id", triage.getTriage_id()));
 			String patientSql = Blade.dao().getScript("PatientQueue.LISTPATIENT_LOCK").getSql();
 			for (Record record : queueTypeIds){
@@ -139,7 +139,7 @@ public class TriageController extends UrlPermissController {
 						}
 					}
 				}
-			}
+			}*/
 			renderJson(success(UPDATE_SUCCESS_MSG));
 		} else {
 			renderJson(error(UPDATE_FAIL_MSG));

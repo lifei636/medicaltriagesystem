@@ -1,5 +1,6 @@
 package com.triage;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -472,7 +473,7 @@ public class ClientPatientQueueController extends BaseController {
 		}
 	}
 	//分诊台等候患者列表
-	public void listPatient_wait() {
+	public void listPatient_wait() throws ParseException {
 		Map<String, Object> map = new HashMap<String, Object>();
 		String ip = getPara("ip");
 		try {
@@ -682,11 +683,11 @@ public class ClientPatientQueueController extends BaseController {
 				}
 			}
 		}
-
 		if (null == final_result) {
 			renderJson(error(QUERY_FAIL_MSG));
 			return;
 		} else {
+			final_result = util(final_result);
 			map.put("return_msg", QUERY_SUCCESS_MSG);
 			map.put("return_code", "success");
 			map.put("count", final_result.size());
@@ -694,8 +695,67 @@ public class ClientPatientQueueController extends BaseController {
 			renderJson(map);
 		}
 	}
+
+	public List<Record> util(List<Record> final_result) throws ParseException {
+		String startTime = getPara("startTime");
+		String endTime = getPara("endTime");
+		String inputText = getPara("inputText");
+		String checkType = getPara("checkType");
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Iterator<Record> iterator = final_result.iterator();
+		if (startTime == null && endTime == null && inputText == null && checkType == null ){
+			return final_result;
+		}
+		while (iterator.hasNext()){
+			Record record = iterator.next();
+			if(checkType != null && !"".equals(checkType)){
+				if (inputText != null && !"".equals(inputText)){
+					switch (checkType){
+						case "name":
+							if(record.getStr("patient_name").indexOf(inputText) != -1){
+								//final_result.remove(record);
+								iterator.remove();
+							}
+							break;
+						case "case":
+							if (record.getStr("patient_source_code").indexOf(inputText) != -1){
+								//final_result.remove(record);
+								iterator.remove();
+							}
+							break;
+						case "code":
+							if (record.getStr("patient_source_code").indexOf(inputText) != -1){
+								//final_result.remove(record);
+								iterator.remove();
+							}
+						default:
+							break;
+					}
+
+				}
+			}
+			String date = record.getStr("fre_date");
+			if(date !=null && !"".equals(date)) {
+				Date parse = format.parse(date);
+				if (startTime != null && !"".equals(startTime)) {
+					Date start = format.parse(startTime);
+					if (parse != null && parse.compareTo(start) == -1) {
+						iterator.remove();
+					}
+				}
+				if (endTime != null && !"".equals(endTime)) {
+					Date start = format.parse(endTime);
+					if (parse != null && parse.compareTo(start) > -1) {
+						iterator.remove();
+					}
+				}
+			}
+
+		}
+		return final_result;
+	}
 	//分诊台未到过号患者列表
-	public void listPatient_pass() {
+	public void listPatient_pass() throws ParseException {
 		Map<String, Object> map = new HashMap<String, Object>();
 		String QueueNumber = getPara("queue_number");
 		if (StringKit.isBlank(QueueNumber)) {
@@ -720,6 +780,7 @@ public class ClientPatientQueueController extends BaseController {
 			renderJson(error(QUERY_FAIL_MSG));
 			return;
 		} else {
+			list = this.util(list);
 			map.put("return_msg", QUERY_SUCCESS_MSG);
 			map.put("return_code", "success");
 			map.put("count", list.size());
@@ -729,7 +790,7 @@ public class ClientPatientQueueController extends BaseController {
 		renderJson(map);
 	}
 	//分诊台已就诊患者列表
-	public void listPatient_already() {
+	public void listPatient_already() throws ParseException {
 		Map<String, Object> map = new HashMap<String, Object>();
 		String QueueNumber = getPara("queue_number");
 		if (StringKit.isBlank(QueueNumber)) {
@@ -755,6 +816,7 @@ public class ClientPatientQueueController extends BaseController {
 			renderJson(error(QUERY_FAIL_MSG));
 			return;
 		} else {
+			list = this.util(list);
 			map.put("return_msg", QUERY_SUCCESS_MSG);
 			map.put("return_code", "success");
 			map.put("count", list.size());
@@ -764,7 +826,7 @@ public class ClientPatientQueueController extends BaseController {
 		renderJson(map);
 	}
 	//分诊台过号患者列表
-	public void listPatient_passno() {
+	public void listPatient_passno() throws ParseException {
 		Map<String, Object> map = new HashMap<String, Object>();
 		String QueueNumber = getPara("queue_number");
 		if (StringKit.isBlank(QueueNumber)) {
@@ -789,6 +851,7 @@ public class ClientPatientQueueController extends BaseController {
 			renderJson(error(QUERY_FAIL_MSG));
 			return;
 		} else {
+			list = this.util(list);
 			map.put("return_msg", QUERY_SUCCESS_MSG);
 			map.put("return_code", "success");
 			map.put("count", list.size());
@@ -798,7 +861,7 @@ public class ClientPatientQueueController extends BaseController {
 		renderJson(map);
 	}
 	//未报到列表
-	public void listPatient_nodisplay() {
+	public void listPatient_nodisplay() throws ParseException {
 		Map<String, Object> map = new HashMap<String, Object>();
 		String QueueNumber = getPara("queue_number");
 		if (StringKit.isBlank(QueueNumber)) {
@@ -823,6 +886,7 @@ public class ClientPatientQueueController extends BaseController {
 			renderJson(error(QUERY_FAIL_MSG));
 			return;
 		} else {
+			list = this.util(list);
 			map.put("return_msg", QUERY_SUCCESS_MSG);
 			map.put("return_code", "success");
 			map.put("count", list.size());
@@ -1055,6 +1119,7 @@ public class ClientPatientQueueController extends BaseController {
 	{
 		Map<String, Object> map = new HashMap<String, Object>();
 		String code = getPara("code");
+		String patient_name = getPara("patient_name");
 		String queue_type_id=getPara("queue_type_id");
 		if (StringKit.isBlank(code)) {
 			map.put("return_code", "fail");
@@ -1080,7 +1145,7 @@ public class ClientPatientQueueController extends BaseController {
 		Triage tri=triage.queryTriageIp(ip);
 		if(tri.getReorder_type()==1)
 		{
-			renderJson(ScanAdd(code , ip,tri.getLate_show().toString(),tri.getLate_flag_step(),queue_type_id));
+			renderJson(ScanAdd(code , ip,tri.getLate_show().toString(),tri.getLate_flag_step(),queue_type_id,patient_name));
 			return;
 		}
 		else 
@@ -1118,6 +1183,12 @@ public class ClientPatientQueueController extends BaseController {
 					if(bool1)
 					{
 						Record record=service.getpatientbypagerlist(code, queue_type_id);
+						Record map2 = Record.create();
+						map2.put("source_code",code);
+						map2.put("patient_name",patient_name);
+						map2.put("id",record.getInt("id"));
+						service.insertPatient(map2);
+
 						map.put("return_msg",
 								"当前患者:" + record.getStr("patient_name") + "已成功报到在当前分诊台" + record.getStr("triage_name") + "下");
 						map.put("return_code", "success");
@@ -1138,9 +1209,14 @@ public class ClientPatientQueueController extends BaseController {
 				else
 				{
 					Record record=service.getpatientbypagerlist(code, queue_type_id);
+					Record map2 = Record.create();
+					map2.put("source_code",code);
+					map2.put("patient_name",record.getStr("patient_name"));
+					map2.put("id",record.getInt("id"));
 					Integer ylList=service.getylnmb(queue_type_id,Integer.parseInt(r_queuetype.getReserve_numlist()));
 					if(ylList<=Integer.parseInt(r_queuetype.getReserve_numlist()))
 					{
+						service.insertPatient(map2);
 						if(ylList==0)
 							ylList=1;
 						map.put("return_msg",
@@ -1168,6 +1244,10 @@ public class ClientPatientQueueController extends BaseController {
 			else
 			{
 				Record record=service.getpatientbypagerlist(code, queue_type_id);
+				Record map2 = Record.create();
+				map2.put("source_code",code);
+				map2.put("patient_name",record.getStr("patient_name"));
+				map2.put("id",record.getInt("id"));
 				if(record.getInt("is_display")==1)
 				{
 					Boolean bool1=false;
@@ -1183,7 +1263,7 @@ public class ClientPatientQueueController extends BaseController {
 					}
 					if(bool1)
 					{
-						record=service.getpatientbypagerlist(code, queue_type_id);
+						service.insertPatient(map2);
 						map.put("return_msg",
 								"当前患者:" + record.getStr("patient_name") + "已成功报到在当前分诊台" + record.getStr("triage_name") + "下");
 						map.put("return_code", "success");
@@ -1285,6 +1365,7 @@ public class ClientPatientQueueController extends BaseController {
 	public Map<String, Object> SanAddBydoor() {
 		Map<String, Object> map = new HashMap<String, Object>();
 		String code = getPara("code");
+		String patient_name = getPara("patient_name");
 		String queue_type_id=getPara("queue_type_id");
 		String pagerid=getPara("queue_type_id");
 		String ip=shardkit.getIpAddr(getRequest());
@@ -1310,7 +1391,11 @@ public class ClientPatientQueueController extends BaseController {
 		}
 		Calendar c = Calendar.getInstance();//可以对每个时间域单独修改
 		int h=c.get(Calendar.HOUR_OF_DAY);
-		
+		int id=record.getInt("id");
+		Record map2 = Record.create();
+		map2.put("source_code",code);
+		map2.put("patient_name",patient_name);
+		map2.put("id",id);
 		if(h<12)
 		{
 			if(record.getInt("time_interval")==3)
@@ -1324,7 +1409,6 @@ public class ClientPatientQueueController extends BaseController {
 		if(t_t.equals("1"))
 		{
 			String is_display = record.getInt("is_display").toString();
-			int id=record.getInt("id");
 
 			if ("1".equals(is_display)) {
 				int is_ckin_order=service.queuetypeisckinorder(queue_type_id);
@@ -1333,9 +1417,11 @@ public class ClientPatientQueueController extends BaseController {
 				if(is_ckin_order==1)
 				{
 					int register=service.findmaxregisteridbyisdisplay(queue_type_id);
-					if(register<=0)
-						register=1;
+					if(register<=0) {
+						register = 1;
+					}
 					disp=service.updatedisplaybyscanreorder(String.valueOf(register),id);
+
 				}
 				else
 				{
@@ -1348,17 +1434,18 @@ public class ClientPatientQueueController extends BaseController {
 							if(h<12&&Integer.parseInt(record.getStr("time_interval"))==2)
 							{
 								disp = service.updatedisplaybyscan(id);
+
 							}
 							else
 							{
-							int max=service.findmaxregisteridnow(queue_type_id);
-							int now= Integer.parseInt(record.getStr("register_id"));
-							if(max>now)
-							{
-								disp=service.updatedisplaybyscan2(id);
-							}
-							else
-								disp = service.updatedisplaybyscan(id);
+								int max=service.findmaxregisteridnow(queue_type_id);
+								int now= Integer.parseInt(record.getStr("register_id"));
+								if(max>now)
+								{
+									disp=service.updatedisplaybyscan2(id);
+								} else {
+									disp = service.updatedisplaybyscan(id);
+								}
 							}
 						}
 						else
@@ -1412,6 +1499,9 @@ public class ClientPatientQueueController extends BaseController {
 				}
 				
 				if (disp > 0) {
+
+					service.insertPatient(map2);
+
 					map.put("return_msg",
 							"当前患者:" + record.getStr("patient_name") + "已成功报到在当前分诊台" + record.getStr("triage_name") + "下");
 					map.put("return_code", "success");
@@ -1538,6 +1628,9 @@ public class ClientPatientQueueController extends BaseController {
 					}
 				}
 				if (disp) {
+
+					service.insertPatient(map2);
+
 					map.put("return_msg",
 							"当前患者:" + record.getStr("patient_name") + "已成功报到在当前分诊台" + record.getStr("triage_name") + "下");
 					map.put("return_code", "success");
@@ -1621,6 +1714,11 @@ public class ClientPatientQueueController extends BaseController {
 
 			if(disp>0)
 			{
+				Record map2 = Record.create();
+				map2.put("source_code",code);
+				map2.put("patient_name",record.getStr("patient_name"));
+				map2.put("id",id);
+				service.insertPatient(map2);
 				map.put("return_msg",
 						"当前患者:" + record.getStr("patient_name") + "已成功报到在当前分诊台" + record.getStr("triage_name") + "下");
 				map.put("return_code", "success");
@@ -1716,7 +1814,7 @@ public class ClientPatientQueueController extends BaseController {
 	}
 
 
-	public Map<String, Object> ScanAdd(String code ,String ip,String late_show,int late_flag_step,String QueueNumber) {
+	public Map<String, Object> ScanAdd(String code ,String ip,String late_show,int late_flag_step,String QueueNumber,String name) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		List<Record> rsList=service.findCode(code, ip);
 		Record record = rsList.get(0);
@@ -1750,6 +1848,10 @@ public class ClientPatientQueueController extends BaseController {
 		String queue_type_id=record.getStr("queue_type_id");
 		int id=record.getInt("id");
 		int register=record.getInt("register_id");
+		Record map2 = Record.create();
+		map2.put("source_code",code);
+		map2.put("patient_name",name);
+		map2.put("id",id);
 		if ("1".equals(is_display)) {
 			int is_ckin_order=service.queuetypeisckinorder(queue_type_id);
 			int disp=0;
@@ -1780,8 +1882,9 @@ public class ClientPatientQueueController extends BaseController {
 								disp=service.updatedisplaybyscan2(id);
 								
 							}
-							else
+							else {
 								disp = service.updatedisplaybyscan(id);
+							}
 						}
 						
 					}
@@ -1822,12 +1925,15 @@ public class ClientPatientQueueController extends BaseController {
 							}
 					}
 				}
-				else
+				else {
 					disp = service.updatedisplaybyscan(id);
-				
+				}
 			}
 			if (disp > 0) {
 				//record = service.findCode(code, ip).get(0);
+
+				service.insertPatient(map2);
+
 				map.put("return_msg",
 						"当前患者:" + record.getStr("patient_name") + "已成功报到在当前分诊台" + record.getStr("triage_name") + "下");
 				map.put("return_code", "success");

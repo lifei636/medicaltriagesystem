@@ -1,0 +1,80 @@
+@layout("/common/_curd/_container.html"){
+
+<script type="text/javascript">
+	var ctx = "${basePath}";
+	var grid_selector = "#grid-table";
+	var pager_selector = "#grid-pager";
+	
+	$(function(){
+		initGrid();
+		initMenuBtn("btns", "${code}");
+	});
+	
+	function initGrid(){
+		var grid_url = ctx + "/${code}/list";
+		var _colnames = ["ID", 
+		         		"分诊类型", 
+		         		"分诊台名称", 
+		         		"IP地址", 
+		         		"打印模式", 
+		         		"排号模式",
+                        "优先等待",
+		         		"复诊叫号间隔",
+                        "迟到间隔",
+                        "迟到模式",
+                        "迟到排序",
+                        "挂号迟到时间(分)",
+		         		"过号间隔", 
+		         		"过号次数"];
+		var _colmodel = [{name:"triage_id", index:"triage_id", width:20},
+						{name:"triage_type", index:"triage_type", width:60},
+						{name:"name", index:"name", width:100},
+						{name:"ip", index:"ip", width:80},
+						{name: "print_type", index: "print_type", width: 50 },
+						{name: "reorder_type", index: "reorder_type", width: 50 },
+                        {name: "first_flag_step", index: "first_flag_step", width: 50 },
+						{name: "return_flag_step", index: "return_flag_step", width: 50 },
+                        { name: "late_flag_step", index: "late_flag_step", width: 50 },
+                        { name: "late_type", index: "late_type", width: 50 },
+                        { name: "late_show", index: "late_show", width: 50 },
+                        { name: "late_time", index: "late_time", width: 50 },
+						{name:"call_buffer", index:"call_buffer", width:50},
+						{name:"pass_time", index:"pass_time", width:50}];
+		
+		jQuery(grid_selector).jqGrid({
+			url : grid_url,
+		    shrinkToFit : true,
+			colNames : _colnames,
+			colModel : _colmodel, 
+			jsonReader : {id :"triage_id"},
+			pager : pager_selector,
+			postData : {sort : "triage_id", order : "desc"}
+		});
+	}
+</script>
+
+
+	<!-- 配置 grid -->
+	<div class="row">
+		<div class="col-xs-12 tb-grid">
+			<!-- 配置 查询 -->
+			@ var _col=[
+			@		{name:"ID", index:"triage_id", type:"text"},
+			@		{name:"分诊类型", index:"triage_type", type:"text"},
+			@		{name:"分诊台名称", index:"name", type:"text"},
+			@		{name:"IP地址", index:"ip", type:"text"}
+			@];
+			@ include("/common/_function/_search.html",{"col":_col}){}
+			<!-- 按钮 -->
+			<div class="welljq well-sm" id="btns"></div>
+			<!-- grid -->
+			<table id="grid-table"></table>
+			<!-- 分页-->
+			<div id="grid-pager"></div>
+		</div>
+	</div>
+	
+	<!-- 引入所需的js -->
+	@include("/common/_listscript.html"){}
+	
+@}	

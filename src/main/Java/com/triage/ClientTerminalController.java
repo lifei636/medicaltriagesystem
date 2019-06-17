@@ -3,6 +3,7 @@ package com.triage;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.staticutil.ConstantModel;
 import org.beetl.sql.core.kit.StringKit;
 
 import com.core.base.BaseController;
@@ -34,6 +35,7 @@ public class ClientTerminalController extends BaseController {
 			renderJson(map);
 			return;
 		} else {
+			map.put("showNumber", ConstantModel.DOOR_SHOWNUMBER);
 			map.put("return_code", "success");
 			map.put("return_msg", "成功");
 			map.put("zsmc", tm.getName());

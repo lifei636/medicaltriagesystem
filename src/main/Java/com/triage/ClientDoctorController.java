@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.staticutil.ConstantModel;
 import org.beetl.sql.core.kit.StringKit;
 
 import com.core.base.BaseController;
@@ -101,10 +102,12 @@ public class ClientDoctorController extends BaseController {
 			renderJson(map);
 			return;
 		} else {
+			map.put("showNumber", ConstantModel.DOOR_SHOWNUMBER);
 			map.put("return_code", "success");
 			map.put("return_msg", "信息查询成功");
 			map.put("doctorinfo", record);
 			renderJson(map);
 		}
 	}
+
 }

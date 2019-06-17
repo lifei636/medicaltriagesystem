@@ -1,11 +1,5 @@
 package com.triage;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverManager;
@@ -16,13 +10,14 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+import com.jfinal.kit.PropKit;
+import com.staticutil.ConstantModel;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.beetl.sql.core.kit.StringKit;
@@ -51,7 +46,6 @@ import com.jfinal.aop.Before;
 import com.jfinal.aop.Clear;
 import com.jfinal.ext.interceptor.GET;
 import com.jfinal.kit.LogKit;
-import com.alibaba.druid.proxy.jdbc.JdbcParameter.TYPE;
 import com.common.config.MainConfig;
 
 @Clear
@@ -61,14 +55,37 @@ public class ClientController extends BaseController {
 	TriageService triageservice = new TriageServiceImpl();
 	DoctorService doctorservice = new DoctorServiceImpl();
 	ShardKit shardkit = new ShardKit();
+	static {
+		PropKit.use("config.properties");
+	}
 
 	@Before(GET.class)
 	public void login() {
 		render(clientLoginRealPath);
 	}
 
+
 	public void index() {
-		render(clientIndexRealPath);
+		//String login = PropKit.get("login");
+		switch (ConstantModel.LOGIN){
+			case ConstantModel.SM:
+				String ip = getPara("ip");
+				Triage triage = triageservice.queryTriageIp(ip);
+				if (ConstantModel.TRIAGENAME.equals(triage.getName())){
+					render(clientIndexRealPath_sm_cc);
+				}else {
+					render(clientIndexRealPath);
+				}
+
+				break;
+			case ConstantModel.DYRY:
+				render(clientIndexRealPath_dy_ry);
+				break;
+			default:
+				render(clientIndexRealPath);
+				break;
+		}
+
 	}
 
 	@Before(GET.class)

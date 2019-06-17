@@ -49,7 +49,6 @@ public class DoctorServiceImpl extends BaseService<Doctor> implements DoctorServ
 	public Record queryByip(String ip) {
 		String sql = Blade.dao().getScript("Doctor.queryByip").getSql();
 		return Db.init().selectOne(sql, Record.create().set("ip", ip));
-
 	}
 
 	@Override

@@ -15,6 +15,7 @@
  */
 package com.core.dao;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -311,12 +312,23 @@ public class Db {
 	}
 
 	/**
+	 * 根据bean查询列表，返回list<Bean>
+	 * @param sqlTemplate
+	 * @param t
+	 * @return
+	 */
+	public <T> List<T> queryListClass(String sqlTemplate, T t) throws IllegalAccessException, NoSuchMethodException, InvocationTargetException {
+
+		List<T> list = (List<T>) getSqlManager().execute(sqlTemplate,t.getClass() , t);
+		return list;
+	}
+
+
+	/**
 	 * 获取map集合
 	 * 
 	 * @param sqlTemplate
 	 *            sql语句
-	 * @param modelOrMap
-	 *            实体类或map
 	 * @return
 	 */
 	public List<Map> queryListMap(String sqlTemplate) {
@@ -327,7 +339,6 @@ public class Db {
 	 * 查询aop返回单条数据
 	 * 
 	 * @param sqlTemplate
-	 * @param modelOrMap
 	 * @param ac
 	 * @return
 	 */
@@ -339,7 +350,6 @@ public class Db {
 	 * 查询aop返回多条数据
 	 * 
 	 * @param sqlTemplate
-	 * @param modelOrMap
 	 * @param ac
 	 * @return
 	 */
@@ -351,7 +361,6 @@ public class Db {
 	 * 查询aop返回单条数据
 	 * 
 	 * @param sqlTemplate
-	 * @param modelOrMap
 	 * @param ac
 	 * @param intercept
 	 * @return
@@ -376,7 +385,6 @@ public class Db {
 	 * 查询aop返回多条数据
 	 * 
 	 * @param sqlTemplate
-	 * @param modelOrMap
 	 * @param ac
 	 * @param intercept
 	 * @return
@@ -413,10 +421,6 @@ public class Db {
 	/**
 	 * 修改一条数据
 	 * 
-	 * @param tableName
-	 *            表名
-	 * @param pk
-	 *            主键名
 	 * @param maps
 	 *            msps
 	 * @return
@@ -598,7 +602,6 @@ public class Db {
 	 * 是否存在
 	 * 
 	 * @param sqlTemplate
-	 * @param paras
 	 * @return
 	 */
 	public boolean isExist(String sqlTemplate, Object modelOrMap) {

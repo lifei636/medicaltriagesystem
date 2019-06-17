@@ -1,5 +1,7 @@
 package com.core.constant;
 
+import com.jfinal.kit.PropKit;
+
 public interface Const {
 	/**
 	 * 登陆地址(路径)
@@ -66,5 +68,16 @@ public interface Const {
 	 * 前台首页面地址(路径)
 	 */
 	final static String clientIndexRealPath = "/triage/index.html";
+
+	/**
+	 * 功能描述: 石棉彩超室前台首页面地址(路径)
+	 **/
+	final static String clientIndexRealPath_sm_cc="/triage/index_sm_cc.html";
+
+	/**
+	 * 功能描述: 德阳人民医院前台首页面地址(路径)
+	 **/
+	final static String clientIndexRealPath_dy_ry="/triage/index_dy_ry.html";
+
 
 }

@@ -2,23 +2,16 @@ package com.calling;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import javax.mail.Flags.Flag;
-
-import org.apache.regexp.recompile;
-import org.beetl.core.statement.VarAssignExpression;
+import com.staticutil.ConstantModel;
 import org.beetl.sql.core.kit.StringKit;
 
-import com.alibaba.druid.sql.visitor.functions.If;
 import com.core.base.BaseController;
 import com.core.jfinal.ext.autoroute.ControllerBind;
 import com.core.toolbox.Record;
@@ -36,10 +29,7 @@ import com.shine.service.impl.PatientQueueServiceImpl;
 import com.shine.service.impl.QueueTypeServiceImpl;
 import com.shine.service.impl.TerminalServiceImpl;
 import com.shine.service.impl.TriageServiceImpl;
-import com.shine.service.CommonComparator;
 import com.jfinal.kit.StrKit;
-import com.jfinal.template.expr.ast.Compare;
-import com.mysql.fabric.xmlrpc.base.Data;
 
 @ControllerBind(controllerKey = "/call_patient")
 public class CallingPatientQueueController extends BaseController {
@@ -50,7 +40,6 @@ public class CallingPatientQueueController extends BaseController {
 	TriageService triage = new TriageServiceImpl();
 	QueueTypeService queuetype = new QueueTypeServiceImpl();
 	TerminalService terminal = new TerminalServiceImpl();
-
 	class orderArylist {
 		Integer T, Q, F, id;
 		String name;
@@ -502,7 +491,11 @@ public class CallingPatientQueueController extends BaseController {
 			status = "0,3,4,6,7,50";
 			break;
 		case "pass":
-			status = "54";
+			if(ConstantModel.DYRY.equals(ConstantModel.LOGIN)){
+				status = "1,51";
+			}else{
+				status = "54";
+			}
 			break;
 		case "over":
 			status = "53";

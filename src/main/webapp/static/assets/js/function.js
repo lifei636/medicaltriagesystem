@@ -94,7 +94,7 @@ $("#searchvalue").keypress(function () {
 });
 
 //获取队列列表
-function ListQueueType()
+function ListQueueType(type)
 {
     var url_t="/clientqueuetype/listQueueType";
     if(queueTypeShowAll=="false")
@@ -126,7 +126,7 @@ function ListQueueType()
                         if (ListNum == "dl"+li.queue_number)
                             p = i+1;
                         html += "<li class='queue_type_id' id='dl" + li.queue_number + "' onclick= 'ListPatient(\"dl"
-                            + li.queue_number+"\")"
+                            + li.queue_number + "\")"
                             + "'><div class='title'>"
                             + li.queue_name
                             + "</div><div class='left'><ul><li>等候："
@@ -140,7 +140,7 @@ function ListQueueType()
                             + "</li><li> </li><li>医生："
                             + li.current_doctor
                                 + "</li></ul></div></li>";
-                       
+
                     });
                     $("#li_listqueue").html(html);
                     var p_l_w = document.documentElement.clientWidth;
@@ -250,7 +250,16 @@ function ListPatient(id) {
                                 break;
                             default:
                         }
-                        html += "<div class=\"rows\"><span class=\"w10\"><input onclick=\"check_status('ck_" + list + "')\" type=\"checkbox\" id=\"" + li.id + "\" value=\"" + li.id + "\" title=\"" + li.id + "\" name=\"ck_" + list + "\" />" + li.register_id + "</span><span onclick=\"clickcheck(" + li.id + ")\" class=\"w15\">" + li.patient_name + "</span><span onclick=\"clickcheck(" + li.id + ")\" class=\"w15\">" + li.doctorName + "</span><span onclick=\"clickcheck(" + li.id + ")\" class=\"w10\">" + s + "</span><span onclick=\"clickcheck(" + li.id + ")\" class=\"w10\">" + li.state_custom + "</span><span onclick=\"clickcheck(" + li.id + ")\" class=\"w10\">" + t + "</span><span onclick=\"clickcheck(" + li.id + ")\" class=\"w15\">" + (showtime=="false"?"":li.fre_date) + "</span><span onclick=\"clickcheck(" + li.id + ")\" class=\"w15 span_last\">" +  (showtime=="false"?"":li.opr_time) + "</span></div><input type=\"hidden\" value=\""+li.patient_source_code+"\" id=\"code"+li.id+"\" />";
+
+                    html += "<div class=\"rows\"><span class=\"w10\"><input onclick=\"check_status('ck_" + list + "')\" type=\"checkbox\" id=\"" + li.id + "\" value=\"" + li.id + "\" title=\"" + li.id + "\" name=\"ck_" + list + "\" />" + li.register_id + "</span>" +
+                        "<span onclick=\"clickcheck(" + li.id + ")\" class=\"w15\">" + li.patient_name + "</span>" +
+                        "<span onclick=\"clickcheck(" + li.id + ")\" class=\"w15\">" + li.doctorName + "</span>" +
+                        "<span onclick=\"clickcheck(" + li.id + ")\" class=\"w10\">" + s + "</span><span onclick=\"clickcheck(" + li.id + ")\" class=\"w10\">" + li.state_custom + "</span>" +
+                        "<span onclick=\"clickcheck(" + li.id + ")\" class=\"w10\">" + t + "</span><span onclick=\"clickcheck(" + li.id + ")\" class=\"w15\">" + (showtime=="false"?"":li.fre_date) + "</span>" +
+                        "<span onclick=\"clickcheck(" + li.id + ")\" class=\"w15 span_last\">" +  (showtime=="false"?"":li.opr_time) + "</span>" +
+                        "</div><input type=\"hidden\" value=\""+li.patient_source_code+"\" id=\"code"+li.id+"\" />";
+
+
                         if (s_id != "") {
                             if (li.id == s_id)
                                 l_c = i;
@@ -275,7 +284,7 @@ function ListPatient(id) {
             div.html("<li style='color:red'>数据加载失败，请联系管理员！</li>");
         }
     });
-    
+
 }
 layui.use('element', function () {
         element = layui.element();
@@ -1473,3 +1482,6 @@ function call_doc_close() {
     }
 }
 
+function strUtil(str) {
+    return str==null||str==undefined || str == NaN ? '/' : str;
+}

@@ -1,90 +1,315 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-<meta charset="utf-8" />
-<title>叫号器</title>
-<link type="text/css" rel="stylesheet"
-	href="/static/web/caller/blue.css" />
-<script type="text/javascript" src="/static/web/caller/jquery.js"></script>
+    <meta charset="utf-8" />
+    <title>叫号器</title>
+    <link type="text/css" rel="stylesheet" href="blue.css" />
+    <script type="text/javascript" src="jquery.js"></script>
 </head>
 <body>
-	<div class="index" id="index">
-		<div id="infos" class="info" title="">测试信息</div>
-
-		<div id="show_list" class="show_list">
-			<div class="tab">
-				<div id="wait" class="tab1" onclick="changetab('wait')">
-					等候(<span id="wait_count">0</span>)
-				</div>
-				<div id="pass" class="tab2" onclick="changetab('pass')">
-					过号(<span id="pass_count">0</span>)
-				</div>
-				<div id="over" class="tab2" onclick="changetab('over')">
-					诊结(<span id="over_count">0</span>)
-				</div>
-				<!--<div id="setting" class="tab2" onclick="changetab('setting')">队列</div>-->
-			</div>
-			<div id="list_wait" class="list" style="display: block">
-				<!--<div class="wait_title"><div class="span1">姓名</div><div class="span2">诊呼</div><div class="span2">过呼</div></div>-->
-				<div class="wait_list">
-					<ul id="li_wait_list"></ul>
-				</div>
-			</div>
-			<div id="list_pass" class="list">
-				<!--<div class="wait_title"><div class="span1">姓名</div><div class="span2">诊呼</div><div class="span2">过呼</div></div>-->
-				<div class="wait_list">
-					<ul id="li_was_list"></ul>
-				</div>
-			</div>
-			<div id="list_over" class="list">
-				<!--<div class="wait_title"><div class="span1">姓名</div><div class="span2">诊呼</div><div class="span2">过呼</div></div>-->
-				<div class="wait_list">
-					<ul id="li_over_list"></ul>
-				</div>
-			</div>
-			<div id="list_setting" class="list">
-				<!--<div class="wait_title"><div class="span1">姓名</div><div class="span2">诊呼</div><div class="span2">过呼</div></div>-->
-				<div class="wait_list">
-					<ul id="li_setting_list"></ul>
-				</div>
-			</div>
-			<div class="h_chage" id="h_c">&nbsp;</div>
-		</div>
-		<div class="btnlist">
-			<div class="div">
-				<input type="button" class="btn" id="btn" onclick="caller()"
-					style="display: block; color: #f00" title="呼叫" value="呼叫" /> <input
-					type="button" class="btn" id="btn_agin"
-					style="display: none; color: #f00" onclick="caller_agin()"
-					title="重呼" value="重呼" />
-			</div>
-
-			<div class="div">
-				<input type="button" class="btn" onclick="caller_status(0,0)"
-					title="过号患者" value="过号" />
-			</div>
-			<div class="div">
-				<input type="button" class="btn" onclick="caller_status(0,1)"
-					title="结诊患者" value="诊结" />
-			</div>
-			<div class="div">
-				<input type="button" class="btn" onclick="back_login()" title="退出登录"
-					value="退出" />
-			</div>
-		</div>
-	</div>
-</body>
-</html>
-<script>
+    <div class="index" id="index">
+        <div class="circle">
+            <input type="button" class="btn" id="btn" onclick="caller()" title="呼叫" value="呼叫" />
+            <input type="button" class="btn" id="btn_agin" style="display:none" onclick="caller_agin()" title="重呼" value="重呼" /> 
+        </div>
+        <div class="rectangle">
+            <div class="left">
+                <div class="top" id="move">&nbsp;</div>
+                <div class="middle">
+                    <div id="infos" class="info" title=""></div>
+                    <input type="button" class="r_btn" onclick="caller_status(0,1)" title="结诊患者" value="诊结" />
+                    <input type="button" class="r_btn" onclick="caller_status(0,0)" title="过号患者" value="过号" />
+                </div>
+                <div class="bottom">&nbsp;</div>
+            </div>
+            <div class="right">
+				<div class="minimize" title="最小化" onclick="win.minimize()">&nbsp;</div>
+                <div class="close" title="关闭" onclick="win.close()">&nbsp;</div>
+                <div id="a_list" onclick="show_list()" class="a_list"><img id="a_list_img" src="down.png" /></div>
+            </div>
+        </div>
+        <div id="show_list" class="show_list">
+            <div class="tab">
+                <div id="wait" class="tab1" onclick="changetab('wait')">等候(<span id="wait_count">0</span>)</div><div id="pass" class="tab2" onclick="changetab('pass')">过号(<span id="pass_count">0</span>)</div><div id="over" class="tab2" onclick="changetab('over')">诊结(<span id="over_count">0</span>)</div><!--<div id="setting" class="tab2" onclick="changetab('setting')">队列</div>-->
+            </div>
+            <div id="list_wait" class="list" style="display:block">
+                <!--<div class="wait_title"><div class="span1">姓名</div><div class="span2">诊呼</div><div class="span2">过呼</div></div>-->
+                <div class="wait_list">
+                    <ul id="li_wait_list"></ul>
+                </div>
+            </div>
+            <div id="list_pass" class="list">
+                <!--<div class="wait_title"><div class="span1">姓名</div><div class="span2">诊呼</div><div class="span2">过呼</div></div>-->
+                <div class="wait_list">
+                    <ul id="li_was_list"></ul>
+                </div>
+            </div>
+            <div id="list_over" class="list">
+                <!--<div class="wait_title"><div class="span1">姓名</div><div class="span2">诊呼</div><div class="span2">过呼</div></div>-->
+                <div class="wait_list">
+                    <ul id="li_over_list"></ul>
+                </div>
+            </div>
+            <div id="list_setting" class="list">
+                <!--<div class="wait_title"><div class="span1">姓名</div><div class="span2">诊呼</div><div class="span2">过呼</div></div>-->
+                <div class="wait_list">
+                    <ul id="li_setting_list"></ul>
+                </div>
+            </div>
+            <div class="h_chage" id="h_c">&nbsp;</div>
+        </div>
+    </div>
+    <script>
+        window.ondragover = function (e) { e.preventDefault(); return false };
+        window.ondragstart = function (e) { e.preventDefault(); return false };
+        window.ondrop = function (e) { e.preventDefault(); return false };
+        var gui = require('nw.gui');
+        var win = gui.Window.get();
+        var z = 1, t = 0;
         var calling = false;
         var wait = 0;
-        var h = document.documentElement.clientHeight;
-        var config_json = JSON.parse(SSMSObject.GetConfig());
+        var rf = require("fs");
+        var path = require('path');
+        var filepath = path.dirname(process.execPath);
+        var data = rf.readFileSync(filepath + "/config.json", "utf-8");
+        var config_json = JSON.parse(data.toString().replace(/(^\s*)|(\s*$)/g, ""));
         var ip = config_json.ip;
         var queue_type_id = config_json.queue_type_id;
         var doctor_id = config_json.doctor_id;
+        var s_h = config_json.show_hide;
         var f_time = config_json.f_time;
-        $(".wait_list").height(h - 380);
+        var hl = config_json.hl;
+        var hs = config_json.hs;
+        if (hs < 10)
+            hs = 10;
+        else if (hs > 100)
+            hs = 100;
+        var w = 250, h = 80;
+        if (config_json.zoom != null) {
+            switch (config_json.zoom) {
+                case 2:
+                    z = 1.5;
+                    w = 376;
+                    h = 120;
+                    t = 1.48;
+                    break;
+                case 1:
+                    z = 1.3;
+                    w = 325;
+                    h = 104;
+                    t = 1.1;
+                    break;
+                default:
+            }
+        }
+        var s_l = true;
+        if (s_h == null)
+            s_h = true;
+       
+        win.width = w;
+        win.height = h;
+        var hide_w = 0;
+        var hide_h = 0;
+        
+        show_hide(0);
+        if (config_json.x != null && config_json.y != null) {
+            
+            win.y = config_json.y;
+            if (config_json.x >= window.screen.availWidth - w) {
+                win.x = window.screen.availWidth - Math.floor(z * hs);
+                hide_w = 2;
+            }
+            else {
+                win.x = config_json.x;
+            }
+        }
+        else {
+            win.y = window.screen.availHeight - h;
+            win.x = window.screen.availWidth - w;
+        }
+        win.zoomLevel = z * t;
+        win.on("restore", function () {
+            win.width = w;
+            win.height = h;
+        });
+        win.on('close', function () {
+            $.get("http://" + ip + "/call_logout/Logout?login_id=" + doctor_id, function (data, status) {
+            });
+            this.close(true);
+        });
+
+        var x = win.x, y = win.y;
+        var disX = 0;
+        var disY = 0;
+        var keydown = false;
+        //$(".movewindow").mousemove(function (ev2) {
+        //    if (keydown) {
+        //        var l = ev2.clientX - disX;
+        //        var t = ev2.clientY - disY;
+        //        x = win.x + l;
+        //        y = win.y + t;
+        //        win.x = x;
+        //        win.y = y;
+        //    }
+        //});
+        //$(".movewindow").mouseup(function () {
+        //    movechange();
+        //});
+        //$(".movewindow").mouseleave(function () {
+        //    movechange();
+        //});
+        //$(".movewindow").mousedown(function (ev) {
+        //    disX = ev.clientX;
+        //    disY = ev.clientY;
+        //    keydown = true;
+        //});
+
+        var move = document.getElementById("move");
+        move.onmousedown = function (ev) {
+            document.onmousemove = function (ev2) {
+                var l = ev2.screenX - win.x - ev.clientX;
+                var t = ev2.screenY - win.y - ev.clientY;
+                x = win.x + l;
+                y = win.y + t;
+                win.x = x;
+                win.y = y;
+                keydown = true;
+            };
+            document.onmouseup = function () {
+                document.onmousemove = null;
+                document.onmouseup = null;
+                //document.onmouseout = null;
+                movechange();
+            };
+            //document.onmouseout = function () {
+            //    document.onmousemove = null;
+            //    document.onmouseup = null;
+            //    document.onmouseout = null;
+            //    //movechange();
+            //}
+        }
+
+        function movechange() {
+            if (keydown) {
+                if (x <= 0) {
+                    win.x = 0;
+                    x = 0;
+                    hide_w = 1;
+                }
+                else if (x >= window.screen.availWidth - w) {
+                    win.x = window.screen.availWidth - Math.floor(z * hs);
+                    x = window.screen.availWidth - Math.floor(z * hs);
+                    hide_w = 2;
+                }
+                else {
+                    win.x = x;
+                    hide_w = 0;
+                }
+                if (y < 0) {
+                    win.y = 0;
+                    y = 0;
+                    hide_h = 1;
+                }
+                else if (y >= window.screen.availHeight - h) {
+                    win.y = window.screen.availHeight - h;
+                    y = window.screen.availHeight - h;
+                    hide_h = 2;
+                }
+                else {
+                    win.y = y;
+                    hide_h = 0;
+                }
+                config_json.x = x;
+                config_json.y = y;
+                rf.writeFileSync(filepath + "/config.json", JSON.stringify(config_json));
+                keydown = false;
+            }
+        }
+        var m_f_l = 0, m_f_e = 0;
+        function leave() {
+            var m_x = window.screen.availWidth - (win.x + Math.floor(z * hs));
+            var now_x = win.x;
+            for (var i = 0; i < m_x; i++) {
+                win.x = now_x + i;
+            }
+            m_f_l = 0, m_f_e = 0;
+        }
+        function enter() {
+            var m_x = w-(window.screen.availWidth-win.x + 5);
+            var now_x = win.x;
+            for (var i = 0; i < m_x; i++) {
+                win.x = now_x - i;
+            }
+            m_f_l = 0, m_f_e = 0;
+        }
+        $("body").mouseleave(function () {
+            if (hide_w == 2) {
+                if (m_f_l==0)
+                    m_f_l = setTimeout("leave()", 500);
+            }
+        });
+        $("body").mouseenter(function () {
+            if (hide_w == 2) {
+                clearTimeout(m_f_l);
+                if (m_f_e==0)
+                    m_f_e = setTimeout(enter, 0);
+            }
+        });
+        var oDiv = document.getElementById("h_c");
+        oDiv.onmousedown = function (ev) {
+           
+            document.onmousemove = function (ev) {
+                hl = ev.screenY - win.y;
+                if (hl < z * 190) {
+                    hl = z * 190;
+                }
+                else if (hl > window.screen.availHeight) {
+                    hl = window.screen.availHeight - z * 80;
+                }
+                
+                $("#show_list").height(Math.floor(hl / z - 72));
+                $(".list").height(Math.ceil(hl / z - 102));
+                $(".wait_list").height(Math.floor(hl / z - 115));
+                config_json.hl = Math.floor(hl);
+                win.height = Math.floor(hl);
+                rf.writeFileSync(filepath + "/config.json", JSON.stringify(config_json));
+            };
+            document.onmouseup = function () {
+                document.onmousemove = null;
+                document.onmouseup = null;
+            };
+        }
+        function show_list() {
+            if (hl < z *190)
+                hl = z*190;
+            else if (hl > window.screen.availHeight) {
+                hl = window.screen.availHeight - z *72;
+            }
+            
+            if (s_l) {
+                s_l = false;
+                $(".show_list").css("display", "block");
+                $("#a_list_img").attr("src", "up.png");
+                $("#show_list").height(Math.floor((hl /z)-72));
+                $(".list").height(Math.floor(hl/z - 102));
+                $(".wait_list").height(Math.floor(hl/z - 115));
+                h = z * hl;
+                win.height = Math.floor(hl);
+                if ((window.screen.availHeight - win.y) < hl)
+                    win.y = window.screen.availHeight - hl;
+            }
+            else {
+                s_l = true;
+                $(".show_list").css("display", "none");
+                $("#a_list_img").attr("src", "down.png");
+                h = z * 80;
+                win.height = h;
+                if ((window.screen.availHeight - win.y) == (hl-(z*5)))
+                    win.y = window.screen.availHeight - h;
+            }
+            fresh_list();
+        }
+
         $.ajax({
             type: "get",
             async: false,
@@ -111,13 +336,19 @@
         });
         
        
-        function checkgf(str) {
+        function checkgf(str,id) {
             if (str == 54)
                 return "(<span style='color:red'>过</span>)";
             else if (str == 2)
                 return "(<span style='color:red'>复</span>)";
+            else if (str == 5)
+                return "(<span style='color:red'>优</span>)";
+            else if (str == 8)
+                return "(<span style='color:red'>迟</span>)";
+            else if (str == 50)
+                return "(<span style='color:red'>挂</span>)";
             else
-                return "";
+                return "("+id+")";
         }
         function get_patient_wait() {
             $.ajax({
@@ -132,13 +363,14 @@
                     $("#wait_count").html(wait);
                     if (data.count > 0) {
                         $.each(data.list, function (i, item) {
-
-                            var s = checkgf(item.state_patient);
-
-                            list += "<li><div class='span1'>" + item.patient_name + s + "</div><div class='span2'><a  onclick='caller_status(\"" + item.patient_source_code + "\",1)' >诊呼</a></div><div class='span2'><a herf='#' onclick='caller_status(\"" + item.patient_source_code + "\",0)' >过呼</a></div></li>";
+                            var s = checkgf(item.state_patient, item.register_id);
+                            if (item.state_patient == 50)
+                                list += "<li><div class='span1'>" + item.patient_name + s + "</div><div class='span2'><a herf='#'>挂起</a></div><div class='span2'><a herf='#>挂起</a></div></li>";
+                            else
+                                list += "<li><div class='span1'>" + item.patient_name + s + "</div><div class='span2'><a  onclick='caller_status(\"" + item.patient_source_code + "\",1)' >诊呼</a></div><div class='span2'><a herf='#' onclick='caller_status(\"" + item.patient_source_code + "\",0)' >过呼</a></div></li>";
                         });
                     }
-                   else
+                    else
                         list = "<li>当前无患者</li>";
                     if (!calling) {
                         if (wait > 0) {
@@ -168,7 +400,7 @@
                     if (data.return_code == "success") {
                         if (data.count > 0) {
                             $.each(data.list, function (i, item) {
-                                list += "<li><div class='span1'>" + item.patient_name + "</div><div class='span2'><a  onclick='caller_status(\"" + item.patient_source_code + "\",1)' >诊呼</a></div><div class='span2'><a herf='#' onclick='caller_status(\"" + item.patient_source_code + "\",0)' >过呼</a></div></li>";
+                                list += "<li><div class='span1'>" + item.patient_name + "(" + item.register_id+")" + "</div><div class='span2'><a  onclick='caller_status(\"" + item.patient_source_code + "\",1)' >诊呼</a></div><div class='span2'><a herf='#' onclick='caller_status(\"" + item.patient_source_code + "\",0)' >过呼</a></div></li>";
                             });
                         }
                         else {
@@ -199,7 +431,7 @@
                     if (data.return_code == "success") {
                         if (data.count > 0) {
                             $.each(data.list, function (i, item) {
-                                list += "<li><div class='span1'>" + item.patient_name + "</div><div class='span2'><a  onclick='caller_status(\"" + item.patient_source_code + "\",1)' >诊呼</a></div><div class='span2'><a herf='#' onclick='caller_status(\"" + item.patient_source_code + "\",0)' >过呼</a></div></li></li>";
+                                list += "<li><div class='span1'>" + item.patient_name + "(" + item.register_id + ")" + "</div><div class='span2'><a  onclick='caller_status(\"" + item.patient_source_code + "\",1)' >诊呼</a></div><div class='span2'><a herf='#' onclick='caller_status(\"" + item.patient_source_code + "\",0)' >过呼</a></div></li></li>";
                             });
                         }
                         else {
@@ -236,8 +468,7 @@
                         }
                         else {
                             list = "<li>当前无队列</li>";
-                        }
-
+                        } 
                     }
                     else if (data.return_code == "loginout")
                         back_login();
@@ -431,7 +662,16 @@
         }
         function back_login()
         {
-        	window.location.href = "login.html";
+            var win2 = gui.Window.open('login.html?type=out', {
+                position: 'center',
+                frame: true,
+                resizable: false,
+                always_on_top: true,
+                width: 300,
+                height:100,
+                focus: true,
+            });
+            win.close();
         }
     </script>
 </body>
