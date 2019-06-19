@@ -277,7 +277,7 @@ public interface PatientQueueService extends IService<PatientQueue> {
 	
 	public int updatePatientLateLock(String idcode,String type,String time);
 	
-	public List<Record> selectIsBegin(String type,String id);
+	public List<Record> selectIsBegin(byte type,String id);
 	
 	public List<Record> selectPassByTer(String type,String ip);
 	

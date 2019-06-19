@@ -1,10 +1,10 @@
 import com.shine.model.Source;
+import org.beetl.ext.fn.Print;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class Test2 {
 
@@ -60,7 +60,18 @@ public class Test2 {
 
 
     public static void main(String[] args) {
-        Map map = new HashMap();
+        Set<Integer> set = new TreeSet<>();
+        List<Integer> list = new ArrayList<>();
+        for (int i=-3 ; i<3; i++){
+            set.add(i);
+            list.add(i);
+        }
+        for (int i =0;i<3 ; i++){
+            set.remove(i);
+            list.remove(i);
+        }
+        System.out.println(set + "," + list);
+        /*Map map = new HashMap();
         map.put("a","a1");
         map.put("b","b1");
         TestBean t = new TestBean();
@@ -77,7 +88,7 @@ public class Test2 {
             e.printStackTrace();
         } catch (IllegalAccessException e) {
             e.printStackTrace();
-        }
+        }*/
     }
 }
 class TestBean{
@@ -98,5 +109,12 @@ class TestBean{
 
     public void setB(String b) {
         this.b = b;
+    }
+}
+class Test_a{
+    public static void main(String[] args) {
+      List<String> list = Arrays.asList("a","2");
+      list.add(2,"3");
+      list.forEach(System.out::println);
     }
 }

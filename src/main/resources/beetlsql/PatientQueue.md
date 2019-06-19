@@ -448,7 +448,8 @@ SELECT
 	b.doctor_id,
 	b.begin_time,
 	b.last_time,
-	b.doctor_id
+	b.doctor_id,
+	d.lock_flag_step
 FROM  patient_queue b 
 INNER JOIN queue_type c  ON c.queue_type_id = b.queue_type_id
 INNER JOIN triage d ON d.triage_id = c.triage_id
@@ -1385,6 +1386,7 @@ SELECT
 	a.late_flag_step,
 	a.first_flag_step,
 	a.late_show,
+	a.lock_flag_step,
 	b.call_pass_first_flag,
 	b.call_pass_rule_flag,
 	b.call_return_first_flag,
@@ -1406,6 +1408,7 @@ SELECT
 	a.call_buffer,
 	a.return_flag_step,
 	a.late_flag_step,
+	a.lock_flag_step,
 	b.call_pass_first_flag,
 	b.call_pass_rule_flag,
 	b.call_return_first_flag,
@@ -1425,6 +1428,7 @@ SELECT
 	b.return_flag_step,
 	b.late_flag_step,
 	b.first_flag_step,
+	b.lock_flag_step,
 	CASE
 WHEN d.call_pass_first_flag IS NULL THEN
 	0
@@ -1493,6 +1497,7 @@ SELECT
 	b.return_flag_step,
 	b.late_flag_step,
 	b.first_flag_step,
+	b.lock_flag_step,
 	CASE
 WHEN d.call_pass_first_flag IS NULL THEN
 	0
@@ -1562,6 +1567,7 @@ SELECT
 	a.return_flag_step,
 	a.late_flag_step,
 	a.first_flag_step,
+	a.lock_flag_step,
 	b.call_pass_first_flag,
 	b.call_pass_rule_flag,
 	b.call_return_first_flag,

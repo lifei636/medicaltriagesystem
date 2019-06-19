@@ -41,10 +41,11 @@ public class ClientQueueTypeController extends BaseController {
 		Triage triage = triageservice.queryTriageIp(ip);
 		List<Record> list =null;
 		//判断是按队列还是按叫号器
-		if(triage.getReorder_type()==1)
-			list= service.listQueueType(ip);
-		else
-			list=service.listPager(ip);
+		if(triage.getReorder_type()==1) {
+			list = service.listQueueType(ip);
+		} else {
+			list = service.listPager(ip);
+		}
 		if (null == list) {
 			renderJson(error(QUEUE_TYPE_NULL_MSG));
 			return;

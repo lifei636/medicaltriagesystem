@@ -21,6 +21,7 @@ public class Triage extends BaseModel {
 	private Integer pager_type;
 	private Integer reorder_type;
 	private Integer return_flag_step;
+	private Integer lock_flag_step;
 	private Integer late_flag_step;
 	private Integer triage_type;
 	private String description;
@@ -30,10 +31,20 @@ public class Triage extends BaseModel {
 	private Date create_time;
 	private Integer print_type;
 	private Integer pass_time;
-	private Integer first_flag_step;
+	private String first_flag_step;
 	private Integer late_type;
 	private Integer late_time;
 	private Integer late_show;
+	private Integer first_orderby;
+
+	public Integer getFirst_orderby() {
+		return first_orderby;
+	}
+
+	public void setFirst_orderby(Integer first_orderby) {
+		this.first_orderby = first_orderby;
+	}
+
 	@AutoID
 	public Integer getTriage_id() {
 		return triage_id;
@@ -43,11 +54,11 @@ public class Triage extends BaseModel {
 		this.triage_id = triage_id;
 	}
 	
-	public Integer getFirst_flag_step() {
+	public String getFirst_flag_step() {
 		return first_flag_step;
 	}
 
-	public void setFirst_flag_step(Integer first_flag_step) {
+	public void setFirst_flag_step(String first_flag_step) {
 		this.first_flag_step = first_flag_step;
 	}
 	
@@ -174,37 +185,21 @@ public class Triage extends BaseModel {
 		this.late_show = late_show;
 	}
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o){
-			return true;
-		}
-		if (o == null || getClass() != o.getClass()){
-			return false;
-		}
-		Triage triage = (Triage) o;
-		return Objects.equals(triage_id, triage.triage_id) &&
-				Objects.equals(call_buffer, triage.call_buffer) &&
-				Objects.equals(pager_type, triage.pager_type) &&
-				Objects.equals(reorder_type, triage.reorder_type) &&
-				Objects.equals(return_flag_step, triage.return_flag_step) &&
-				Objects.equals(late_flag_step, triage.late_flag_step) &&
-				Objects.equals(triage_type, triage.triage_type) &&
-				Objects.equals(description, triage.description) &&
-				Objects.equals(ip, triage.ip) &&
-				Objects.equals(name, triage.name) &&
-				Objects.equals(triage_pwd, triage.triage_pwd) &&
-				Objects.equals(create_time, triage.create_time) &&
-				Objects.equals(print_type, triage.print_type) &&
-				Objects.equals(pass_time, triage.pass_time) &&
-				Objects.equals(first_flag_step, triage.first_flag_step) &&
-				Objects.equals(late_type, triage.late_type) &&
-				Objects.equals(late_time, triage.late_time) &&
-				Objects.equals(late_show, triage.late_show);
+	public Integer getLock_flag_step() {
+		return lock_flag_step;
+	}
+
+	public void setLock_flag_step(Integer lock_flag_step) {
+		this.lock_flag_step = lock_flag_step;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(triage_id, call_buffer, pager_type, reorder_type, return_flag_step, late_flag_step, triage_type, description, ip, name, triage_pwd, create_time, print_type, pass_time, first_flag_step, late_type, late_time, late_show);
+		return super.hashCode();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		return super.equals(obj);
 	}
 }

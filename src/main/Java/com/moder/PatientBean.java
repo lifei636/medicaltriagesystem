@@ -5,7 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Comparator;
 import java.util.Date;
 
-public class PatientBean implements Comparator<PatientBean> {
+public class PatientBean {
 
     /**
      * id自增
@@ -278,19 +278,6 @@ public class PatientBean implements Comparator<PatientBean> {
         return simpleDateFormat;
     }
 
-    @Override
-    public int compare(PatientBean o1, PatientBean o2) {
-        try {
-            Date parse1 = getSimpleDateFormat().parse(o1.getOpr_time());
-            Date parse2 = getSimpleDateFormat().parse(o1.getOpr_time());
-            if (parse1.compareTo(parse2) > -1){
-
-            }
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return 0;
-    }
 
     @Override
     public boolean equals(Object obj) {

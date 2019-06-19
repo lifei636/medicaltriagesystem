@@ -3,6 +3,7 @@ package com.triage;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.logging.Logger;
 
 import org.beetl.sql.core.kit.StringKit;
 
@@ -28,6 +29,7 @@ import com.shine.service.impl.TerminalServiceImpl;
 import com.shine.service.impl.TriageServiceImpl;
 import com.jfinal.kit.StrKit;
 import com.mysql.fabric.xmlrpc.base.Data;
+import org.slf4j.LoggerFactory;
 
 @ControllerBind(controllerKey = "/clientPatientQueue")
 public class ClientPatientQueueController extends BaseController {
@@ -477,8 +479,9 @@ public class ClientPatientQueueController extends BaseController {
 		Map<String, Object> map = new HashMap<String, Object>();
 		String ip = getPara("ip");
 		try {
-			if(ip.isEmpty()||ip.equals("")) 
-				ip=shardkit.getIpAddr(getRequest());
+			if(ip.isEmpty()||ip.equals("")) {
+				ip = shardkit.getIpAddr(getRequest());
+			}
 		}
 		catch (Exception e) {
 			ip=shardkit.getIpAddr(getRequest());
@@ -490,8 +493,11 @@ public class ClientPatientQueueController extends BaseController {
 		}
 		//分诊台
 		Triage rip=triage.queryTriageIp(ip);
+		DataOrderUtil orderUtil = new DataOrderUtil();
+		Map<String, Object> orderBy = orderUtil.orderBy(rip, QueueNumber, this);
+		renderJson(orderBy);
 		//正常排队的队列，优先的除外
-		List<Record> result = new ArrayList<Record>();
+		/*List<Record> result = new ArrayList<Record>();
 		//页面展示的序列
 		List<Record> final_result= new ArrayList<Record>();
 		//叫号器
@@ -670,7 +676,7 @@ public class ClientPatientQueueController extends BaseController {
 		final_result.addAll(result);
 		
 		
-		List<Record> calledList = servicepatientqueue.selectIsBegin("2", ip);
+		List<Record> calledList = servicepatientqueue.selectIsBegin((byte) 2, ip);
 		if (calledList.size() > 0) {
 			if(final_result.size()<rule.getInt("late_flag_step"))
 			{
@@ -693,7 +699,7 @@ public class ClientPatientQueueController extends BaseController {
 			map.put("count", final_result.size());
 			map.put("list", final_result);
 			renderJson(map);
-		}
+		}*/
 	}
 
 	public List<Record> util(List<Record> final_result) throws ParseException {
@@ -928,7 +934,9 @@ public class ClientPatientQueueController extends BaseController {
 				//根据队列id获取优先队列数量
 				int v1=service.getFirstByQueutTypeID(Integer.parseInt(QueueNumber)).size();
 				//优先等待数
-				int v2=tri.getFirst_flag_step();
+				//int v2=tri.getFirst_flag_step();
+				//重构后默认为0
+				int v2=0;
 				if(v1<v2&&v1>0)
 				{
 					int id=record.getInt("id");
@@ -949,7 +957,9 @@ public class ClientPatientQueueController extends BaseController {
 			if(record!=null)
 			{
 				int v1=service.getFirstByQueutTypeID(Integer.parseInt(QueueNumber)).size();
-				int v2=tri.getFirst_flag_step();
+				//int v2=tri.getFirst_flag_step();
+				//重构后默认为0
+				int v2=0;
 				int id=record.getInt("id");
 				if(record.getInt("call_first_rule_flag")==0&&record.getInt("call_first_rule_flag2")==0&&record.getInt("call_first_first_flag")>2&&v1<v2)
 				{
@@ -1817,6 +1827,7 @@ public class ClientPatientQueueController extends BaseController {
 	public Map<String, Object> ScanAdd(String code ,String ip,String late_show,int late_flag_step,String QueueNumber,String name) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		List<Record> rsList=service.findCode(code, ip);
+
 		Record record = rsList.get(0);
 		for (Record r : rsList) {
 			if(r.getStr("queue_type_id").equals(QueueNumber)) {

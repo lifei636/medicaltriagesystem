@@ -18,7 +18,8 @@ SELECT
 	late_time,
 	first_flag_step,
 	pass_time,
-	triage_pwd
+	triage_pwd,
+	lock_flag_step
 FROM
 	triage
 

@@ -24,7 +24,7 @@ public class OrderByStateServiceImpl extends BaseService<PatientQueue> implement
 
     @Override
     public List<Record> queryWait(String queueTypeId,String statePatient) {
-        String sql = Blade.dao().getScript("QueueOrder.queryPatientList_page").getSql();
+        String sql = Blade.dao().getScript("QueueOrder.queryPatientList_docot").getSql();
         return Db.init().selectList(sql, Record.create().set("queueTypeId", queueTypeId).set("state_patient",statePatient));
     }
 
@@ -36,7 +36,7 @@ public class OrderByStateServiceImpl extends BaseService<PatientQueue> implement
 
     @Override
     public List<Record> queryPageWait(String queueTypeId, String statePatient) {
-        String sql = Blade.dao().getScript("QueueOrder.queryPatientList_docot").getSql();
+        String sql = Blade.dao().getScript("QueueOrder.queryPatientList_page").getSql();
         return Db.init().selectList(sql, Record.create().set("queueTypeId", queueTypeId).set("state_patient",statePatient));
     }
 

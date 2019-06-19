@@ -79,4 +79,27 @@ public class BeansUtil {
         return map;
     }
 
+    /**
+     * 截取字符串数字部分
+     * @return
+     */
+    public static int substrNumber(Object o){
+        if (o instanceof Integer){
+            return (int) o;
+        }
+        if(o != null && !"".equals(o.toString())){
+            String str = o + "".trim();
+            String s = str.replaceAll("[^0-9]","").trim();
+            if(s != null && !"".equals(s)){
+                return Integer.parseInt(s);
+            }
+        }
+        return 0;
+    }
+
+    public static void main(String[] args) {
+        int i = substrNumber(4);
+        System.out.println(i);
+    }
+
 }

@@ -24,6 +24,9 @@ public class TriageBean {
 
     private int pager_type;
 
+    /**
+     * 过号间隔
+     */
     private int call_buffer;
 
     /**
@@ -52,7 +55,9 @@ public class TriageBean {
 
     private int reorder_type;
 
-
+    /**
+     * 回复诊叫号间隔
+     */
     private String return_flag_step;
 
     /**
@@ -63,7 +68,7 @@ public class TriageBean {
     /**
      * 优先等候
      **/
-    private int first_flag_step;
+    private String first_flag_step;
 
     /**
      * 分诊台密码
@@ -80,9 +85,28 @@ public class TriageBean {
      **/
     private int pass_time;
 
+    /**
+     * 迟到模式
+     */
     private int late_type;
 
+    /**
+     * 迟到排序方式
+     */
     private int late_show;
+
+    /**
+     * 锁定数量
+     */
+    private int lock_flag_step;
+
+    public int getLock_flag_step() {
+        return lock_flag_step;
+    }
+
+    public void setLock_flag_step(int lock_flag_step) {
+        this.lock_flag_step = lock_flag_step;
+    }
 
     public int getTriage_id() {
         return triage_id;
@@ -172,11 +196,11 @@ public class TriageBean {
         this.late_flag_step = late_flag_step;
     }
 
-    public int getFirst_flag_step() {
+    public String getFirst_flag_step() {
         return first_flag_step;
     }
 
-    public void setFirst_flag_step(int first_flag_step) {
+    public void setFirst_flag_step(String first_flag_step) {
         this.first_flag_step = first_flag_step;
     }
 

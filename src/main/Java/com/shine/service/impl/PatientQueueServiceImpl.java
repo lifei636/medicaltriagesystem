@@ -1239,10 +1239,9 @@ public class PatientQueueServiceImpl extends BaseService<PatientQueue> implement
 	}
 
 	@Override
-	public List<Record> selectIsBegin(String type, String id) {
+	public List<Record> selectIsBegin(byte type, String id) {
 		String sql = "";
-		if (type.equals("1"))
-		{
+		if (type == 1) {
 			sql = Blade.dao().getScript("PatientQueue.selectIsBegin_queue").getSql();
 		}
 		else

@@ -394,10 +394,10 @@ public class CallingPatientQueueController extends BaseController {
 		final_result.addAll(list_first_unlocked);
 		final_result.addAll(result);
 		
-		List<Record> calledList = servicepatientqueue.selectIsBegin(type, queue_type_id);
+		List<Record> calledList = servicepatientqueue.selectIsBegin(Byte.parseByte(type), queue_type_id);
 		if (calledList.size() > 0) {
-			if(final_result.size()<rule.getInt("late_flag_step"))
-			{
+			//锁定的数量
+			if(final_result.size()< rule.getInt("late_flag_step")){
 				for (int i = 0; i < final_result.size(); i++) {
 						if (final_result.get(i).getInt("late_lock") ==0)
 							servicepatientqueue.updatePatientLateLock(final_result.get(i).getStr("patient_source_code"),
@@ -709,7 +709,7 @@ public class CallingPatientQueueController extends BaseController {
 		final_result.addAll(result);
 		
 		
-		List<Record> calledList = servicepatientqueue.selectIsBegin("2", ip);
+		List<Record> calledList = servicepatientqueue.selectIsBegin((byte) 2, ip);
 		if (calledList.size() > 0) {
 			if(final_result.size()<rule.getInt("late_flag_step"))
 			{
@@ -2485,7 +2485,7 @@ public class CallingPatientQueueController extends BaseController {
 				final_result = list_first;
 		} else
 			final_result = result;
-		List<Record> calledList = servicepatientqueue.selectIsBegin("2", ip);
+		List<Record> calledList = servicepatientqueue.selectIsBegin((byte) 2, ip);
 		if (calledList.size() > 0) {
 			for (int i = 0; i < final_result.size(); i++) {
 
